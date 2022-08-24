@@ -375,6 +375,18 @@ export const constantRouterMap = [
     ]
   },
   {
+    path: '/designForm',
+    component: BlankLayout,
+    redirect: '/designForm/design',
+    children: [
+      {
+        path: 'design',
+        name: 'FormDesign',
+        component: () => import('@/components/designForm/FormDesign')
+      }
+    ]
+  },
+  {
     path: '/404',
     component: () => import(/* webpackChunkName: "fail" */ '@/views/exception/404')
   },
