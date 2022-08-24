@@ -175,14 +175,14 @@
             align:"center",
             dataIndex: 'taskName'
           },
-          // {
-          //   title: '操作',
-          //   dataIndex: 'action',
-          //   align:"center",
-          //   fixed:"right",
-          //   width:147,
-          //   scopedSlots: { customRender: 'action' }
-          // }
+          {
+            title: '操作',
+            dataIndex: 'action',
+            align:"center",
+            fixed:"right",
+            width:147,
+            scopedSlots: { customRender: 'action' }
+          }
         ],
         url: {
           list: "/flowable/task/todoList"
