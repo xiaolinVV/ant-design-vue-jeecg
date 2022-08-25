@@ -80,7 +80,7 @@
           <a-divider v-if='isCanBacke(record)' type="vertical" ></a-divider>
           <act-handle-btn v-if='isCanBacke(record)' @success="loadData" :data-id="record.dataId" :variables='record' :type="1" text="驳回"></act-handle-btn>
           <a-divider v-if='isCanHistoric(record)' type="vertical" ></a-divider>
-          <act-historic-detail-btn v-if='isCanHistoric(record)' :data-id="record.dataId"></act-historic-detail-btn>
+          <act-historic-detail-btn :data-id="record.dataId"></act-historic-detail-btn>
 
 <!--          <a-divider type="vertical" />-->
 <!--          <a-dropdown>-->
