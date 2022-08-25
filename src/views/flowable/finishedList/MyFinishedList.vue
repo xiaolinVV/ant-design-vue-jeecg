@@ -76,22 +76,22 @@
         </template>
 
         <span slot="action" slot-scope="text, record">
-<!--          <a @click="handleEdit(record)">编辑</a>-->
-
-          <a-divider type="vertical" />
-          <a-dropdown>
-            <a class="ant-dropdown-link">更多 <a-icon type="down" /></a>
-            <a-menu slot="overlay">
-              <a-menu-item>
-                <a @click="handleDetail(record)">详情</a>
-              </a-menu-item>
-              <a-menu-item>
-                <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.id)">
-                  <a>删除</a>
-                </a-popconfirm>
-              </a-menu-item>
-            </a-menu>
-          </a-dropdown>
+          <act-historic-detail-btn :data-id="record.dataId"></act-historic-detail-btn>
+          <a-divider v-if='record.jimuReportId' type="vertical" ></a-divider>
+          <a v-if='record.jimuReportId' @click="goToJimuReport(record)">查看单据</a>
+<!--          <a-dropdown>-->
+<!--            <a class="ant-dropdown-link">更多 <a-icon type="down" /></a>-->
+<!--            <a-menu slot="overlay">-->
+<!--              <a-menu-item>-->
+<!--                <a @click="handleDetail(record)">详情</a>-->
+<!--              </a-menu-item>-->
+<!--              <a-menu-item>-->
+<!--                <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.id)">-->
+<!--                  <a>删除</a>-->
+<!--                </a-popconfirm>-->
+<!--              </a-menu-item>-->
+<!--            </a-menu>-->
+<!--          </a-dropdown>-->
         </span>
 
       </a-table>
@@ -105,11 +105,16 @@
   import '@/assets/less/TableExpand.less'
   import { mixinDevice } from '@/utils/mixin'
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
+  import { ACCESS_TOKEN } from '@/store/mutation-types'
+  import {FlowableMixin} from "@views/flowable/mixin/FlowableMixin";
+  import ActHistoricDetailBtn from "@views/flowable/components/ActHistoricDetailBtn";
+  import Vue from 'vue'
 
   export default {
     name: 'MyFinishedList',
     mixins:[JeecgListMixin, mixinDevice],
     components: {
+      ActHistoricDetailBtn
     },
     data () {
       return {
@@ -131,16 +136,16 @@
             align:"center",
             dataIndex: 'title'
           },
-          {
-            title:'流程编号',
-            align:"center",
-            dataIndex: 'procDefId'
-          },
-          {
-            title:'任务id',
-            align:"center",
-            dataIndex: 'taskId'
-          },
+          // {
+          //   title:'流程编号',
+          //   align:"center",
+          //   dataIndex: 'procDefId'
+          // },
+          // {
+          //   title:'任务id',
+          //   align:"center",
+          //   dataIndex: 'taskId'
+          // },
           {
             title:'流程名称',
             align:"center",
@@ -171,14 +176,14 @@
             align:"center",
             dataIndex: 'duration'
           },
-          // {
-          //   title: '操作',
-          //   dataIndex: 'action',
-          //   align:"center",
-          //   fixed:"right",
-          //   width:147,
-          //   scopedSlots: { customRender: 'action' }
-          // }
+          {
+            title: '操作',
+            dataIndex: 'action',
+            align:"center",
+            fixed:"right",
+            width:147,
+            scopedSlots: { customRender: 'action' }
+          }
         ],
         url: {
           list: "/flowable/task/finishedList"
@@ -197,6 +202,11 @@
       initDictConfig(){
       },
       getSuperFieldList(){
+      },
+      goToJimuReport(record){
+        let jimuReportId = record.jimuReportId
+        let reportUrl = window._CONFIG['domianURL'] + '/jmreport/view/' + jimuReportId + '?token=' + Vue.ls.get(ACCESS_TOKEN)
+        window.open(reportUrl)
       }
     }
   }

@@ -76,9 +76,9 @@
         </template>
 
         <span slot="action" slot-scope="text, record">
-          <act-handle-btn v-if='isCanPass(record)' @success="loadData" :data-id="record.dataId" :variables='record' :type="0" text="办理"/>
+          <act-handle-btn v-if='isCanPass(record)' @success="loadData" :data-id="record.dataId" :variables='record' :candidate-users='candidateUsers' :type="0" text="办理"/>
           <a-divider v-if='isCanBacke(record)' type="vertical" ></a-divider>
-          <act-handle-btn v-if='isCanBacke(record)' @success="loadData" :data-id="record.dataId" :variables='record' :type="1" text="驳回"></act-handle-btn>
+          <act-handle-btn v-if='isCanBacke(record)' @success="loadData" :data-id="record.dataId" :variables='record' :type="2" text="退回"></act-handle-btn>
           <a-divider type="vertical" ></a-divider>
           <act-historic-detail-btn :data-id="record.dataId"></act-historic-detail-btn>
           <a-divider v-if='record.jimuReportId' type="vertical" ></a-divider>
@@ -114,6 +114,7 @@
   import {FlowableMixin} from "@views/flowable/mixin/FlowableMixin";
   import ActHandleBtn from "@views/flowable/components/ActHandleBtn";
   import ActHistoricDetailBtn from "@views/flowable/components/ActHistoricDetailBtn";
+  import {  userList } from '@views/flowable/api/definition'
 
   export default {
     name: 'MyTodoList',
@@ -189,10 +190,12 @@
         url: {
           list: "/flowable/task/todoList"
         },
+        candidateUsers: []
       }
     },
     created() {
       this.getSuperFieldList();
+      this.initUserAndRole()
     },
     computed: {
       importExcelUrl: function(){
@@ -200,6 +203,11 @@
       },
     },
     methods: {
+      initUserAndRole(){
+        userList({}).then(res=>{
+          this.candidateUsers = res.result||[]
+        })
+      },
       initDictConfig(){
       },
       getSuperFieldList(){

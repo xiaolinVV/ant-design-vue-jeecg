@@ -3,7 +3,7 @@
 <template>
   <span>
       <a-button :type="btnType" @click="handle()" >{{text}}</a-button>
-      <a-modal :title="modalTaskTitle" v-model="modalTaskVisible" :mask-closable="false" :width="500">
+      <a-modal :title="modalTaskTitle" v-model="modalTaskVisible" :mask-closable="false" :width="800">
 
       <div  v-if="modalTaskVisible">
         <div v-if="type==handleType.reApply">
