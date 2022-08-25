@@ -79,9 +79,10 @@
           <act-handle-btn v-if='isCanPass(record)' @success="loadData" :data-id="record.dataId" :variables='record' :type="0" text="办理"/>
           <a-divider v-if='isCanBacke(record)' type="vertical" ></a-divider>
           <act-handle-btn v-if='isCanBacke(record)' @success="loadData" :data-id="record.dataId" :variables='record' :type="1" text="驳回"></act-handle-btn>
-          <a-divider v-if='isCanHistoric(record)' type="vertical" ></a-divider>
+          <a-divider type="vertical" ></a-divider>
           <act-historic-detail-btn :data-id="record.dataId"></act-historic-detail-btn>
-
+          <a-divider v-if='record.jimuReportId' type="vertical" ></a-divider>
+          <a v-if='record.jimuReportId' @click="goToJimuReport(record)">查看单据</a>
 <!--          <a-divider type="vertical" />-->
 <!--          <a-dropdown>-->
 <!--            <a class="ant-dropdown-link">更多 <a-icon type="down" /></a>-->
@@ -201,6 +202,11 @@
       initDictConfig(){
       },
       getSuperFieldList(){
+      },
+      goToJimuReport(record){
+        let jimuReportId = record.jimuReportId
+        let reportUrl = window._CONFIG['domianURL'] + '/jmreport/view/' + jimuReportId + '?token=' + Vue.ls.get(ACCESS_TOKEN)
+        window.open(reportUrl)
       }
     }
   }
