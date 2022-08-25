@@ -106,7 +106,8 @@
 </template>
 
 <script>
-
+  import Vue from 'vue'
+  import { ACCESS_TOKEN } from '@/store/mutation-types'
   import '@/assets/less/TableExpand.less'
   import { mixinDevice } from '@/utils/mixin'
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
