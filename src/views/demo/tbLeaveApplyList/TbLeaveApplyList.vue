@@ -4,21 +4,6 @@
     <div class="table-page-search-wrapper">
       <a-form layout="inline" @keyup.enter.native="searchQuery">
         <a-row :gutter="24">
-          <a-col :xl="6" :lg="7" :md="8" :sm="24">
-            <a-form-item label="请假人">
-              <a-input placeholder="请输入请假人" v-model="queryParam.name"></a-input>
-            </a-form-item>
-          </a-col>
-          <a-col :xl="6" :lg="7" :md="8" :sm="24">
-            <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
-              <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
-              <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
-              <a @click="handleToggleSearch" style="margin-left: 8px">
-                {{ toggleSearchStatus ? '收起' : '展开' }}
-                <a-icon :type="toggleSearchStatus ? 'up' : 'down'"/>
-              </a>
-            </span>
-          </a-col>
         </a-row>
       </a-form>
     </div>
@@ -65,9 +50,9 @@
         <template slot="htmlSlot" slot-scope="text">
           <div v-html="text"></div>
         </template>
-        <template slot="imgSlot" slot-scope="text">
+        <template slot="imgSlot" slot-scope="text,record">
           <span v-if="!text" style="font-size: 12px;font-style: italic;">无图片</span>
-          <img v-else :src="getImgView(text)" height="25px" alt="" style="max-width:80px;font-size: 12px;font-style: italic;"/>
+          <img v-else :src="getImgView(text)" :preview="record.id" height="25px" alt="" style="max-width:80px;font-size: 12px;font-style: italic;"/>
         </template>
         <template slot="fileSlot" slot-scope="text">
           <span v-if="!text" style="font-size: 12px;font-style: italic;">无文件</span>
@@ -84,22 +69,16 @@
 
         <span slot="action" slot-scope="text, record">
           <a @click="handleEdit(record)">编辑</a>
-          <a-divider v-if='isCanApply(record)' type="vertical" ></a-divider>
-          <act-apply-btn v-if='isCanApply(record)' @success="loadData" :data-id="record.id" :variables="record"></act-apply-btn>
-          <a-divider v-if='isCanReApply(record)' type="vertical" ></a-divider>
-          <act-handle-btn v-if='isCanReApply(record)' @success="loadData" :data-id="record.id" :variables='record' :type="3" text="重新提交"></act-handle-btn>
-          <a-divider v-if='isCanPass(record)' type="vertical" ></a-divider>
-          <act-handle-btn v-if='isCanPass(record)' @success="loadData" :data-id="record.id" :variables='record' :type="0" text="通过"/>
-          <a-divider v-if='isCanBacke(record)' type="vertical" ></a-divider>
-          <act-handle-btn v-if='isCanBacke(record)' @success="loadData" :data-id="record.id" :variables='record' :type="1" text="驳回"></act-handle-btn>
-          <a-divider v-if='isCanHistoric(record)' type="vertical" ></a-divider>
-          <act-historic-detail-btn v-if='isCanHistoric(record)' :data-id="record.id"></act-historic-detail-btn>
+
           <a-divider type="vertical" />
           <a-dropdown>
             <a class="ant-dropdown-link">更多 <a-icon type="down" /></a>
             <a-menu slot="overlay">
               <a-menu-item>
                 <a @click="handleDetail(record)">详情</a>
+              </a-menu-item>
+              <a-menu-item v-if="record.bpmStatus === '0'">
+                <a @click="startProcess(record)">发起流程</a>
               </a-menu-item>
               <a-menu-item>
                 <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.id)">
@@ -122,22 +101,14 @@
   import '@/assets/less/TableExpand.less'
   import { mixinDevice } from '@/utils/mixin'
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
-  import {FlowableMixin} from "@views/flowable/mixin/FlowableMixin";
   import TbLeaveApplyModal from './modules/TbLeaveApplyModal'
-  import ActApplyBtn from "@views/flowable/components/ActApplyBtn";
-  import ActCancelBtn from "@views/flowable/components/ActCancelBtn";
-  import ActHandleBtn from "@views/flowable/components/ActHandleBtn";
-  import ActHistoricDetailBtn from "@views/flowable/components/ActHistoricDetailBtn";
+  import { postAction } from '@/api/manage'
 
   export default {
     name: 'TbLeaveApplyList',
-    mixins:[JeecgListMixin, mixinDevice,FlowableMixin],
+    mixins:[JeecgListMixin, mixinDevice],
     components: {
-      TbLeaveApplyModal,
-      ActApplyBtn,
-      ActCancelBtn,
-      ActHandleBtn,
-      ActHistoricDetailBtn
+      TbLeaveApplyModal
     },
     data () {
       return {
@@ -175,14 +146,9 @@
             dataIndex: 'content'
           },
           {
-            title:'流程状态',
+            title:'审批状态',
             align:"center",
-            dataIndex: 'actStatus_dictText'
-          },
-          {
-            title:'待处理节点',
-            align:"center",
-            dataIndex: 'taskName'
+            dataIndex: 'bpmStatus'
           },
           {
             title: '操作',
@@ -199,7 +165,7 @@
           deleteBatch: "/tbLeaveApply/tbLeaveApply/deleteBatch",
           exportXlsUrl: "/tbLeaveApply/tbLeaveApply/exportXls",
           importExcelUrl: "tbLeaveApply/tbLeaveApply/importExcel",
-          
+          startProcess: '/flowable/definition/startByDataId/'
         },
         dictOptions:{},
         superFieldList:[],
@@ -214,6 +180,26 @@
       },
     },
     methods: {
+      startProcess(record){
+        this.$confirm({
+          title:'提示',
+          content:'确认提交流程吗?',
+          onOk:()=>{
+            let params = Object.assign({dataId: record.id}, record);
+            postAction(this.url.startProcess + record.id, params).then(res=>{
+              if(res.success){
+                this.$message.success(res.message);
+                this.loadData();
+                this.onClearSelected();
+              }else{
+                this.$message.warning(res.message);
+              }
+            }).catch((e)=>{
+              this.$message.warning('不识别的请求!');
+            })
+          }
+        })
+      },
       initDictConfig(){
       },
       getSuperFieldList(){
@@ -222,6 +208,7 @@
         fieldList.push({type:'datetime',value:'startTime',text:'开始时间'})
         fieldList.push({type:'int',value:'days',text:'请假天数',dictCode:''})
         fieldList.push({type:'string',value:'content',text:'请假事由',dictCode:''})
+        fieldList.push({type:'string',value:'bpmStatus',text:'审批状态',dictCode:''})
         this.superFieldList = fieldList
       }
     }

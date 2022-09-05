@@ -23,6 +23,9 @@
               <a-textarea v-model="model.content" rows="4" placeholder="请输入请假事由" />
             </a-form-model-item>
           </a-col>
+          <a-col v-if="showFlowSubmitButton" :span="24" style="width: 100%;text-align: center;">
+            <a-button icon="check" style="width: 126px" type="primary" @click="submitForm">提 交</a-button>
+          </a-col>
         </a-row>
       </a-form-model>
     </j-form-container>
@@ -39,6 +42,18 @@
     components: {
     },
     props: {
+      //流程表单data
+      formData: {
+        type: Object,
+        default: ()=>{},
+        required: false
+      },
+      //表单模式：true流程表单 false普通表单
+      formBpm: {
+        type: Boolean,
+        default: false,
+        required: false
+      },
       //表单禁用
       disabled: {
         type: Boolean,
@@ -70,12 +85,28 @@
     },
     computed: {
       formDisabled(){
+        if(this.formBpm===true){
+          if(this.formData.disabled===false){
+            return false
+          }
+          return true
+        }
         return this.disabled
       },
+      showFlowSubmitButton(){
+        if(this.formBpm===true){
+          if(this.formData.disabled===false){
+            return true
+          }
+        }
+        return false
+      }
     },
     created () {
        //备份model原始值
       this.modelDefault = JSON.parse(JSON.stringify(this.model));
+      //如果是流程中表单，则需要加载流程表单data
+      this.showFlowData();
     },
     methods: {
       add () {
@@ -84,6 +115,17 @@
       edit (record) {
         this.model = Object.assign({}, record);
         this.visible = true;
+      },
+      //渲染流程表单数据
+      showFlowData(){
+        if(this.formBpm === true){
+          let params = {id:this.formData.dataId};
+          getAction(this.url.queryById,params).then((res)=>{
+            if(res.success){
+              this.edit (res.result);
+            }
+          });
+        }
       },
       submitForm () {
         const that = this;
