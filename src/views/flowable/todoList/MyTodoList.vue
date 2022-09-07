@@ -31,16 +31,10 @@
 
     <!-- 操作按钮区域 -->
     <div class="table-operator">
-<!--      <a-button type="primary" icon="download" @click="handleExportXls('我发起流程')">导出</a-button>-->
     </div>
 
     <!-- table区域-begin -->
     <div>
-      <div class="ant-alert ant-alert-info" style="margin-bottom: 16px;">
-        <i class="anticon anticon-info-circle ant-alert-icon"></i> 已选择 <a style="font-weight: 600">{{ selectedRowKeys.length }}</a>项
-        <a style="margin-left: 24px" @click="onClearSelected">清空</a>
-      </div>
-
       <a-table
         ref="table"
         size="middle"
@@ -51,7 +45,6 @@
         :dataSource="dataSource"
         :pagination="ipagination"
         :loading="loading"
-        :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
         class="j-table-force-nowrap"
         @change="handleTableChange">
 
@@ -76,30 +69,10 @@
         </template>
 
         <span slot="action" slot-scope="text, record">
-          <act-handle-btn v-if='isCanPass(record)' @success="loadData" :data-id="record.dataId" :variables='record' :candidate-users='candidateUsers' :type="0" text="办理"/>
-          <a-divider v-if='isCanBacke(record)' type="vertical" ></a-divider>
-          <act-handle-btn v-if='isCanBacke(record)' @success="loadData" :data-id="record.dataId" :variables='record' :type="2" text="退回"></act-handle-btn>
-          <a-divider type="vertical" ></a-divider>
-          <act-historic-detail-btn :data-id="record.dataId"></act-historic-detail-btn>
-          <a-divider v-if='record.jimuReportId' type="vertical" ></a-divider>
-          <a v-if='record.jimuReportId' @click="goToJimuReport(record)">查看单据</a>
-<!--          <a-divider type="vertical" />-->
-<!--          <a-dropdown>-->
-<!--            <a class="ant-dropdown-link">更多 <a-icon type="down" /></a>-->
-<!--            <a-menu slot="overlay">-->
-<!--              <a-menu-item>-->
-<!--                <a @click="handleDetail(record)">详情</a>-->
-<!--              </a-menu-item>-->
-<!--              <a-menu-item>-->
-<!--                <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.id)">-->
-<!--                  <a>删除</a>-->
-<!--                </a-popconfirm>-->
-<!--              </a-menu-item>-->
-<!--            </a-menu>-->
-<!--          </a-dropdown>-->
+          <a @click="handleProcess(record)">审批受理</a>
         </span>
-
       </a-table>
+      <act-handle-modal ref="actHandleModal" @ok="modalFormOk" :form-component-url='formComponentUrl'></act-handle-modal>
     </div>
 
   </a-card>
@@ -112,16 +85,13 @@
   import { mixinDevice } from '@/utils/mixin'
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
   import {FlowableMixin} from "@views/flowable/mixin/FlowableMixin";
-  import ActHandleBtn from "@views/flowable/components/ActHandleBtn";
-  import ActHistoricDetailBtn from "@views/flowable/components/ActHistoricDetailBtn";
-  import {  userList } from '@views/flowable/api/definition'
+  import ActHandleModal from '@views/ActHandleModal'
 
   export default {
     name: 'MyTodoList',
     mixins:[JeecgListMixin, mixinDevice,FlowableMixin],
     components: {
-      ActHandleBtn,
-      ActHistoricDetailBtn
+      ActHandleModal
     },
     data () {
       return {
@@ -129,7 +99,7 @@
         // 表头
         columns: [
           {
-            title: '#',
+            title: '编号',
             dataIndex: '',
             key:'rowIndex',
             width:60,
@@ -139,9 +109,24 @@
             }
           },
           {
-            title:'业务标题',
+            title:'业务类型',
+            align:"center",
+            dataIndex: 'category_dictText'
+          },
+          {
+            title:'标题',
             align:"center",
             dataIndex: 'title'
+          },
+          {
+            title:'提交人',
+            align:"center",
+            dataIndex: 'startUserId_dictText'
+          },
+          {
+            title:'提交时间',
+            align:"center",
+            dataIndex: 'createTime'
           },
           // {
           //   title:'流程编号',
@@ -153,26 +138,6 @@
           //   align:"center",
           //   dataIndex: 'taskId'
           // },
-          {
-            title:'流程名称',
-            align:"center",
-            dataIndex: 'procDefName'
-          },
-          {
-            title:'流程实例',
-            align:"center",
-            dataIndex: 'procInsId'
-          },
-          {
-            title:'发起人',
-            align:"center",
-            dataIndex: 'startUserId_dictText'
-          },
-          {
-            title:'开始时间',
-            align:"center",
-            dataIndex: 'createTime'
-          },
           {
             title:'当前环节',
             align:"center",
@@ -190,12 +155,12 @@
         url: {
           list: "/flowable/task/todoList"
         },
-        candidateUsers: []
+        candidateUsers: [],
+        formComponentUrl: ""  // pc 表单组件地址
       }
     },
     created() {
       this.getSuperFieldList();
-      this.initUserAndRole()
     },
     computed: {
       importExcelUrl: function(){
@@ -203,11 +168,6 @@
       },
     },
     methods: {
-      initUserAndRole(){
-        userList({}).then(res=>{
-          this.candidateUsers = res.result||[]
-        })
-      },
       initDictConfig(){
       },
       getSuperFieldList(){
@@ -216,6 +176,14 @@
         let jimuReportId = record.jimuReportId
         let reportUrl = window._CONFIG['domianURL'] + '/jmreport/view/' + jimuReportId + '?token=' + Vue.ls.get(ACCESS_TOKEN)
         window.open(reportUrl)
+      },
+      handleProcess(record) {
+        record.id = record.dataId
+        this.formComponentUrl = record.pcFormUrl
+        this.$refs.actHandleModal.show(record);
+        this.$refs.actHandleModal.title=record.title
+        this.$refs.actHandleModal.formBpm = true;
+        this.$refs.actHandleModal.disableSubmit = false;
       }
     }
   }

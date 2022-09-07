@@ -36,11 +36,6 @@
 
     <!-- table区域-begin -->
     <div>
-      <div class="ant-alert ant-alert-info" style="margin-bottom: 16px;">
-        <i class="anticon anticon-info-circle ant-alert-icon"></i> 已选择 <a style="font-weight: 600">{{ selectedRowKeys.length }}</a>项
-        <a style="margin-left: 24px" @click="onClearSelected">清空</a>
-      </div>
-
       <a-table
         ref="table"
         size="middle"
@@ -51,7 +46,6 @@
         :dataSource="dataSource"
         :pagination="ipagination"
         :loading="loading"
-        :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
         class="j-table-force-nowrap"
         @change="handleTableChange">
 
@@ -76,9 +70,10 @@
         </template>
 
         <span slot="action" slot-scope="text, record">
-          <act-historic-detail-btn :data-id="record.dataId"></act-historic-detail-btn>
-          <a-divider v-if='record.jimuReportId' type="vertical" ></a-divider>
-          <a v-if='record.jimuReportId' @click="goToJimuReport(record)">查看单据</a>
+          <a @click="handleProcess(record)">审批历史</a>
+<!--          <act-historic-detail-btn :data-id="record.dataId"></act-historic-detail-btn>-->
+<!--          <a-divider v-if='record.jimuReportId' type="vertical" ></a-divider>-->
+<!--          <a v-if='record.jimuReportId' @click="goToJimuReport(record)">查看单据</a>-->
 <!--          <a-dropdown>-->
 <!--            <a class="ant-dropdown-link">更多 <a-icon type="down" /></a>-->
 <!--            <a-menu slot="overlay">-->
@@ -95,6 +90,7 @@
         </span>
 
       </a-table>
+      <act-handle-modal ref="actHandleModal" @ok="modalFormOk" :form-component-url='formComponentUrl'></act-handle-modal>
     </div>
 
   </a-card>
@@ -109,12 +105,14 @@
   import {FlowableMixin} from "@views/flowable/mixin/FlowableMixin";
   import ActHistoricDetailBtn from "@views/flowable/components/ActHistoricDetailBtn";
   import Vue from 'vue'
+  import ActHandleModal from '@views/ActHandleModal'
 
   export default {
     name: 'MyFinishedList',
     mixins:[JeecgListMixin, mixinDevice],
     components: {
-      ActHistoricDetailBtn
+      ActHistoricDetailBtn,
+      ActHandleModal
     },
     data () {
       return {
@@ -122,7 +120,7 @@
         // 表头
         columns: [
           {
-            title: '#',
+            title: '编号',
             dataIndex: '',
             key:'rowIndex',
             width:60,
@@ -132,9 +130,24 @@
             }
           },
           {
-            title:'业务标题',
+            title:'业务类型',
+            align:"center",
+            dataIndex: 'category_dictText'
+          },
+          {
+            title:'标题',
             align:"center",
             dataIndex: 'title'
+          },
+          {
+            title:'提交人',
+            align:"center",
+            dataIndex: 'startUserId_dictText'
+          },
+          {
+            title:'提交时间',
+            align:"center",
+            dataIndex: 'createTime'
           },
           // {
           //   title:'流程编号',
@@ -146,21 +159,16 @@
           //   align:"center",
           //   dataIndex: 'taskId'
           // },
-          {
-            title:'流程名称',
-            align:"center",
-            dataIndex: 'procDefName'
-          },
-          {
-            title:'流程实例',
-            align:"center",
-            dataIndex: 'procInsId'
-          },
-          {
-            title:'发起人',
-            align:"center",
-            dataIndex: 'startUserId_dictText'
-          },
+          // {
+          //   title:'流程名称',
+          //   align:"center",
+          //   dataIndex: 'procDefName'
+          // },
+          // {
+          //   title:'流程实例',
+          //   align:"center",
+          //   dataIndex: 'procInsId'
+          // },
           {
             title:'开始时间',
             align:"center",
@@ -188,6 +196,7 @@
         url: {
           list: "/flowable/task/finishedList"
         },
+        formComponentUrl: ""
       }
     },
     created() {
@@ -207,6 +216,14 @@
         let jimuReportId = record.jimuReportId
         let reportUrl = window._CONFIG['domianURL'] + '/jmreport/view/' + jimuReportId + '?token=' + Vue.ls.get(ACCESS_TOKEN)
         window.open(reportUrl)
+      },
+      handleProcess(record) {
+        record.id = record.dataId
+        this.formComponentUrl = record.pcFormUrl
+        this.$refs.actHandleModal.show(record);
+        this.$refs.actHandleModal.title=record.title
+        this.$refs.actHandleModal.formBpm = true;
+        this.$refs.actHandleModal.disableSubmit = true;
       }
     }
   }
