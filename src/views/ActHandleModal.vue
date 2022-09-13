@@ -55,7 +55,9 @@
       formComponentUrl (newVal) {
         if (newVal !== '') {
           let formComponentUrl = "./" + this.formComponentUrl
-          this.formComponent = require(`${formComponentUrl}`).default;
+          // this.formComponent = require(`${formComponentUrl}`).default;
+          this.formComponent = () => import(`${formComponentUrl}`)
+          console.log('this.formComponent===', this.formComponent);
         }
       }
     },
@@ -63,7 +65,8 @@
       // 动态注册表单组件
       registerFormComponent (formComponentUrl) {
         if (formComponentUrl) {
-          this.formComponent = require(`${formComponentUrl}`).default;
+          // this.formComponent = require(`${formComponentUrl}`).default;
+          this.formComponent = () => import(`${formComponentUrl}`)
         }
       },
       show (record) {
