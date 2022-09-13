@@ -41,7 +41,7 @@
         size="middle"
         :scroll="{x:true}"
         bordered
-        rowKey="id"
+        rowKey="taskId"
         :columns="columns"
         :dataSource="dataSource"
         :pagination="ipagination"
@@ -169,11 +169,11 @@
           //   align:"center",
           //   dataIndex: 'procInsId'
           // },
-          {
-            title:'开始时间',
-            align:"center",
-            dataIndex: 'createTime'
-          },
+          // {
+          //   title:'开始时间',
+          //   align:"center",
+          //   dataIndex: 'createTime'
+          // },
           {
             title:'结束时间',
             align:"center",

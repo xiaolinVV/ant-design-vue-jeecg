@@ -40,7 +40,7 @@
         size="middle"
         :scroll="{x:true}"
         bordered
-        rowKey="id"
+        rowKey="taskId"
         :columns="columns"
         :dataSource="dataSource"
         :pagination="ipagination"
