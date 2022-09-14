@@ -8,10 +8,11 @@
     :okButtonProps="{ class:{'jee-hidden': disableSubmit} }"
     @cancel="handleCancel"
     okText="提交"
+    :footer="null"
     cancelText="关闭">
     <component ref="realForm" @ok="submitCallback" :disabled="true" :form-bpm='formBpm' :form-data='formData' :is="formComponent"></component>
     <HistoricActDetail ref="historicDetail" :data-id="dataId"></HistoricActDetail>
-    <act-handle-form  ref="actHandleForm" v-if='!disableSubmit' @ok="submitCallback" :disabled="disableSubmit" style='margin-top: 10px'></act-handle-form>
+    <act-handle-form  ref="actHandleForm" v-if='!disableSubmit' @ok="submitCallback" :disabled="disableSubmit" style='margin-top: 20px'></act-handle-form>
   </j-modal>
 </template>
 
@@ -41,8 +42,8 @@
         visible: false,
         disableSubmit: false,
         dataId: "",
-        formBpm: false,
-        formData: {
+        formBpm: false, //表单模式：true流程表单 false普通表单
+        formData: {     //流程表单data
           disabled: true,
           dataId: ""
         },

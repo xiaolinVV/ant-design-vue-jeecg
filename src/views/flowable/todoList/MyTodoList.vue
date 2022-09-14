@@ -70,6 +70,8 @@
 
         <span slot="action" slot-scope="text, record">
           <a @click="handleProcess(record)">审批受理</a>
+
+          <act-historic-detail-btn :data-id='record.dataId'></act-historic-detail-btn>
         </span>
       </a-table>
       <act-handle-modal ref="actHandleModal" @ok="modalFormOk" :form-component-url='formComponentUrl'></act-handle-modal>
@@ -86,12 +88,14 @@
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
   import {FlowableMixin} from "@views/flowable/mixin/FlowableMixin";
   import ActHandleModal from '@views/ActHandleModal'
+  import ActHistoricDetailBtn from '@views/flowable/components/ActHistoricDetailBtn'
 
   export default {
     name: 'MyTodoList',
     mixins:[JeecgListMixin, mixinDevice,FlowableMixin],
     components: {
-      ActHandleModal
+      ActHandleModal,
+      ActHistoricDetailBtn
     },
     data () {
       return {
