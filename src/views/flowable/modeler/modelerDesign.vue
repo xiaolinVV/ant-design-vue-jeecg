@@ -97,6 +97,9 @@
               <el-dropdown-item icon="el-icon-delete" @click.native="handleDelete(scope.row)" >
                 删除
               </el-dropdown-item>
+              <el-dropdown-item icon="el-icon-edit-outline" @click.native="handleProcessConfig(scope.row)" >
+                流程配置
+              </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </template>
@@ -141,6 +144,9 @@
         />
       </a-modal>
 
+    <!--  流程配置区域  -->
+    <ext-flow-my-business-config-modal ref='extFlowMyBusinessConfigModal'></ext-flow-my-business-config-modal>
+
   </div>
 </template>
 
@@ -156,10 +162,12 @@ import {
   updateState,
   userList
 } from "@views/flowable/api/definition";
+import ExtFlowMyBusinessConfigModal from './modules/ExtFlowMyBusinessConfigModal'
 
 export default {
   components: {
     bpmnModeler,
+    ExtFlowMyBusinessConfigModal
   },
   data() {
     return {
@@ -389,7 +397,13 @@ export default {
       }
       console.log(tree, treeNode,this.allDefinitionList,childrens)
       resolve(childrens)
-    }
+    },
+    handleProcessConfig: function (record) {
+      let processDefinitionKey = record.key;
+      let processName = record.name;
+      this.$refs.extFlowMyBusinessConfigModal.showModal(processDefinitionKey);
+      this.$refs.extFlowMyBusinessConfigModal.title = "流程【" + processName + "】配置";
+    },
   },
   computed: {
     getContainer() {
