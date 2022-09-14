@@ -81,6 +81,8 @@ export const JeecgListMixin = {
         this.ipagination.current = 1;
       }
       var params = this.getQueryParams();//查询条件
+      //搜索之前执行 应用场景：对 queryParam 对象内的数据，做一些数据转换工作等
+      if (typeof this.beforeSearch === 'function') this.beforeSearch(params)
       this.loading = true;
       getAction(this.url.list, params).then((res) => {
         if (res.success) {
