@@ -65,14 +65,15 @@ export const FlowableMixin = {
     },
     // 判断表单是否可编辑、删除：
     // 1、草稿状态可编辑、删除
-    // 2、被驳回且申请人是当前登录用户，可编辑、删除
+    // 2、被驳回且申请人是当前登录用户并且当前节点为申请人节点时，可编辑、删除
     isEditOrDelete(row){
       const proposer = row.proposer // 申请人
       const bpmStatus = row.bpmStatus
+      const taskNameId = row.taskNameId // 当前节点id
       if (bpmStatus === '0') { //草稿状态：可编辑、可删除
         return true;
       }
-      return bpmStatus === '3' && proposer === this.loginUser.username;
+      return bpmStatus === '3' && proposer === this.loginUser.username && taskNameId === "start";
     }
   }
 
