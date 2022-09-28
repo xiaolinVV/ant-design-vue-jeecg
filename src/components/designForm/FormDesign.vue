@@ -26,7 +26,9 @@ export default {
   created() {
     this.$nextTick(()=>{
       this.designData =  this.$route.params.designData
-      this.$refs.kfd.handleSetData(JSON.parse(this.designData))
+      if (this.designData !== "null") {
+        this.$refs.kfd.handleSetData(JSON.parse(this.designData))
+      }
     })
   },
   mounted () {
