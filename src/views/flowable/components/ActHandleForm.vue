@@ -156,7 +156,7 @@
                 this.$message.warn('请选择退回节点！');
                 return
               }
-              rejectTask(formData).then(res => {
+              returnTask(formData).then(res => {
                 this.confirmLoading = false;
                 if (res.success) {
                   this.$message.success('操作成功');
