@@ -125,7 +125,7 @@
           {
             title:'提交人',
             align:"center",
-            dataIndex: 'startUserId_dictText'
+            dataIndex: 'startUserName'
           },
           {
             title:'提交时间',
