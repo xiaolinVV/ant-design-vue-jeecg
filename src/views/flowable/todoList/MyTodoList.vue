@@ -5,23 +5,35 @@
       <a-form layout="inline" @keyup.enter.native="searchQuery">
         <a-row :gutter="24">
           <a-col :xl="6" :lg="7" :md="8" :sm="24">
-            <a-form-item label="流程编号">
-              <a-input placeholder="请输入流程编号" v-model="queryParam.procDefId"></a-input>
+            <a-form-item label="关键字">
+              <a-input placeholder="请输入关键字" v-model="queryParam.itemName"></a-input>
             </a-form-item>
           </a-col>
           <a-col :xl="6" :lg="7" :md="8" :sm="24">
-            <a-form-item label="流程名称">
-              <a-input placeholder="请输入流程名称" v-model="queryParam.procDefName"></a-input>
+            <a-form-item label="申请时间">
+              <j-date class="query-group-cust" v-model="queryParam.applyTimeBegin" placeholder="请选择开始日期" />
+              <span class="query-group-split-cust"></span>
+              <j-date class="query-group-cust" v-model="queryParam.applyTimeEnd" placeholder="请选择结束日期" />
+            </a-form-item>
+          </a-col>
+          <a-col :xl="6" :lg="7" :md="8" :sm="24">
+            <a-form-item label="申请科室">
+              <a-input placeholder="请输入申请科室" v-model="queryParam.applyKeshi"></a-input>
+            </a-form-item>
+          </a-col>
+          <a-col :xl="6" :lg="7" :md="8" :sm="24">
+            <a-form-item label="申请人">
+              <a-input placeholder="请输入申请人" v-model="queryParam.applyPeople"></a-input>
             </a-form-item>
           </a-col>
           <a-col :xl="6" :lg="7" :md="8" :sm="24">
             <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
               <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
               <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
-              <a @click="handleToggleSearch" style="margin-left: 8px">
+              <!-- <a @click="handleToggleSearch" style="margin-left: 8px">
                 {{ toggleSearchStatus ? '收起' : '展开' }}
                 <a-icon :type="toggleSearchStatus ? 'up' : 'down'"/>
-              </a>
+              </a> -->
             </span>
           </a-col>
         </a-row>
