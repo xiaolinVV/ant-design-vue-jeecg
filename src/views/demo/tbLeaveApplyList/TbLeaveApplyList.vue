@@ -83,9 +83,9 @@
         </template>
 
         <span slot="action" slot-scope="text, record">
-          <a @click="handleEdit(record)">编辑</a>
+          <a   v-if='isEditOrDelete(record)'  @click="handleEdit(record)">编辑</a>
 
-          <a-divider type="vertical" />
+          <a-divider  v-if='isEditOrDelete(record)'  type="vertical" />
           <a-dropdown>
             <a class="ant-dropdown-link">更多 <a-icon type="down" /></a>
             <a-menu slot="overlay">
@@ -96,7 +96,7 @@
                 <a @click="startProcess(record)">发起流程</a>
               </a-menu-item>
               <a-menu-item>
-                <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.id)">
+                <a-popconfirm  v-if='isEditOrDelete(record)'  title="确定删除吗?" @confirm="() => handleDelete(record.id)">
                   <a>删除</a>
                 </a-popconfirm>
               </a-menu-item>
@@ -113,123 +113,124 @@
 
 <script>
 
-  import '@/assets/less/TableExpand.less'
-  import { mixinDevice } from '@/utils/mixin'
-  import { JeecgListMixin } from '@/mixins/JeecgListMixin'
-  import TbLeaveApplyModal from './modules/TbLeaveApplyModal'
-  import { postAction } from '@/api/manage'
-  import {filterMultiDictText} from '@/components/dict/JDictSelectUtil'
+import '@/assets/less/TableExpand.less'
+import { mixinDevice } from '@/utils/mixin'
+import { JeecgListMixin } from '@/mixins/JeecgListMixin'
+import TbLeaveApplyModal from './modules/TbLeaveApplyModal'
+import { postAction } from '@/api/manage'
+import { FlowableMixin } from '@views/flowable/mixin/FlowableMixin'
+import {filterMultiDictText} from '@/components/dict/JDictSelectUtil'
 
-  export default {
-    name: 'TbLeaveApplyList',
-    mixins:[JeecgListMixin, mixinDevice],
-    components: {
-      TbLeaveApplyModal
-    },
-    data () {
-      return {
-        description: '请假申请管理页面',
-        // 表头
-        columns: [
-          {
-            title: '#',
-            dataIndex: '',
-            key:'rowIndex',
-            width:60,
-            align:"center",
-            customRender:function (t,r,index) {
-              return parseInt(index)+1;
-            }
-          },
-          {
-            title:'请假人',
-            align:"center",
-            dataIndex: 'name'
-          },
-          {
-            title:'开始时间',
-            align:"center",
-            dataIndex: 'startTime'
-          },
-          {
-            title:'请假天数',
-            align:"center",
-            dataIndex: 'days'
-          },
-          {
-            title:'请假事由',
-            align:"center",
-            dataIndex: 'content'
-          },
-          {
-            title:'审批状态',
-            align:"center",
-            dataIndex: 'bpmStatus_dictText'
-          },
-          {
-            title: '操作',
-            dataIndex: 'action',
-            align:"center",
-            fixed:"right",
-            width:147,
-            scopedSlots: { customRender: 'action' }
+export default {
+  name: 'TbLeaveApplyList',
+  mixins:[JeecgListMixin, mixinDevice, FlowableMixin],
+  components: {
+    TbLeaveApplyModal
+  },
+  data () {
+    return {
+      description: '请假申请管理页面',
+      // 表头
+      columns: [
+        {
+          title: '#',
+          dataIndex: '',
+          key:'rowIndex',
+          width:60,
+          align:"center",
+          customRender:function (t,r,index) {
+            return parseInt(index)+1;
           }
-        ],
-        url: {
-          list: "/tbLeaveApply/tbLeaveApply/list",
-          delete: "/tbLeaveApply/tbLeaveApply/delete",
-          deleteBatch: "/tbLeaveApply/tbLeaveApply/deleteBatch",
-          exportXlsUrl: "/tbLeaveApply/tbLeaveApply/exportXls",
-          importExcelUrl: "tbLeaveApply/tbLeaveApply/importExcel",
-          startProcess: '/flowable/definition/startByDataId/'
         },
-        dictOptions:{},
-        superFieldList:[],
-      }
-    },
-    created() {
+        {
+          title:'请假人',
+          align:"center",
+          dataIndex: 'name'
+        },
+        {
+          title:'开始时间',
+          align:"center",
+          dataIndex: 'startTime'
+        },
+        {
+          title:'请假天数',
+          align:"center",
+          dataIndex: 'days'
+        },
+        {
+          title:'请假事由',
+          align:"center",
+          dataIndex: 'content'
+        },
+        {
+          title:'审批状态',
+          align:"center",
+          dataIndex: 'bpmStatus_dictText'
+        },
+        {
+          title: '操作',
+          dataIndex: 'action',
+          align:"center",
+          fixed:"right",
+          width:147,
+          scopedSlots: { customRender: 'action' }
+        }
+      ],
+      url: {
+        list: "/tbLeaveApply/tbLeaveApply/list",
+        delete: "/tbLeaveApply/tbLeaveApply/delete",
+        deleteBatch: "/tbLeaveApply/tbLeaveApply/deleteBatch",
+        exportXlsUrl: "/tbLeaveApply/tbLeaveApply/exportXls",
+        importExcelUrl: "tbLeaveApply/tbLeaveApply/importExcel",
+        startProcess: '/flowable/definition/startByDataId/'
+      },
+      dictOptions:{},
+      superFieldList:[],
+    }
+  },
+  created() {
     this.getSuperFieldList();
+  },
+  computed: {
+    importExcelUrl: function(){
+      return `${window._CONFIG['domianURL']}/${this.url.importExcelUrl}`;
     },
-    computed: {
-      importExcelUrl: function(){
-        return `${window._CONFIG['domianURL']}/${this.url.importExcelUrl}`;
-      },
+  },
+  methods: {
+    startProcess(record){
+      this.$confirm({
+        title:'提示',
+        content:'确认提交流程吗?',
+        onOk:()=>{
+          let params = Object.assign({dataId: record.id}, record);
+          postAction(this.url.startProcess + record.id, params).then(res=>{
+            if(res.success){
+              this.$message.success(res.message);
+              this.loadData();
+              this.onClearSelected();
+            }else{
+              this.$message.warning(res.message);
+            }
+          }).catch((e)=>{
+            this.$message.warning('不识别的请求!');
+          })
+        }
+      })
     },
-    methods: {
-      startProcess(record){
-        this.$confirm({
-          title:'提示',
-          content:'确认提交流程吗?',
-          onOk:()=>{
-            let params = Object.assign({dataId: record.id}, record);
-            postAction(this.url.startProcess + record.id, params).then(res=>{
-              if(res.success){
-                this.$message.success(res.message);
-                this.loadData();
-                this.onClearSelected();
-              }else{
-                this.$message.warning(res.message);
-              }
-            }).catch((e)=>{
-              this.$message.warning('不识别的请求!');
-            })
-          }
-        })
-      },
-      initDictConfig(){
-      },
-      getSuperFieldList(){
-        let fieldList=[];
-        fieldList.push({type:'string',value:'name',text:'请假人',dictCode:''})
-        fieldList.push({type:'datetime',value:'startTime',text:'开始时间'})
-        fieldList.push({type:'int',value:'days',text:'请假天数',dictCode:''})
-        fieldList.push({type:'string',value:'content',text:'请假事由',dictCode:''})
-        fieldList.push({type:'string',value:'bpmStatus',text:'审批状态',dictCode:'act_status'})
-        this.superFieldList = fieldList
-      }
+    initDictConfig(){
+    },
+    getSuperFieldList(){
+      let fieldList=[];
+      fieldList.push({type:'string',value:'name',text:'请假人',dictCode:''})
+      fieldList.push({type:'datetime',value:'startTime',text:'开始时间'})
+      fieldList.push({type:'int',value:'days',text:'请假天数',dictCode:''})
+      fieldList.push({type:'string',value:'content',text:'请假事由',dictCode:''})
+      fieldList.push({type:'string',value:'bpmStatus',text:'审批状态',dictCode:'act_status'})
+      this.superFieldList = fieldList
     }
   }
+}
 </script>
 <style scoped>
-  @import '~@assets/less/common.less';
+@import '~@assets/less/common.less';
 </style>
