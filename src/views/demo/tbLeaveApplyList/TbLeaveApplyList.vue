@@ -83,7 +83,7 @@
         </template>
 
         <span slot="action" slot-scope="text, record">
-          <a   v-if='isEditOrDelete(record)'  @click="handleEdit(record)">编辑</a>
+          <a  v-if='isEditOrDelete(record)'  @click="handleEdit(record)">编辑</a>
 
           <a-divider  v-if='isEditOrDelete(record)'  type="vertical" />
           <a-dropdown>
@@ -91,6 +91,9 @@
             <a-menu slot="overlay">
               <a-menu-item>
                 <a @click="handleDetail(record)">详情</a>
+              </a-menu-item>
+              <a-menu-item  v-if='record.jimuReportId'>
+                 <a @click="goToApplyDoc(record)">审批单据</a>
               </a-menu-item>
               <a-menu-item v-if="record.bpmStatus === '0'">
                 <a @click="startProcess(record)">发起流程</a>
@@ -113,124 +116,131 @@
 
 <script>
 
-import '@/assets/less/TableExpand.less'
-import { mixinDevice } from '@/utils/mixin'
-import { JeecgListMixin } from '@/mixins/JeecgListMixin'
-import TbLeaveApplyModal from './modules/TbLeaveApplyModal'
-import { postAction } from '@/api/manage'
-import { FlowableMixin } from '@views/flowable/mixin/FlowableMixin'
-import {filterMultiDictText} from '@/components/dict/JDictSelectUtil'
+  import '@/assets/less/TableExpand.less'
+  import { mixinDevice } from '@/utils/mixin'
+  import { JeecgListMixin } from '@/mixins/JeecgListMixin'
+  import TbLeaveApplyModal from './modules/TbLeaveApplyModal'
+  import { postAction } from '@/api/manage'
+  import { FlowableMixin } from '@views/flowable/mixin/FlowableMixin'
+  import Vue from 'vue'
+  import { ACCESS_TOKEN } from '@/store/mutation-types'
+  import {filterMultiDictText} from '@/components/dict/JDictSelectUtil'
 
-export default {
-  name: 'TbLeaveApplyList',
-  mixins:[JeecgListMixin, mixinDevice, FlowableMixin],
-  components: {
-    TbLeaveApplyModal
-  },
-  data () {
-    return {
-      description: '请假申请管理页面',
-      // 表头
-      columns: [
-        {
-          title: '#',
-          dataIndex: '',
-          key:'rowIndex',
-          width:60,
-          align:"center",
-          customRender:function (t,r,index) {
-            return parseInt(index)+1;
-          }
-        },
-        {
-          title:'请假人',
-          align:"center",
-          dataIndex: 'name'
-        },
-        {
-          title:'开始时间',
-          align:"center",
-          dataIndex: 'startTime'
-        },
-        {
-          title:'请假天数',
-          align:"center",
-          dataIndex: 'days'
-        },
-        {
-          title:'请假事由',
-          align:"center",
-          dataIndex: 'content'
-        },
-        {
-          title:'审批状态',
-          align:"center",
-          dataIndex: 'bpmStatus_dictText'
-        },
-        {
-          title: '操作',
-          dataIndex: 'action',
-          align:"center",
-          fixed:"right",
-          width:147,
-          scopedSlots: { customRender: 'action' }
-        }
-      ],
-      url: {
-        list: "/tbLeaveApply/tbLeaveApply/list",
-        delete: "/tbLeaveApply/tbLeaveApply/delete",
-        deleteBatch: "/tbLeaveApply/tbLeaveApply/deleteBatch",
-        exportXlsUrl: "/tbLeaveApply/tbLeaveApply/exportXls",
-        importExcelUrl: "tbLeaveApply/tbLeaveApply/importExcel",
-        startProcess: '/flowable/definition/startByDataId/'
-      },
-      dictOptions:{},
-      superFieldList:[],
-    }
-  },
-  created() {
-    this.getSuperFieldList();
-  },
-  computed: {
-    importExcelUrl: function(){
-      return `${window._CONFIG['domianURL']}/${this.url.importExcelUrl}`;
+  export default {
+    name: 'TbLeaveApplyList',
+    mixins:[JeecgListMixin, mixinDevice, FlowableMixin],
+    components: {
+      TbLeaveApplyModal
     },
-  },
-  methods: {
-    startProcess(record){
-      this.$confirm({
-        title:'提示',
-        content:'确认提交流程吗?',
-        onOk:()=>{
-          let params = Object.assign({dataId: record.id}, record);
-          postAction(this.url.startProcess + record.id, params).then(res=>{
-            if(res.success){
-              this.$message.success(res.message);
-              this.loadData();
-              this.onClearSelected();
-            }else{
-              this.$message.warning(res.message);
+    data () {
+      return {
+        description: '请假申请管理页面',
+        // 表头
+        columns: [
+          {
+            title: '#',
+            dataIndex: '',
+            key:'rowIndex',
+            width:60,
+            align:"center",
+            customRender:function (t,r,index) {
+              return parseInt(index)+1;
             }
-          }).catch((e)=>{
-            this.$message.warning('不识别的请求!');
-          })
-        }
-      })
+          },
+          {
+            title:'请假人',
+            align:"center",
+            dataIndex: 'name'
+          },
+          {
+            title:'开始时间',
+            align:"center",
+            dataIndex: 'startTime'
+          },
+          {
+            title:'请假天数',
+            align:"center",
+            dataIndex: 'days'
+          },
+          {
+            title:'请假事由',
+            align:"center",
+            dataIndex: 'content'
+          },
+          {
+            title:'审批状态',
+            align:"center",
+            dataIndex: 'bpmStatus_dictText'
+          },
+          {
+            title: '操作',
+            dataIndex: 'action',
+            align:"center",
+            fixed:"right",
+            width:147,
+            scopedSlots: { customRender: 'action' }
+          }
+        ],
+        url: {
+          list: "/tbLeaveApply/tbLeaveApply/list",
+          delete: "/tbLeaveApply/tbLeaveApply/delete",
+          deleteBatch: "/tbLeaveApply/tbLeaveApply/deleteBatch",
+          exportXlsUrl: "/tbLeaveApply/tbLeaveApply/exportXls",
+          importExcelUrl: "tbLeaveApply/tbLeaveApply/importExcel",
+          startProcess: '/flowable/definition/startByDataId/'
+        },
+        dictOptions:{},
+        superFieldList:[],
+      }
     },
-    initDictConfig(){
+    created() {
+    this.getSuperFieldList();
     },
-    getSuperFieldList(){
-      let fieldList=[];
-      fieldList.push({type:'string',value:'name',text:'请假人',dictCode:''})
-      fieldList.push({type:'datetime',value:'startTime',text:'开始时间'})
-      fieldList.push({type:'int',value:'days',text:'请假天数',dictCode:''})
-      fieldList.push({type:'string',value:'content',text:'请假事由',dictCode:''})
-      fieldList.push({type:'string',value:'bpmStatus',text:'审批状态',dictCode:'act_status'})
-      this.superFieldList = fieldList
+    computed: {
+      importExcelUrl: function(){
+        return `${window._CONFIG['domianURL']}/${this.url.importExcelUrl}`;
+      },
+    },
+    methods: {
+      startProcess(record){
+        this.$confirm({
+          title:'提示',
+          content:'确认提交流程吗?',
+          onOk:()=>{
+            let params = Object.assign({dataId: record.id}, record);
+            postAction(this.url.startProcess + record.id, params).then(res=>{
+              if(res.success){
+                this.$message.success(res.message);
+                this.loadData();
+                this.onClearSelected();
+              }else{
+                this.$message.warning(res.message);
+              }
+            }).catch((e)=>{
+              this.$message.warning('不识别的请求!');
+            })
+          }
+        })
+      },
+      goToApplyDoc(record) {
+        let jimuReportId = record.jimuReportId
+        let reportUrl = window._CONFIG['domianURL'] + '/jmreport/view/' + jimuReportId + '?token=' + Vue.ls.get(ACCESS_TOKEN) + '&id=' + record.id
+        window.open(reportUrl)
+      },
+      initDictConfig(){
+      },
+      getSuperFieldList(){
+        let fieldList=[];
+        fieldList.push({type:'string',value:'name',text:'请假人',dictCode:''})
+        fieldList.push({type:'datetime',value:'startTime',text:'开始时间'})
+        fieldList.push({type:'int',value:'days',text:'请假天数',dictCode:''})
+        fieldList.push({type:'string',value:'content',text:'请假事由',dictCode:''})
+        fieldList.push({type:'string',value:'bpmStatus',text:'审批状态',dictCode:'act_status'})
+        this.superFieldList = fieldList
+      }
     }
   }
-}
 </script>
 <style scoped>
-@import '~@assets/less/common.less';
+  @import '~@assets/less/common.less';
 </style>
