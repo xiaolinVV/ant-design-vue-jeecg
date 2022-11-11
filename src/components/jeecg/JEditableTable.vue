@@ -117,8 +117,9 @@
               <!-- tr 只加载可见的和预加载的总共十条数据 -->
               <div
                 v-if="
-                rowIndex >= parseInt(`${(scrollTop-rowHeight) / rowHeight}`) &&
-                  (parseInt(`${scrollTop / rowHeight}`) + 9) > rowIndex
+                maxHeight == null ||
+                (rowIndex >= parseInt(`${(scrollTop-rowHeight) / rowHeight}`) &&
+                  (parseInt(`${scrollTop / rowHeight}`) + 9) > rowIndex)
               "
                 :id="`${caseId}tbody-tr-${rowIndex}`"
                 :data-idx="rowIndex"
@@ -836,6 +837,14 @@
         required: false,
         default: ''
       },
+      //删除前校验数据
+      beforeDelete:{
+        type: Function,
+        required: false,
+        default: ()=>{
+          return Promise.resolve(true);
+        }
+      }
     },
     data() {
       return {
@@ -1521,8 +1530,14 @@
       },
       /** 删除被选中的行 */
       removeSelectedRows() {
-        this.removeRows(this.selectedRowIds)
-        this.selectedRowIds = []
+        //update-begin-author:taoyan date:2022-8-5 for: VUEN-1767【bug】vue2 未控制住
+        this.beforeDelete().then(()=>{
+          this.removeRows(this.selectedRowIds)
+          this.selectedRowIds = []
+        }).catch(e=>{
+          this.$message.error(e);
+        });
+        //update-end-author:taoyan date:2022-8-5 for: VUEN-1767【bug】vue2 未控制住
       },
       /** 删除一行或多行 */
       removeRows(id) {
