@@ -54,6 +54,9 @@ import { rules } from '@/utils/rules'
 import KFormDesign from 'k-form-design'
 Vue.use(KFormDesign)
 /** KFormDesign */
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+Vue.use(ElementUI);
 Vue.prototype.rules = rules
 Vue.config.productionTip = false
 Vue.use(Storage, config.storageOptions)
