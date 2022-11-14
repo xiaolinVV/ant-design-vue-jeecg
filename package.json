@@ -46,7 +46,6 @@
     "vuex": "^3.1.0",
     "vxe-table": "2.9.13",
     "vxe-table-plugin-antd": "1.8.10",
-    "workflow-bpmn-modeler": "^0.2.8",
     "xe-utils": "2.4.8",
     "xss": "^1.0.13"
   },

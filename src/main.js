@@ -50,13 +50,10 @@ import '@/components/jeecg/JVxeTable/install'
 import '@/components/JVxeCells/install'
 //表单验证
 import { rules } from '@/utils/rules'
-/** element ui & KFormDesign */
-import ElementUI from 'element-ui';
-import 'element-ui/lib/theme-chalk/index.css';
+/** KFormDesign */
 import KFormDesign from 'k-form-design'
 Vue.use(KFormDesign)
-Vue.use(ElementUI);
-/** element ui & KFormDesign */
+/** KFormDesign */
 Vue.prototype.rules = rules
 Vue.config.productionTip = false
 Vue.use(Storage, config.storageOptions)
