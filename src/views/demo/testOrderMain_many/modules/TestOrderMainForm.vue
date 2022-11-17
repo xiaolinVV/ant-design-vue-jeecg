@@ -47,11 +47,12 @@
 
 <script>
 
-  import { getAction } from '@/api/manage'
+  import { getAction, putAction } from '@/api/manage'
   import { FormTypes,getRefPromise,VALIDATE_NO_PASSED } from '@/utils/JEditableTableUtil'
   import { JEditableTableModelMixin } from '@/mixins/JEditableTableModelMixin'
   import { validateDuplicateValue } from '@/utils/util'
 
+  const ruleBaseURL = '/sys/fillRule/executeRuleByCode/'
   export default {
     name: 'TestOrderMainForm',
     mixins: [JEditableTableModelMixin],
@@ -133,6 +134,9 @@
           testOrderProduct: {
             list: '/testOrderMain_many/testOrderMain/queryTestOrderProductByMainId'
           },
+          rule: {
+            orderCode: ruleBaseURL + 'shop_order_num'
+          },
         }
       }
     },
@@ -153,6 +157,7 @@
     },
     methods: {
       addBefore(){
+        this.getOrderCode()
         this.testOrderProductTable.dataSource=[]
       },
       getAllTable() {
@@ -196,6 +201,14 @@
       validateError(msg){
         this.$message.error(msg)
       },
+      getOrderCode() {
+        putAction(this.url.rule.orderCode, this.model).then(res => {
+          // 执行成功，获取返回的值，并赋到页面上
+          if (res.success) {
+            this.model.orderCode = res.result
+          }
+        })
+      }
 
     }
   }
