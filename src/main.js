@@ -51,8 +51,8 @@ import '@/components/JVxeCells/install'
 //表单验证
 import { rules } from '@/utils/rules'
 /** KFormDesign */
-import KFormDesign from 'k-form-design'
-Vue.use(KFormDesign)
+// import KFormDesign from 'k-form-design'
+// Vue.use(KFormDesign)
 /** KFormDesign */
 Vue.prototype.rules = rules
 Vue.config.productionTip = false
