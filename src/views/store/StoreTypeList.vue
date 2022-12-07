@@ -22,6 +22,7 @@
         rowKey="id"
         :columns="columns"
         :dataSource="dataSource"
+        :pagination="ipagination"
         :loading="loading"
         :expandedRowKeys="expandedRowKeys"
         @change="handleTableChange"
@@ -50,17 +51,17 @@
           <a-divider type="vertical" />
           <a @click="handleEdit(record)">编辑</a>
           <a-divider type="vertical" />
-          <a @click="handleEdit(record)">停用</a>
+          <a v-if="record.status==='1'" @click="showStopStatus(record)">停用</a>
+          <a v-else @click="showStartStatus(record)">启用</a>
           <a-divider type="vertical" />
-          <a-popconfirm title="确定删除吗?" @confirm="() => handleDeleteNode(record.id)" placement="topLeft">
-            <a>删除</a>
-          </a-popconfirm>
+            <a @click='showDelete(record)'>删除</a>
         </span>
 
       </a-table>
     </div>
 
     <storeType-modal ref="modalForm" @ok="modalFormOk"></storeType-modal>
+    <StoreTypeListStopOrStartModal ref="storeTypeListStopOrStartModal" @ok="modalFormOk"/>
   </a-card>
 </template>
 
@@ -69,6 +70,7 @@
   import { getAction, deleteAction } from '@/api/manage'
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
   import StoreTypeModal from './modules/StoreTypeModal'
+  import StoreTypeListStopOrStartModal from './modules/StoreTypeListStopOrStartModal'
   import {filterMultiDictText} from '@/components/dict/JDictSelectUtil'
   import { filterObj } from '@/utils/util';
 
@@ -76,7 +78,8 @@
     name: "StoreTypeList",
     mixins:[JeecgListMixin],
     components: {
-      StoreTypeModal
+      StoreTypeModal,
+      StoreTypeListStopOrStartModal
     },
     data () {
       return {
@@ -205,6 +208,28 @@
       }
     },
     methods: {
+      handleAdd: function () {
+        this.$refs.modalForm.add();
+        this.$refs.modalForm.title = "添加分类";
+        this.$refs.modalForm.disableSubmit = false;
+      },
+      showStopStatus(record = {}) {
+        this.$refs.storeTypeListStopOrStartModal.showModalStopStatus(record)
+      },
+      showStartStatus(record = {}) {
+        this.$refs.storeTypeListStopOrStartModal.showStartStatus(record)
+      },
+      showDelete(record = {}) {
+        // todo 添加删除拦截校验 @zhangshaolin
+        // if (record.level == 1 && record.isDel == 1) {
+        //   this.$error({
+        //     title: '该分类底下存在子分类或者商户，无法删除',
+        //     content: '您若要删除该分类，请先移除子分类或者商户'
+        //   })
+        //   return
+        // }
+        this.$refs.storeTypeListStopOrStartModal.showDelete(record)
+      },
       loadData(arg){
         if(arg==1){
           this.ipagination.current=1
@@ -342,6 +367,7 @@
         this.loadParent = true
         let obj = {}
         obj[this.pidField] = record['id']
+        this.$refs.modalForm.title = "添加子分类";
         this.$refs.modalForm.add(obj);
       },
       handleDeleteNode(id) {

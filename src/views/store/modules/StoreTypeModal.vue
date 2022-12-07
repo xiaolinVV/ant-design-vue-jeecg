@@ -13,28 +13,10 @@
         <a-form-model-item label="分类名称" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="typeName">
           <a-input v-model="model.typeName" placeholder="请输入分类名称" ></a-input>
         </a-form-model-item>
-        <a-form-model-item label="分类级别" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="level">
-          <j-dict-select-tag type="list" v-model="model.level"  dictCode="store_type_level" placeholder="请选择分类级别" />
-        </a-form-model-item>
-        <a-form-model-item label="分类图片" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="logoAddr">
-          <j-image-upload isMultiple  v-model="model.logoAddr" ></j-image-upload>
-        </a-form-model-item>
-        <a-form-model-item label="排序" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="sort">
-          <a-input-number v-model="model.sort" placeholder="请输入排序" style="width: 100%" />
-        </a-form-model-item>
-        <a-form-model-item label="福利金抵扣最低值" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="smallWelfarePayments">
-          <a-input-number v-model="model.smallWelfarePayments" placeholder="请输入福利金抵扣最低值" style="width: 100%" />
-        </a-form-model-item>
-        <a-form-model-item label="状态；0：停用；1：启用" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="status">
-          <j-dict-select-tag type="list" v-model="model.status"  dictCode="store_type_status" placeholder="请选择状态；0：停用；1：启用" />
-        </a-form-model-item>
-        <a-form-model-item label="停用说明" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="closeExplain">
-          <a-textarea v-model="model.closeExplain" rows="4" placeholder="请输入停用说明" />
-        </a-form-model-item>
-        <a-form-model-item label="父级分类id，0为一级" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="pid">
+        <a-form-model-item label="上级分类名称" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="pid">
           <j-tree-select
             ref="treeSelect"
-            placeholder="请选择父级分类id，0为一级"
+            placeholder="请选择上级分类名称"
             v-model="model.pid"
             dict="store_type,type_name,id"
             pidField="pid"
@@ -43,7 +25,22 @@
             disabled>
           </j-tree-select>
         </a-form-model-item>
-        
+        <a-form-model-item label="排序" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="rank">
+          <a-input-number v-model="model.rank" placeholder="请输入排序" style="width: 100%" />
+        </a-form-model-item>
+        <a-form-model-item label="状态" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="status">
+          <j-dict-select-tag type="list" v-model="model.status"  dictCode="store_type_status" placeholder="请选择状态" />
+        </a-form-model-item>
+        <a-form-model-item label="福利金抵扣最低值" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="smallWelfarePayments">
+          <a-input-number v-model="model.smallWelfarePayments" placeholder="请输入福利金抵扣最低值" style="width: 100%" />
+        </a-form-model-item>
+        <a-form-model-item label="logo" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="logoAddr">
+          <j-image-upload isMultiple  v-model="model.logoAddr" ></j-image-upload>
+          <div>
+            请上传分类图片，支持jpg、jpeg、png格式，大小不超过500k
+          </div>
+        </a-form-model-item>
+
       </a-form-model>
     </a-spin>
   </j-modal>
@@ -55,7 +52,7 @@
   import { validateDuplicateValue } from '@/utils/util'
   export default {
     name: "StoreTypeModal",
-    components: { 
+    components: {
     },
     data () {
       return {
@@ -63,6 +60,7 @@
         width:800,
         visible: false,
         model:{
+          status: "1"
          },
         labelCol: {
           xs: { span: 24 },
@@ -81,7 +79,7 @@
            logoAddr: [
               { required: true, message: '请输入分类图片!'},
            ],
-           sort: [
+          rank: [
               { required: true, message: '请输入排序!'},
               { pattern: /^-?\d+\.?\d*$/, message: '请输入数字!'},
            ],
@@ -99,7 +97,7 @@
         },
         expandedRowKeys:[],
         pidField:"pid"
-     
+
       }
     },
     created () {
@@ -181,8 +179,8 @@
           }
         }
       }
-      
-      
+
+
     }
   }
 </script>
