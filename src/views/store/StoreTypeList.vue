@@ -11,37 +11,17 @@
 
     <!-- 操作按钮区域 -->
     <div class="table-operator">
-      <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
-      <a-button type="primary" icon="download" @click="handleExportXls('店铺分类')">导出</a-button>
-      <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">
-        <a-button type="primary" icon="import">导入</a-button>
-      </a-upload>
-      <!-- 高级查询区域 -->
-      <j-super-query :fieldList="superFieldList" ref="superQueryModal" @handleSuperQuery="handleSuperQuery"></j-super-query>
-      <a-dropdown v-if="selectedRowKeys.length > 0">
-        <a-menu slot="overlay">
-          <a-menu-item key="1" @click="batchDel"><a-icon type="delete"/>删除</a-menu-item>
-        </a-menu>
-        <a-button style="margin-left: 8px"> 批量操作 <a-icon type="down" /></a-button>
-      </a-dropdown>
+      <a-button @click="handleAdd" type="primary" icon="plus">添加</a-button>
     </div>
 
     <!-- table区域-begin -->
     <div>
-      <div class="ant-alert ant-alert-info" style="margin-bottom: 16px;">
-        <i class="anticon anticon-info-circle ant-alert-icon"></i> 已选择 <a style="font-weight: 600">{{ selectedRowKeys.length }}</a>项
-        <a style="margin-left: 24px" @click="onClearSelected">清空</a>
-      </div>
-
       <a-table
         ref="table"
         size="middle"
         rowKey="id"
-        class="j-table-force-nowrap"
-        :scroll="{x:true}"
         :columns="columns"
         :dataSource="dataSource"
-        :pagination="ipagination"
         :loading="loading"
         :expandedRowKeys="expandedRowKeys"
         @change="handleTableChange"
@@ -66,22 +46,15 @@
         </template>
 
         <span slot="action" slot-scope="text, record">
-          <a @click="handleEdit(record)">编辑</a>
-
+          <a @click="handleAddChild(record)">添加子分类</a>
           <a-divider type="vertical" />
-          <a-dropdown>
-            <a class="ant-dropdown-link">更多 <a-icon type="down" /></a>
-            <a-menu slot="overlay">
-              <a-menu-item>
-                <a @click="handleAddChild(record)">添加下级</a>
-              </a-menu-item>
-              <a-menu-item>
-                <a-popconfirm title="确定删除吗?" @confirm="() => handleDeleteNode(record.id)" placement="topLeft">
-                  <a>删除</a>
-                </a-popconfirm>
-              </a-menu-item>
-            </a-menu>
-          </a-dropdown>
+          <a @click="handleEdit(record)">编辑</a>
+          <a-divider type="vertical" />
+          <a @click="handleEdit(record)">停用</a>
+          <a-divider type="vertical" />
+          <a-popconfirm title="确定删除吗?" @confirm="() => handleDeleteNode(record.id)" placement="topLeft">
+            <a>删除</a>
+          </a-popconfirm>
         </span>
 
       </a-table>
@@ -108,6 +81,11 @@
     data () {
       return {
         description: '店铺分类管理页面',
+        /* 排序参数 */
+        isorter:{
+          column: 'rank,createTime',
+          order: 'desc',
+        },
         // 表头
         columns: [
           {
@@ -130,27 +108,41 @@
             title:'排序',
             align:"left",
             sorter: true,
-            dataIndex: 'sort'
+            dataIndex: 'rank'
           },
           {
             title:'福利金抵扣最低值',
             align:"left",
-            dataIndex: 'smallWelfarePayments'
+            dataIndex: 'smallWelfarePayments',
+            customRender:function (text) {
+              if (text){
+                return text + '%'
+              }else {
+                return text
+              }
+            }
           },
           {
-            title:'状态；0：停用；1：启用',
+            title:'状态',
             align:"left",
             dataIndex: 'status_dictText'
           },
           {
             title:'停用说明',
-            align:"left",
-            dataIndex: 'closeExplain'
+            align:"center",
+            dataIndex: 'closeExplain',
+            customRender:function (text) {
+              if (text){
+                return text
+              }else {
+                return '-'
+              }
+            }
           },
           {
             title:'创建者',
             align:"left",
-            dataIndex: 'createBy'
+            dataIndex: 'createBy_dictText'
           },
           {
             title:'创建时间',
@@ -161,7 +153,7 @@
           {
             title:'更新者',
             align:"left",
-            dataIndex: 'updateBy'
+            dataIndex: 'updateBy_dictText'
           },
           {
             title:'更新时间',
@@ -173,7 +165,7 @@
             dataIndex: 'action',
             align:"center",
             fixed:"right",
-            width:147,
+            width:250,
             scopedSlots: { customRender: 'action' },
           }
         ],
