@@ -210,7 +210,7 @@ import dayjs from 'dayjs'
 
 export default {
   name: 'StoreSetting',
-  // inject: ['rush'],
+  inject: ['rush'],
   components: {
     AInput,
     AUpload
