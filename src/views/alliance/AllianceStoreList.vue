@@ -1,0 +1,643 @@
+<!--店铺管理认证列表-->
+<template>
+
+  <a-card :bordered="false">
+
+    <!-- 查询区域 -->
+    <div class="table-page-search-wrapper">
+      <a-form layout="inline">
+        <a-row :gutter="24">
+
+          <a-col :md="8" :sm="8">
+            <a-form-item label="联系人">
+              <a-input placeholder="请输入联系人" v-model="queryParam.bossName"></a-input>
+            </a-form-item>
+          </a-col>
+          <a-col :md="8" :sm="8">
+            <a-form-item label="联系人手机">
+              <a-input placeholder="请输入联系人手机" v-model="queryParam.bossPhone"></a-input>
+            </a-form-item>
+          </a-col>
+          <a-col :md="8" :sm="8">
+            <a-form-item label="门店名称">
+              <a-input placeholder="请输入门店名称" v-model="queryParam.storeName"></a-input>
+            </a-form-item>
+          </a-col>
+          <template v-if="toggleSearchStatus">
+            <a-col :md="8" :sm="8">
+              <a-form-item label="分店名称">
+                <a-input placeholder="请输入分店名称" v-model="queryParam.subStoreName"></a-input>
+              </a-form-item>
+            </a-col>
+
+            <!--备注: 下拉框选择未完成-->
+            <!--<a-col :md="6" :sm="8">
+              <a-form-item
+                style="display: flex;"
+                :labelCol="labelCol"
+                :wrapperCol="wrapperCol"
+                label="*所在城市" v-if="showAddress">
+                <a-select placeholder="请选择省" style="width:100px;margin-right: 10px;"
+                          :defaultValue="firstDefaultAddress">
+                  <a-select-option :value="item.id" v-for="(item,index) in addressFirstList" :key="index"
+                                   @click="firstOptions(item)">
+                    {{item.name}}
+                  </a-select-option>
+                </a-select>
+                <a-select placeholder="请选择市" style="width:100px;margin-right: 10px;"
+                          :defaultValue="secondDefaultAddress">
+                  <a-select-option :value="item.id" v-for="(item,index) in addressSecondList" :key="index"
+                                   @click="secondOptions(item)">
+                    {{item.name}}
+                  </a-select-option>
+                </a-select>
+                <a-select placeholder="请选择区" style="width:100px;margin-right: 10px;" v-if="addressThirdList.length>0">
+                  <a-select-option :value="item.id" v-for="(item,index) in addressThirdList" :key="index"
+                                   @click="thirdOptions(item)">
+                    {{item.name}}
+                  </a-select-option>
+                </a-select>
+                <lable style="font-size:12px;">需填写完整的省/市/区信息</lable>
+              </a-form-item>
+            </a-col>-->
+
+            <a-col :md="8" :sm="8">
+              <a-form-item
+                label="主体类型">
+                <j-dict-select-tag v-model="queryParam.straight" placeholder="请选择主体分类"
+                                   dictCode="store_straight"/>
+              </a-form-item>
+            </a-col>
+            <!--:triggerChange="true"-->
+            <a-col :md="8" :sm="8">
+              <a-form-item
+                :labelCol="labelCol"
+                :wrapperCol="wrapperCol"
+                label="主营分类">
+                <j-dict-select-tag v-model="queryParam.mainType" placeholder="请选择主营分类"
+                                   dictCode="store_main_type"/>
+              </a-form-item>
+            </a-col>
+            <a-col :md="8" :sm="8">
+              <a-form-item label="认证状态">
+                <j-dict-select-tag v-model="queryParam.attestationStatus" placeholder="请选择认证状态"
+                                   dictCode="store_attestation_status"/>
+              </a-form-item>
+            </a-col>
+          </template>
+          <a-col :md="6" :sm="8">
+            <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
+              <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
+              <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
+              <a @click="handleToggleSearch" style="margin-left: 8px">
+                {{ toggleSearchStatus ? '收起' : '展开' }}
+                <a-icon :type="toggleSearchStatus ? 'up' : 'down'"/>
+              </a>
+            </span>
+          </a-col>
+
+        </a-row>
+      </a-form>
+    </div>
+
+    <!-- 操作按钮区域 -->
+    <div class="table-operator">
+      <!--<a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>-->
+      <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl"
+                @change="handleImportExcel">
+        <!--<a-button type="primary" icon="import">导入</a-button>-->
+      </a-upload>
+      <a-dropdown v-if="selectedRowKeys.length > 0">
+        <a-menu slot="overlay">
+          <a-menu-item key="1" @click="batchDel">
+            <a-icon type="delete"/>
+            删除
+          </a-menu-item>
+        </a-menu>
+        <a-button style="margin-left: 8px"> 批量操作
+          <a-icon type="down"/>
+        </a-button>
+      </a-dropdown>
+    </div>
+
+    <!-- table区域-begin -->
+    <div>
+      <!-- <div class="ant-alert ant-alert-info" style="margin-bottom: 16px;">
+         <i class="anticon anticon-info-circle ant-alert-icon"></i> 已选择 <a
+         style="font-weight: 600">{{ selectedRowKeys.length }}</a>项
+         <a style="margin-left: 24px" @click="onClearSelected">清空</a>
+       </div>-->
+      <!--bordered-->
+
+      <a-table
+        ref="table"
+        size="middle"
+        :scroll="{x:3400}"
+        rowKey="id"
+        :columns="columns"
+        :dataSource="dataSource"
+        :pagination="ipagination"
+        :loading="loading"
+        :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
+        @change="handleTableChange">
+        <template slot="logoAddr" slot-scope="text, record, index">
+          <img class="clickShowImage" :preview="'logoAddr' + index"  :src="getAvatarView(record.logoAddr)" alt="" >
+          <span v-if="record.logoAddr==null">~</span>
+        </template>
+        <template slot="avatarslot1" slot-scope="text, record, index">
+          <img class="clickShowImage" :preview="'storePicture' + index"  :src="getAvatarView1(record.storePicture)" alt="" >
+          <span v-if="record.storePicture==null">~</span>
+        </template>
+        <template slot="avatarslot2" slot-scope="text, record, index">
+          <img class="clickShowImage" :preview="'accordingStore' + index"  :src="getAvatarView2(record.accordingStore)" alt="" v-if="record.accordingStore!=null">
+          <span v-if="record.accordingStore==null">~</span>
+        </template>
+        <template slot="avatarslot3" slot-scope="text, record, index">
+          <img class="clickShowImage" :preview="'licenseForEnterprise' + index"  :src="getAvatarView3(record.licenseForEnterprise)" alt="" v-if="record.licenseForEnterprise!=null">
+          <span v-if="record.licenseForEnterprise==null">~</span>
+        </template>
+        <template slot="avatarslot4" slot-scope="text, record, index">
+          <img class="clickShowImage" :preview="'idPictureZ' + index"  :src="getAvatarView4(record.idPictureZ)" alt="" >
+          <span v-if="record.idPictureZ==null">~</span>
+        </template>
+        <template slot="avatarslot5" slot-scope="text, record, index">
+          <img class="clickShowImage" :preview="'idPictureF' + index"  :src="getAvatarView5(record.idPictureF)" alt="" >
+          <span v-if="record.idPictureF==null">~</span>
+        </template>
+        <template slot="avatarslot6" slot-scope="text, record, index">
+          <img class="clickShowImage" :preview="'idHand' + index"  :src="getAvatarView6(record.idHand)" alt="" >
+           <span v-if="record.idHand==null">~</span>
+        </template>
+        <template slot="avatarslot7" slot-scope="text, record, index">
+          <img class="clickShowImage" :preview="'agentAuthorization' + index"  :src="getAvatarView7(record.agentAuthorization)" alt=""  v-if="record.agentAuthorization!=null">
+          <span v-if="record.agentAuthorization==null">~</span>
+        </template>
+        <template slot="ssAddress" slot-scope="text, record, index">
+          <img class="clickShowImage" :preview="'ssAddress' + index"  :src="ssAddressView(record.ssAddress)" alt=""  v-if="record.ssAddress!=null">
+          <span v-if="record.ssAddress==null">~</span>
+        </template>
+        <template slot="goodAudit" slot-scope="text, record, index">
+          <div class="anty-img-wrap">
+            <span shape="square" v-if="record.goodAudit==0">免审核</span>
+            <span shape="square" v-if="record.goodAudit==1">需审核</span>
+            <!--<a-switch checkedChildren="免审核" unCheckedChildren="需审核" v-model="record.goodAudit" @change="switchChange(record)"/>-->
+          </div>
+        </template>
+        <template slot="isChain" slot-scope="text, record, index">
+          <div class="anty-img-wrap">
+            <span shape="square" v-if="record.isChain==0">是</span>
+            <span shape="square" v-if="record.isChain==1">否</span>
+            <!--<a-switch checkedChildren="是" unCheckedChildren="否" v-model="record.isChain" @change="isChainChange(record)"/>-->
+          </div>
+        </template>
+        <template slot="status" slot-scope="text, record, index">
+          <div class="anty-img-wrap">
+            <span shape="square" v-if="record.status==0">停用</span>
+            <span shape="square" v-if="record.status==1">启用</span>
+          </div>
+        </template>
+        <template slot="storeType" slot-scope="text, record, index">
+          <div class="anty-img-wrap">
+            <span shape="square" v-if="record.storeType==0">联盟店</span>
+            <span shape="square" v-if="record.storeType==1">独立店</span>
+            <!--<a-select v-model="record.storeType" @change="storeTypeChange(record,index)">
+              <a-select-option value="0">联盟店</a-select-option>
+              <a-select-option value="1">独立店</a-select-option>
+            </a-select>-->
+          </div>
+        </template>
+        <div slot="action" slot-scope="text, record">
+          <a @click="updataStatusAndCloseEplain(record)" v-if="record.status==1">停用</a>
+          <a @click="updateStatus(record)" v-if="record.status==0">启动</a>
+          <a-divider type="vertical"/>
+          <a @click="handleEdit(record,'基础信息')">
+            编辑基础信息
+          </a>
+          <a-divider type="vertical"/>
+          <a @click="handleEdit(record,'证件信息')">
+            编辑证件信息
+          </a>
+          <a-divider type="vertical"/>
+          <a @click="showModal(record)">审核</a>
+        </div>
+
+      </a-table>
+    </div>
+  </a-card>
+</template>
+
+<script>
+  import {getAction,putAction,postAction} from '@/api/manage';
+  import {JeecgListMixin} from '@/mixins/JeecgListMixin'
+  import {filterObj} from '@/utils/util';
+  import Vue from 'vue'
+  import {ACCESS_TOKEN} from "@/store/mutation-types"
+  import { colAuthFilter } from "@/utils/authFilter"
+  export default {
+    name: "AllianceStoreList",
+    mixins: [JeecgListMixin],
+    components: {
+    },
+    inject:['rush'],
+    data () {
+      return {
+        description: '代理店铺列表',
+        // 表头
+        columns: [
+          {
+            title: '#',
+            dataIndex: '',
+            key: 'rowIndex',
+            width: 60,
+            align: "center",
+            fixed: 'left',
+            customRender: function (t, r, index) {
+              return parseInt(index) + 1;
+            }
+          },
+          {
+            title: '店铺编号',
+            align: "center",
+            dataIndex: 'id'
+          },
+          {
+            title: '登录账户',
+            align: "center",
+            dataIndex: 'userName'
+          },
+          {
+            title: '联系人',
+            align: "center",
+            dataIndex: 'bossName'
+          },
+          {
+            title: '联系人手机号',
+            align: "center",
+            dataIndex: 'bossPhone'
+          },
+          {
+            title: '门店名称',
+            align: "center",
+            dataIndex: 'storeName'
+          },
+          {
+            title: '分店名称',
+            align: "center",
+            dataIndex: 'subStoreName'
+          },
+          {
+            title: 'logo',
+            align: "center",
+            dataIndex: 'logoAddr',
+            scopedSlots: {customRender: "logoAddr"}
+          },
+          {
+            title: '门脸照',
+            align: "center",
+            dataIndex: 'storePicture',
+            scopedSlots: {customRender: "avatarslot1"}
+          },
+          {
+            title: '店内照',
+            align: "center",
+            dataIndex: 'accordingStore',
+            scopedSlots: {customRender: "avatarslot2"}
+          },
+          {
+            title: '城市',
+            align: "center",
+            dataIndex: 'areaAddress'
+          },
+          {
+            title: '门店地址',
+            align: "center",
+            dataIndex: 'storeAddress'
+          },
+          {
+            title: '主体类型',
+            align: "center",
+            dataIndex: 'straight_dictText',
+            sorter: true,
+          },
+          {
+            title: '主营分类',
+            align: "center",
+            dataIndex: 'mainType_dictText',
+          },
+          {
+            title: '客服电话',
+            align: "center",
+            dataIndex: 'takeOutPhone'
+          },
+          {
+            title: '统一信用代码',
+            align: "center",
+            dataIndex: 'socialCreditCode'
+          },
+          {
+            title: '企业营业执照图片',
+            align: "center",
+            dataIndex: 'licenseForEnterprise',
+            scopedSlots: {customRender: "avatarslot3"}
+          },
+          {
+            title: '经办人类型',
+            align: "center",
+            dataIndex: 'agentType_dictText',
+          },
+          {
+            title: '姓名',
+            align: "center",
+            dataIndex: 'agentName'
+          },
+          {
+            title: '身份证号码',
+            align: "center",
+            dataIndex: 'idCode'
+          },
+          {
+            title: '身份证正面照片',
+            align: "center",
+            dataIndex: 'idPictureZ',
+            scopedSlots: {customRender: "avatarslot4"}
+          },
+          {
+            title: '身份证反面照片',
+            align: "center",
+            dataIndex: 'idPictureF',
+            scopedSlots: {customRender: "avatarslot5"}
+          },
+
+          {
+            title: '手持身份证照片',
+            align: "center",
+            dataIndex: 'idHand',
+            scopedSlots: {customRender: "avatarslot6"}
+          },
+          {
+            title: '授权书图片',
+            align: "center",
+            dataIndex: 'agentAuthorization',
+            scopedSlots: {customRender: "avatarslot7"}
+          },
+          {
+            title: '认证状态',
+            align: "center",
+            dataIndex: 'attestationStatus_dictText',
+          },
+          {
+            title: '店铺二维码',
+            align: "center",
+            dataIndex: 'ssAddress',
+            scopedSlots: {customRender: "ssAddress"}
+          },
+          {
+            title: '商品审核',
+            align: "center",
+            dataIndex: 'goodAudit',
+            width: 100,
+            scopedSlots: {customRender: 'goodAudit'},
+          },
+          {
+            title: '备注',
+            align: "center",
+            dataIndex: 'remark'
+          },
+          {
+            title: '状态',
+            align: "center",
+            dataIndex: 'status',
+            scopedSlots: {customRender: "status"}
+          },
+          {
+            title: '停用原因',
+            align: "center",
+            dataIndex: 'closeExplain'
+          },
+          {
+            title: '店铺类型',
+            align: "center",
+            dataIndex: 'storeType',
+            scopedSlots: {customRender: "storeType"}
+          },
+          {
+            title: '是否连锁',
+            align: "center",
+            dataIndex: 'isChain',
+            scopedSlots: {customRender: "isChain"}
+          },
+          /*{
+           title: '操作',
+           dataIndex: 'action',
+           align: "center",
+           fixed: 'right',
+           width: 330,
+           scopedSlots: {customRender: 'action'},
+           }*/
+        ],
+        url: {
+          list: "/storeManage/storeManage/findAllianceStoreList",
+          delete: "/storeManage/storeManage/delete",
+          deleteBatch: "/storeManage/storeManage/deleteBatch",
+          exportXlsUrl: "storeManage/storeManage/exportXls",
+          importExcelUrl: "storeManage/storeManage/importExcel",
+          imgerver: window._CONFIG['domianURL'] + "/sys/common/view",
+          addAudit: "/storeManage/storeManage/audit",
+          updateStatusById: "/storeManage/storeManage/updateStatusById",
+          updateAttestationStatusById: "/storeManage/storeManage/updateAttestationStatusById",
+          findByParentId: "/sysArea/sysArea/findByParentId",
+          getList: "/sysArea/sysArea/getList",
+          edit:"storeManage/storeManage/edit",
+        },
+        id: "",
+        //地址一级options
+        addressFirstList: [],
+        //地址二级option
+        addressSecondList: [],
+        //地址三级option
+        addressThirdList: [],
+        //默认一级option
+        firstDefaultAddress: '',
+        //默认二级option
+        SecondDefaultAddress: '',
+        //刷新地址联动
+        showAddress: true,
+        //
+        disableSubmit:false,
+      }
+    },
+    computed: {
+      importExcelUrl: function () {
+        return `${window._CONFIG['domianURL']}/${this.url.importExcelUrl}`;
+      }
+    },
+
+    methods: {
+      switchChange(item){
+        console.log(item)
+        let info = {
+          goodAudit:item.goodAudit?true:false,
+          id:item.id
+        }
+        putAction(this.url.edit,info)
+      },
+      //店铺类型选择
+      storeTypeChange(item,index){
+        console.log(item,index);
+        let info = {
+          id:item.id,
+          storeType:item.storeType
+        }
+        putAction(this.url.edit,info)
+      },
+      isChainChange(item){
+        let info = {
+          isChain:item.isChain?true:false,
+          id:item.id
+        }
+        putAction(this.url.edit,info)
+      },
+      //获取地址一级options
+      getList() {
+        getAction(this.url.getList).then((res) => {
+          if (res.success) {
+            this.showAddress = false
+            this.addressFirstList = res.result
+            this.firstDefaultAddress = res.result[0].name
+            this.$nextTick(() => {
+              this.showAddress = true
+            })
+          } else {
+            this.$message.warning(res.message);
+          }
+        });
+      },
+      //点击一级options展示二级
+      firstOptions(item){
+        getAction(this.url.findByParentId, {id: item.id}).then((res) => {
+          if (res.success) {
+            this.showAddress = false
+            this.firstDefaultAddress = item.name
+            this.addressSecondList = res.result
+            this.SecondDefaultAddress = res.result[0].name
+            this.$nextTick(() => {
+              this.showAddress = true
+              this.AllData.areaAddress = `${item.name}`
+              this.AllData.sysAreaId = item.id
+            })
+          } else {
+            this.$message.warning(res.message);
+          }
+        });
+      },
+      //点击二级展示三级
+      secondOptions(item){
+        getAction(this.url.findByParentId, {id: item.id}).then(res => {
+          if (res.success) {
+            this.addressThirdList = res.result
+            this.AllData.areaAddress += `-${item.name}`
+            this.AllData.sysAreaId = item.id
+          } else {
+            this.$message.warning(res.message);
+          }
+        })
+      },
+      //点击三级
+      thirdOptions(item){
+        this.AllData.areaAddress += `-${item.name}`
+        this.AllData.sysAreaId = item.id
+      },
+      initIndex() {
+        initDictOptions('straight').then((res) => {
+          if (res.success) {
+            this.straight = res.result;
+          }
+        });
+      },
+      //启用
+      updateStatus(item){
+        let that = this;
+        if (!this.url.updateStatusById) {
+          this.$message.error("请设置url.updateFrameStatus属性!")
+          return
+        }
+        this.$confirm({
+          title: "启用店铺后，店铺商品、订单、资金模块都将可以访问",
+          content: "您确定要启用吗？",
+          onOk:()=>{
+            console.log(item)
+            getAction(that.url.updateStatusById, {id:item.id,status:item.status == '0'?'1':'0',closeExplain:''}).then((res) => {
+              if (res.success) {
+                that.$message.success(res.message);
+                that.loadData();
+                that.onClearSelected();
+              } else {
+                that.$message.warning(res.message);
+              }
+            });
+          }
+        });
+      },
+      //弹窗
+      updataStatusAndCloseEplain(item) {
+        this.$refs.modalForm.getExplainInfo(item);
+        this.$refs.modalForm.title = "停用";
+        this.$refs.modalForm.disableSubmit = true;
+      },
+      onChangeDate(date, dateString) {
+        console.log(date, dateString);
+      },
+      getAvatarView: function (logoAddr) {
+        return this.url.imgerver + "/" + logoAddr;
+      },
+      getAvatarView1: function (storePicture) {
+        return this.url.imgerver + "/" + storePicture;
+      },
+      getAvatarView2: function (accordingStore) {
+        return this.url.imgerver + "/" + accordingStore;
+      },
+      getAvatarView3: function (licenseForEnterprise) {
+        return this.url.imgerver + "/" + licenseForEnterprise;
+      },
+      getAvatarView4: function (idPictureZ) {
+        return this.url.imgerver + "/" + idPictureZ;
+      },
+      getAvatarView5: function (idPictureF) {
+        return this.url.imgerver + "/" + idPictureF;
+      },
+      getAvatarView6: function (idHand) {
+        return this.url.imgerver + "/" + idHand;
+      },
+      getAvatarView7: function (agentAuthorization) {
+        return this.url.imgerver + "/" + agentAuthorization;
+      },
+      ssAddressView: function (ssAddress) {
+        return this.url.imgerver + "/" + ssAddress;
+      },
+      modalFormOk(info){
+        let obj = info;
+//        obj.id = this.id
+        postAction(this.url.updateAttestationStatusById, obj).then(res => {
+          if (res.success) {
+            this.$message.success(res.message);
+            this.$refs.modalForm1.clearAll();
+            this.rush();
+          } else {
+            this.$message.warning(res.message);
+          }
+        })
+      },
+      showModal(item) {
+        this.$refs.modalForm1.showModal(item);
+        this.$refs.modalForm1.title = "价格";
+        this.$refs.modalForm1.disableSubmit = false;
+      },
+      created() {
+        this.columns = colAuthFilter(this.columns,'storeManage:');
+        this.loadData();
+      },
+    }
+  }
+</script>
+<style scoped lang="less">
+</style>
