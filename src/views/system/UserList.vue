@@ -26,6 +26,11 @@
 
           <template v-if="toggleSearchStatus">
             <a-col :md="6" :sm="8">
+              <a-form-item label="邮箱">
+                <a-input placeholder="请输入邮箱查询" v-model="queryParam.email"></a-input>
+              </a-form-item>
+            </a-col>
+            <a-col :md="6" :sm="8">
               <a-form-item label="真实名字">
                 <a-input placeholder="请输入真实名字" v-model="queryParam.realname"></a-input>
               </a-form-item>
@@ -71,7 +76,7 @@
         <a-button type="primary" icon="import">导入</a-button>
       </a-upload>
       <j-third-app-button biz-type="user" :selected-row-keys="selectedRowKeys" syncToApp syncToLocal @sync-finally="onSyncFinally"/>
-      <a-button type="primary" icon="hdd" @click="recycleBinVisible=true">回收站</a-button>
+<!--      <a-button type="primary" icon="hdd" @click="recycleBinVisible=true">回收站</a-button>-->
       <a-dropdown v-if="selectedRowKeys.length > 0">
         <a-menu slot="overlay" @click="handleMenuClick">
           <a-menu-item key="1">
@@ -92,7 +97,7 @@
           <a-icon type="down"/>
         </a-button>
       </a-dropdown>
-      <j-super-query :fieldList="superQueryFieldList" @handleSuperQuery="handleSuperQuery"/>
+<!--      <j-super-query :fieldList="superQueryFieldList" @handleSuperQuery="handleSuperQuery"/>-->
     </div>
 
     <!-- table区域-begin -->
@@ -225,7 +230,7 @@
             sorter: true
           },
           {
-            title: '用户姓名',
+            title: '真实姓名',
             align: "center",
             width: 100,
             dataIndex: 'realname',
@@ -258,17 +263,23 @@
             dataIndex: 'phone'
           },
           {
-            title: '部门',
+            title: '邮箱',
             align: "center",
-            width: 180,
-            dataIndex: 'orgCodeTxt'
+            width: 100,
+            dataIndex: 'email'
           },
-          {
-            title: '负责部门',
-            align: "center",
-            width: 180,
-            dataIndex: 'departIds_dictText'
-          },
+          // {
+          //   title: '部门',
+          //   align: "center",
+          //   width: 180,
+          //   dataIndex: 'orgCodeTxt'
+          // },
+          // {
+          //   title: '负责部门',
+          //   align: "center",
+          //   width: 180,
+          //   dataIndex: 'departIds_dictText'
+          // },
           {
             title: '状态',
             align: "center",
