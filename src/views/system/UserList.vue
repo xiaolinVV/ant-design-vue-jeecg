@@ -161,6 +161,10 @@
                 </a-popconfirm>
               </a-menu-item>
 
+               <a-menu-item>
+                <a href="javascript:;" @click="handleAgentSettings(record.username)">代理人</a>
+              </a-menu-item>
+
             </a-menu>
           </a-dropdown>
         </span>
@@ -179,6 +183,7 @@
     <!-- 用户回收站 -->
     <user-recycle-bin-modal :visible.sync="recycleBinVisible" @ok="modalFormOk"/>
 
+    <sys-user-agent-modal ref="sysUserAgentModal"></sys-user-agent-modal>
   </a-card>
 </template>
 
@@ -204,7 +209,7 @@
       PasswordModal,
       JInput,
       UserRecycleBinModal,
-      JSuperQuery
+      JSuperQuery,
     },
     data() {
       return {
@@ -393,6 +398,10 @@
         if (isToLocal) {
           this.loadData()
         }
+      },
+      handleAgentSettings(username){
+        this.$refs.sysUserAgentModal.agentSettings(username);
+        this.$refs.sysUserAgentModal.title = "用户代理人设置";
       },
     }
 
