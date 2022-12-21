@@ -21,7 +21,7 @@
     props: {
       title: {
         type: String,
-        default: 'Jeecg-Boot Pro',
+        default: '全惠付商家赚钱',
         required: false
       },
       showTitle: {
