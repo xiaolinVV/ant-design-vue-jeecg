@@ -99,7 +99,7 @@
   import { mixinDevice } from '@/utils/mixin'
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
   import {FlowableMixin} from "@views/flowable/mixin/FlowableMixin";
-  import ActHandleModal from '@views/ActHandleModal'
+  import ActHandleModal from '@views/flowable/components/ActHandleModal'
   import ActHistoricDetailBtn from '@views/flowable/components/ActHistoricDetailBtn'
 
   export default {

@@ -52,34 +52,37 @@
     },
     created() {
     },
-    watch:{
-      formComponentUrl (newVal) {
-        if (newVal !== '') {
-          let formComponentUrl = "./" + this.formComponentUrl
-          // this.formComponent = require(`${formComponentUrl}`).default;
-          this.formComponent = () => import(`${formComponentUrl}`)
-          console.log('this.formComponent===', this.formComponent);
-        }
-      }
-    },
+    // watch:{
+    //   formComponentUrl (newVal) {
+    //     if (newVal !== '') {
+    //       let formComponentUrl = "./" + this.formComponentUrl
+    //       // this.formComponent = require(`${formComponentUrl}`).default;
+    //       this.formComponent = () => import(`${formComponentUrl}`)
+    //       console.log('this.formComponent===', this.formComponent);
+    //     }
+    //   }
+    // },
     methods: {
       // 动态注册表单组件
       registerFormComponent (formComponentUrl) {
         if (formComponentUrl) {
           // this.formComponent = require(`${formComponentUrl}`).default;
-          this.formComponent = () => import(`${formComponentUrl}`)
+          // this.formComponent = () => import(`${formComponentUrl}`);
+          this.formComponent = () => import(`@/views/${formComponentUrl}`);
         }
       },
       show (record) {
+        this.registerFormComponent(record.pcFormUrl);
         this.dataId = record.dataId
-        this.visible=true
-        this.formData.dataId = record.dataId
-        this.$nextTick(()=>{
-          this.$refs.realForm.edit(record);
+        this.visible=true;
+        this.formData = record;
+
+        this.$nextTick().then(() => {
+          // this.$refs.realForm && this.$refs.realForm.edit(record);
           if (!this.disableSubmit){
             this.$refs.actHandleForm.edit(record);
           }
-        })
+        });
       },
       close () {
         this.$emit('close');

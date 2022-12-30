@@ -117,7 +117,7 @@
   import {FlowableMixin} from "@views/flowable/mixin/FlowableMixin";
   import ActHistoricDetailBtn from "@views/flowable/components/ActHistoricDetailBtn";
   import Vue from 'vue'
-  import ActHandleModal from '@views/ActHandleModal'
+  import ActHandleModal from '@views/flowable/components/ActHandleModal'
 
   export default {
     name: 'MyFinishedList',
