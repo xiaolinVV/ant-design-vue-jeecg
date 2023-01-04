@@ -70,8 +70,9 @@
         <img
           class="clickShowImage"
           :preview="'headPortrait' + index"
-          :src="getAvatarView(record.headPortrait)"
+          :src="record.headPortrait"
           alt=""
+          height="25px" style="max-width:80px;font-size: 12px;font-style: italic;"
         />
       </template>
       <template slot="logoAddr" slot-scope="text, record, index">
