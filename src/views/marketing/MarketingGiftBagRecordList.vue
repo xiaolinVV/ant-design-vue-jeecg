@@ -135,7 +135,7 @@
         @change="handleTableChange"
       >
         <template slot="headPortrait" slot-scope="text, record, index">
-          <img class="clickShowImage " :preview="'headPortrait' + index" :src="record.headPortrait" alt="" />
+          <img class="clickShowImage " :preview="'headPortrait' + index" :src="record.headPortrait" alt="" height="25px" style="max-width:80px;font-size: 12px;font-style: italic;" />
         </template>
         <template slot="giftContent" slot-scope="text, record, index">
           <a href="javascript:;" @click="showContentModal(record)">{{ record.giftName }}</a>

@@ -90,7 +90,7 @@
         </div>
       </template>
       <template slot="headPortrait" slot-scope="text, record, index">
-        <img class="clickShowImage" :preview="'headPortrait' + index"  :src="record.headPortrait" alt="">
+        <img class="clickShowImage" :preview="'headPortrait' + index"  :src="record.headPortrait" alt="" height="25px" style="max-width:80px;font-size: 12px;font-style: italic;">
       </template>
     </a-table>
 

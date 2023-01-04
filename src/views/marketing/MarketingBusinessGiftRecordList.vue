@@ -111,6 +111,7 @@
             :preview="'headPortrait' + index"
             :src="record.headPortrait"
             alt=""
+            height="25px" style="max-width:80px;font-size: 12px;font-style: italic;"
           />
         </template>
         <span slot="action" slot-scope="text, record">
