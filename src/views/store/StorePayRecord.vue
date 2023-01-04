@@ -142,7 +142,7 @@
         ref="table"
         size="middle"
         bordered
-        :scroll="{x:2000}"
+        :scroll="{x:true}"
         rowKey="id"
         :columns="columns"
         :dataSource="dataSource"
