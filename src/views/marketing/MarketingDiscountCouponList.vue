@@ -135,7 +135,7 @@
         ref="table"
         size="middle"
         rowKey="id"
-        :scroll="{x:3000}"
+        :scroll="{x:true}"
         :columns="columns"
         :dataSource="dataSource"
         :pagination="ipagination"

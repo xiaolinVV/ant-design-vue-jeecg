@@ -54,7 +54,7 @@
       <a-table
         ref="table"
         size="middle"
-        :scroll="{x:3000}"
+        :scroll="{x:true}"
         rowKey="id"
         bordered
         :columns="columns"

@@ -213,7 +213,7 @@
         ref="table"
         size="middle"
         bordered
-        :scroll="{x:3000}"
+        :scroll="{x:true}"
         rowKey="id"
         :columns="columns"
         :dataSource="dataSource"
@@ -470,7 +470,7 @@
             dataIndex: 'pointsDisplay',
             scopedSlots: { customRender: 'pointsDisplay' }
           },
-          
+
           {
             title: '商品属性',
             align: 'center',
@@ -813,7 +813,7 @@
        if (this.selectedRowKeys.length <= 0) {
           this.$message.warning('请选择一条记录！')
           return
-        } 
+        }
         let ids = this.selectedRowKeys.join(',')
         this.$refs.clientModal.open(ids)
       },
