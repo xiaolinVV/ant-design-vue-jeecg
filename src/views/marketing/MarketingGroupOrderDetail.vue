@@ -40,7 +40,7 @@
         :columns="columns"
         :dataSource="dataSource"
         style="margin-bottom: 24px"
-        :scroll="{ x: 2500 }"
+        :scroll="{ x: true }"
         v-if="!showSecondTable"
       >
         <!-- :pagination="false" -->
@@ -86,7 +86,7 @@
         :columns="columnsSecond"
         :dataSource="dataSourceSecond"
         style="margin-bottom: 24px"
-        :scroll="{ x: 2500 }"
+        :scroll="{ x: true }"
         v-else
       >
         <!-- :pagination="false" -->
