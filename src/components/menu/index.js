@@ -1,5 +1,6 @@
 import Menu from 'ant-design-vue/es/menu'
 import Icon from 'ant-design-vue/es/icon'
+import { mapActions, mapState } from 'vuex'
 
 const { Item, SubMenu } = Menu
 
@@ -89,6 +90,9 @@ export default {
         })
       }
 
+      // 通过子路由获取所有父级的路径
+      openKeys = this.findPatentValue(this.menu, this.selectedKeys[0]);
+
       // update-begin-author:sunjianlei date:20210409 for: 修复动态功能测试菜单、带参数菜单标题错误、展开错误的问题
       // 包含冒号的是动态菜单
       if (this.selectedKeys[0].includes(':')) {
@@ -125,6 +129,34 @@ export default {
       }
     },
     // update-end-author:sunjianlei date:20210409 for: 修复动态功能测试菜单、带参数菜单标题错误、展开错误的问题
+
+    findPatentValue (array, value, valueName = 'path', childrenName = 'children') {
+      if (!value || !Array.isArray(array)) return []
+      const result = []
+      let valid = false
+      const seek = (array, value) => {
+        let parentValue = ''
+        const up = (array, value, lastValue) => {
+          array.forEach(v => {
+            const val = v[valueName]
+            const child = v[childrenName]
+            if (val === value) {
+              valid = true
+              parentValue = lastValue
+              return
+            }
+            if (child && child.length) up(child, value, val)
+          })
+        }
+        up(array, value)
+        if (parentValue) {
+          result.unshift(parentValue)
+          seek(array, parentValue)
+        }
+      }
+      seek(array, value)
+      return valid ? [...result, value] : []
+    },
 
     // render
     renderItem (menu) {
