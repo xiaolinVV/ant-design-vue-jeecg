@@ -24,7 +24,7 @@
 
       <a-table
         :columns="columns"
-        :scroll="{x: 1500}"
+        :scroll="{x: true}"
         size="middle"
         :pagination="false"
         :dataSource="dataSource"

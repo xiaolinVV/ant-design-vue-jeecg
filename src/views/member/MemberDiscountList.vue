@@ -110,7 +110,7 @@
         ref="table"
         size="middle"
         rowKey="id"
-        :scroll="{x:2500}"
+        :scroll="{x:true}"
         :columns="columns"
         bordered
         :dataSource="dataSource"

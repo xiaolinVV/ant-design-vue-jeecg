@@ -92,7 +92,7 @@
         rowKey="id"
         :columns="columns"
         :dataSource="dataSource"
-        :scroll="{ x: 1500 }"
+        :scroll="{ x: true }"
         :pagination="ipagination"
         :loading="loading"
         :rowSelection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"

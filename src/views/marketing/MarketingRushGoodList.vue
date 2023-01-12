@@ -53,7 +53,7 @@
                   </a-select>
                 </a-form-item>
               </a-col>
-              
+
 
               <a-col :md="8" :sm="8">
                 <a-form-item label="商品编号">
@@ -69,7 +69,7 @@
                   </a-select>
                 </a-form-item>
               </a-col>
-              
+
               <a-col :md="8" :sm="8">
                 <a-form-item label="加入时间">
                   <a-range-picker
@@ -105,7 +105,7 @@
         <!-- 操作按钮区域 -->
         <div class="table-operator">
           <a-button @click="routerTo" icon="plus" type="primary">新增</a-button>
-          
+
           <a-dropdown v-if="selectedRowKeys.length > 0">
             <a-menu slot="overlay">
               <a-menu-item @click="batchDel" key="1">
@@ -134,7 +134,7 @@
             :dataSource="dataSource"
             :loading="loading"
             :pagination="ipagination"
-            :scroll="{ x: 2000 }"
+            :scroll="{ x: true }"
             :rowSelection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
             @change="handleTableChange"
             ref="table"
@@ -378,7 +378,7 @@ export default {
       infos.statusExplain = infos.modalExplain
       console.log(infos,'infos')
       var obj = {}
-      
+
       if (title == '删除') {
         obj.id = infos.id
         obj.delExplain = infos.statusExplain
@@ -499,7 +499,7 @@ export default {
             if (item.mainPicture) {
               item.mainPicture = this.url.imgerver + '/' + Object.values(JSON.parse(item.mainPicture))[0]
             }
-          
+
           }
           this.dataSource = res.result.records
           this.ipagination.total = res.result.total

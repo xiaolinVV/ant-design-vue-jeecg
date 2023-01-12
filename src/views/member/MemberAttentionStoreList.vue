@@ -60,7 +60,7 @@
       :columns="columns"
       :dataSource="dataSource"
       :pagination="ipagination"
-      :scroll="{ x: 2000 }"
+      :scroll="{ x: true }"
       :loading="loading"
       bordered
       :rowSelection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"

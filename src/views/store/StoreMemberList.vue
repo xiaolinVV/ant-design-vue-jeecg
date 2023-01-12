@@ -109,7 +109,7 @@
       <a-table
         ref="table"
         size="middle"
-        :scroll="{x:2500}"
+        :scroll="{x:true}"
         rowKey="id"
         :columns="columns"
         bordered

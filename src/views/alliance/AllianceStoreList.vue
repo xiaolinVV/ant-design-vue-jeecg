@@ -132,7 +132,7 @@
       <a-table
         ref="table"
         size="middle"
-        :scroll="{x:3400}"
+        :scroll="{x:true}"
         rowKey="id"
         :columns="columns"
         :dataSource="dataSource"

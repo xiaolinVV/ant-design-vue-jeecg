@@ -8,7 +8,7 @@
     "build:test": "vue-cli-service build --mode test",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "start": "cross-env NODE_OPTIONS=--max-old-space-size=8192 webpack"
+    "start": "cross-env NODE_OPTIONS=--max-old-space-size=18192 webpack"
   },
   "dependencies": {
     "@antv/data-set": "^0.11.4",

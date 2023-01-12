@@ -68,7 +68,7 @@
     <!-- 操作按钮区域 -->
     <div class="table-operator">
       <a-button @click="handleAdd" type="primary" icon="plus">添加</a-button>
-      
+
       <a-dropdown v-if="selectedRowKeys.length > 0">
         <a-menu slot="overlay">
           <a-menu-item key="1" @click="batchDel">
@@ -95,7 +95,7 @@
         size="middle"
         bordered
         rowKey="id"
-        :scroll="{ x: 2000 }"
+        :scroll="{ x: true }"
         :columns="columns"
         :dataSource="dataSource"
         :pagination="ipagination"
@@ -103,7 +103,7 @@
         :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
         @change="handleTableChange">
 
-        
+
         <span slot="action" slot-scope="text, record">
           <a @click="handleSort(record)">排序</a>
           <a-divider type="vertical" />
@@ -113,7 +113,7 @@
           <a v-else @click="showTextareaModal(record, 2)">启用</a>
           <a-divider type="vertical" />
           <a @click="showTextareaModal(record, 3)">删除</a>
-          
+
         </span>
 
       </a-table>
@@ -341,7 +341,7 @@
     methods: {
       handleSort(record){
         this.$refs.modalForm1.edit(record)
-        
+
       },
       async showTextareaModal(record, type) {
         const allInfos = [
@@ -388,7 +388,7 @@
         obj.status = infos.status
         obj.sort = infos.sort
         result = await postAction(this.url.edit, obj)
-       
+
       }
       if (result.success) {
         this.$message.success(result.message)

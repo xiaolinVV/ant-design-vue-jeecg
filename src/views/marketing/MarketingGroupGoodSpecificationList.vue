@@ -112,7 +112,7 @@
         :loading="loading"
         :rowSelection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
         @change="handleTableChange"
-        :scroll="{ x: 2500 }"
+        :scroll="{ x: true }"
       >
         <template slot="headPortrait" slot-scope="text, record, index">
           <img

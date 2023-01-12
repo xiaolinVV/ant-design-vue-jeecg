@@ -43,7 +43,7 @@
         :dataSource="dataSource"
         :pagination="ipagination"
         :loading="loading"
-        :scroll="{ x: 2000 }"
+        :scroll="{ x: true }"
         @change="handleTableChange"
       >
         <template slot="mainPicture" slot-scope="text, record, index">
