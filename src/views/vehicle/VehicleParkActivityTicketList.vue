@@ -140,7 +140,7 @@
         bordered
         rowKey="id"
         :columns="columns"
-        :scroll="{ x: 2000 }"
+        :scroll="{ x: true }"
         :dataSource="dataSource"
         :pagination="ipagination"
         :loading="loading"
