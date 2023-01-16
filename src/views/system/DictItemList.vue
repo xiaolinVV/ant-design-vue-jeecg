@@ -121,7 +121,7 @@
         },
         title: "操作",
         visible: false,
-        screenWidth: 800,
+        screenWidth: 1000,
         model: {},
         dictId: "",
         status: 1,
