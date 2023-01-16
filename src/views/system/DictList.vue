@@ -7,12 +7,12 @@
         <a-row :gutter="12">
           <a-col :md="7" :sm="8">
             <a-form-item label="字典名称" :labelCol="{span: 6}" :wrapperCol="{span: 14, offset: 1}">
-              <a-input placeholder="请输入字典名称" v-model="queryParam.dictName"></a-input>
+              <j-input placeholder="请输入字典名称" v-model="queryParam.dictName"></j-input>
             </a-form-item>
           </a-col>
           <a-col :md="7" :sm="8">
             <a-form-item label="字典编号" :labelCol="{span: 6}" :wrapperCol="{span: 14, offset: 1}">
-              <a-input placeholder="请输入字典编号" v-model="queryParam.dictCode"></a-input>
+              <j-input placeholder="请输入字典编号" v-model="queryParam.dictCode"></j-input>
             </a-form-item>
           </a-col>
           <a-col :md="7" :sm="8">

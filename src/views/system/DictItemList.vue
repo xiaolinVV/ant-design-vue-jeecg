@@ -101,6 +101,11 @@
             dataIndex: 'itemValue',
           },
           {
+            title: '描述',
+            align: "center",
+            dataIndex: 'description',
+          },
+          {
             title: '操作',
             dataIndex: 'action',
             align: "center",
