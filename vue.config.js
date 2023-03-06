@@ -7,7 +7,7 @@ function resolve(dir) {
 
 // vue.config.js
 module.exports = {
-  publicPath: '/v2/gongkeManage/',
+  publicPath: '/v2/',
   /*
     Vue-cli3:
     Crashed when using Webpack `import()` #2463
