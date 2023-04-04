@@ -76,7 +76,7 @@
         :columns="columns"
         :dataSource="dataSource"
         :pagination="ipagination"
-        :scroll="{ x: true }"
+        :scroll="{ x: 2000 }"
         :loading="loading"
         :rowSelection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
         @change="handleTableChange"

@@ -119,7 +119,7 @@
         :loading="loading"
         :rowSelection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
         @change="handleTableChange"
-        :scroll="{ x: true }"
+        :scroll="{ x: 1500 }"
       >
         <!-- <template slot="startTimeStart" slot-scope="text, record">
           {{ record.startTimeStart }} - {{ record.startTimeEnd }}

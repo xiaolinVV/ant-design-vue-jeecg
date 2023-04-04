@@ -1,23 +1,12 @@
 <template>
   <a-card :bordered="false" class="AddMarketingGroupGoodsModel" :loading="cardLoading">
     <div class="title">
-      添加商品
+      添加单品抢购商品
     </div>
-    <div class="line-wrap" v-for="(item, index) in limitLsit" :key="index">
-      <div class="label">
-        <span class="dataCheckedStar" v-if="item.isMust">
-          *
-        </span>
-        {{ item.label }}：
-      </div>
-      <div class="value">
-        {{ item.value }}
-      </div>
-    </div>
-    <a-alert message="重要提示：加入本专区的商品统一价格为29.9，请选择合适的商品，避免造成不必要的亏损" type="info" />
+    <a-alert message="  重要提示：先批量设置过后再单独调整价格，避免单独设置的价格被批量操作覆盖。选择商品时请合理设置价格，避免造成不必要的亏损" type="info" />
 
     <div class="table-page-search-wrapper">
-      <a-form layout="inline" style="margin-top: 20px" @submit="handleSubmit">
+      <a-form layout="inline" style="margin-top: 20px">
         <a-row :gutter="24">
           <a-col :md="8" :sm="6">
             <a-form-item label="商品名称">
@@ -38,7 +27,7 @@
                 style="width:30%;margin-right: 5%;"
               >
                 <a-select-option value="">请选择</a-select-option>
-                <a-select-option v-for="item in listGoodType" :value="item.id">{{ item.name }}</a-select-option>
+                <a-select-option v-for="(item,index) in listGoodType" :value="item.id" :key="index">{{ item.name }}</a-select-option>
               </a-select>
               <a-select
                 v-model="queryParam.goodTypeIdTwo"
@@ -47,17 +36,15 @@
                 style="width:30%;margin-right: 5%;"
               ><!--v-model="id"-->
                 <a-select-option value="">请选择</a-select-option>
-                <a-select-option v-for="item in listGoodType1" :value="item.id">{{ item.name }}</a-select-option>
-                <!--:defaultValue="listGoodType1.length>0?listGoodType1[0].name : ''"-->
+                <a-select-option v-for="(item,index) in listGoodType1" :value="item.id" :key="index">{{ item.name }}</a-select-option>
               </a-select>
               <a-select v-model="queryParam.goodTypeIdThree" placeholder="请选择" style="width:30%">
                 <a-select-option value="">请选择</a-select-option>
-                <a-select-option v-for="item in listGoodType2" :value="item.id">{{ item.name }}</a-select-option>
-                <!--:defaultValue="listGoodType2.length>0?listGoodType2[0].name : ''"-->
+                <a-select-option v-for="(item,index) in listGoodType2" :value="item.id" :key="index">{{ item.name }}</a-select-option>
               </a-select>
             </a-form-item>
           </a-col>
-  
+
           <a-col :md="8" :sm="6">
             <a-form-item label="供应商">
               <a-input placeholder="请输入供应商" v-model="queryParam.sysUserName"></a-input>
@@ -81,8 +68,9 @@
               class="components-table-demo-nested"
               rowKey="id"
             >
-              <!--              <a-icon type="smile-o" />-->
-              <span slot="buylimitTitle">购买限制</span>
+              <template slot="rate" slot-scope="text,record,index">
+                <a-input-number :min="0" v-model="dataSource[index].rate"></a-input-number>
+              </template>
               <template slot="operation" slot-scope="text, record, index">
                 <a-popconfirm
                   v-if="dataSource.length"
@@ -100,7 +88,7 @@
                   style="width: 50px;height: 50px;display: inline-block;vertical-align: middle"
                 />
               </template>
-              
+
 
               <template slot="marketPrice" slot-scope="text, record, index">
                 <div v-if="record.isViewMarketPrice == 1">
@@ -113,7 +101,21 @@
             </a-table>
           </a-col>
         </a-row>
-        <a-button type="primary" html-type="submit" style="margin: 30px auto;display: block;">
+        <div style="margin-top: 20px">
+          <a-form-item
+            :labelCol="labelCol"
+            :wrapperCol="wrapperCol"
+            label="开始时间">
+            <a-date-picker showTime format='YYYY-MM-DD HH:mm:ss'  v-model="startTime" />
+          </a-form-item>
+          <a-form-item
+            :labelCol="labelCol"
+            :wrapperCol="wrapperCol"
+            label="结束时间">
+            <a-date-picker showTime format='YYYY-MM-DD HH:mm:ss'  v-model="endTime"/>
+          </a-form-item>
+        </div>
+        <a-button type="primary" style="margin: 30px auto;display: block;" @click="handleSubmit">
           提交
         </a-button>
       </a-form>
@@ -122,8 +124,7 @@
     <AddMarketingChargeSelectStoreModel
       ref="AddMarketingChargeSelectStoreModel"
       :selectedRowKeysFrom="modelOkInfo.ids"
-      :marketingPrefectureId="marketingZoneGroupId"
-      :types="2"
+      :types="3"
       @handleOK="modelOk"
     >
     </AddMarketingChargeSelectStoreModel>
@@ -132,12 +133,11 @@
 
 <script>
 import AddMarketingChargeSelectStoreModel from './AddMarketingChargeSelectStoreModel'
-// import AddMarketingGroupGoodsSetAllModel from './AddMarketingGroupGoodsSetAllModel'
-import { initDictOptions, filterDictText } from '@/components/dict/JDictSelectUtil'
+import { initDictOptions } from '@/components/dict/JDictSelectUtil'
 import { getAction, postAction } from '@/api/manage'
 
 export default {
-  name: 'AddMarketingGroupGoodsModel',
+  name: 'AddMarketingRushGoodsModel',
   data() {
     return {
       formLayout: 'horizontal',
@@ -145,26 +145,16 @@ export default {
       cardLoading: false,
       tableLoading: false,
       areaOptions: [],
-   
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 5 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 16 },
+      },
       disabled: true,
       dataSource: [],
-      limitLsit: [
-        {
-          label: '专区id',
-          value: 'sdf145sdf489sdf145sdf489',
-          isMust: false
-        },
-        {
-          label: '加入分类',
-          value: '专区名称',
-          isMust: false
-        },
-        {
-          label: '活动价',
-          value: '29.9',
-          isMust: false
-        }
-      ],
       columns: [
         {
           title: '#',
@@ -202,7 +192,7 @@ export default {
           align: 'center',
           width: 150
         },
-       
+
         {
           title: '市场价',
           dataIndex: 'marketPrice',
@@ -229,7 +219,13 @@ export default {
           key: 'repertory',
           align: 'center'
         },
-        
+        {
+          title: '价格',
+          dataIndex: 'rate',
+          key: 'rate',
+          align: 'center',
+          scopedSlots:{customRender:'rate'}
+        },
         {
           title: '供应商',
           dataIndex: 'sysUserName',
@@ -245,25 +241,15 @@ export default {
           scopedSlots: { customRender: 'operation' }
         }
       ],
-      selectedRowKeys: [], // Check here to configure the default column
-      marketingZoneGroupId: '',
+      selectedRowKeys: [],
       price: '',
-      marketingZoneGroupRecord: {},
       allData: {},
       //选中专区商品
       url: {
         imgerver: window._CONFIG['domianURL'] + '/sys/common/view',
-        // postGoodListList: 'marketingPrefecture/marketingPrefecture/postGoodListList',
         getgoodTypeListcascade: '/goodType/goodType/getgoodTypeListcascade',
-        //获取对应活动分类
-        getMarketingPrefectureType: 'marketingPrefectureType/marketingPrefectureType/getMarketingPrefectureType',
-        //获取专区二级分类
-        findUnderlingListMap: 'marketingPrefectureType/marketingPrefectureType/findUnderlingListMap',
-        queryById: '/marketingPrefecture/marketingPrefecture/queryById',
         //提交接口
-        chooseAddGood: 'marketingRushGood/marketingRushGood/addArr',
-        //获取中奖拼团商品类型（1）
-        getAllMarketingGroupGoodType: 'marketing/marketingGroupGoodType/getAllMarketingGroupGoodType'
+        chooseAddGood: 'marketingRushGood/marketingRushGood/addArr'
       },
       //查询条件
       queryParam: {
@@ -283,30 +269,18 @@ export default {
       modelOkInfo: '',
       subMitDataSource: '',
       memberType: [],
-      allDataSource: []
+      allDataSource: [],
+      startTime:'',
+      endTime:''
     }
   },
   components: {
     AddMarketingChargeSelectStoreModel
-    // AddMarketingGroupGoodsSetAllModel
   },
   async created() {
-    console.log(this.$route.query)
-    let marketingZoneGroupRecord =
-      (this.$route.query.marketingZoneGroupRecord && this.$route.query.marketingZoneGroupRecord.length > 0
-        ? this.$route.query.marketingZoneGroupRecord[0]
-        : {}) || {}
-    this.marketingRushTypeId = this.$route.query.marketingRushTypeId || ''
-    this.price = this.$route.query.price || ''
-    this.marketingZoneGroupRecord = marketingZoneGroupRecord
-    this.limitLsit[0].value = marketingZoneGroupRecord.id
-    this.limitLsit[1].value = marketingZoneGroupRecord.rushName
-    this.limitLsit[2].value = marketingZoneGroupRecord.price
     this.goodTypeListcascade('0')
-    await this.getMarketingPrefectureType()
     this.loadData()
   },
-  computed() {},
   methods: {
     onSelectChange(selectedRowKeys) {
       console.log('selectedRowKeys changed: ', selectedRowKeys)
@@ -328,36 +302,41 @@ export default {
     selectStore() {
       this.$refs.AddMarketingChargeSelectStoreModel.open()
     },
-   
-    async handleSubmit(e) {
-      e.preventDefault()
-      
+
+    handleSubmit() {
+
+      if(!this.startTime){
+        this.$message.warning('请选择开始时间');
+        return false;
+      }
+
+      if(!this.endTime){
+        this.$message.warning('请选择结束时间');
+        return false;
+      }
       let subMitDataSource = JSON.parse(JSON.stringify(this.subMitDataSource))
+      console.log(subMitDataSource);
       let resALL = []
       for (let item of subMitDataSource) {
         let ret
         for (let index = 0; index < item.goodSpecificationList.length; index++) {
           for (let item2 of this.dataSource) {
             if (item2.mainGoodId == item.id && index == item2.sort) {
+              if(!item2.rate){
+                this.$message.warning('请填写价格');
+                return false;
+              }
               ret = {
-                marketingRushTypeId: this.marketingRushTypeId,
                 goodListId: item.id,
-                price: this.price
+                price: item2.rate,
+                startTime:this.startTime,
+                endTime:this.endTime
               }
             }
           }
         }
-        setTimeout(() => {
-          resALL.push(ret)
-        }, 100)
+          resALL.push(ret);
       }
-      await new Promise(resolve => {
-        setTimeout(() => {
-          resolve(resALL)
-        }, 500)
-      })
-      // return
-      
       postAction(this.url.chooseAddGood, JSON.stringify(resALL), {
         'Content-Type': 'application/json'
       }).then(res => {
@@ -369,29 +348,6 @@ export default {
         } else {
           this.$message.warn(res.message || '添加失败！')
         }
-      })
-    },
-    getMarketingPrefectureType() {
-      this.cardLoading = true
-      return new Promise(resolve => {
-        getAction(this.url.getAllMarketingGroupGoodType).then(res => {
-          if (res.success) {
-            let sz = []
-            for (let item of res.result) {
-              sz.push({
-                label: item.typeName,
-                value: item.id,
-                isLeaf: false
-              })
-            }
-            this.prefectureType = sz
-            this.$nextTick(() => {
-              resolve()
-            })
-          } else {
-            resolve()
-          }
-        })
       })
     },
     async loadData() {
@@ -462,7 +418,7 @@ export default {
       this.dataSource = sz
       this.tableLoading = false
     },
-  
+
     //查询
     search() {
       let queryParam = Object.freeze(this.queryParam),

@@ -117,7 +117,7 @@
         :dataSource="dataSource"
         :pagination="ipagination"
         :loading="loading"
-        :scroll="{x:true}"
+        :scroll="{x:2000}"
         :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
         @change="handleTableChange">
         <template slot="appearType" slot-scope="text, record">

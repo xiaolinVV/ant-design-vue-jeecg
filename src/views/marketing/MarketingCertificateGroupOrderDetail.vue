@@ -41,7 +41,7 @@
         :columns="columns"
         :dataSource="dataSource"
         style="margin-bottom: 24px"
-        :scroll="{ x: true }"
+        :scroll="{ x: 2500 }"
       >
         <template slot="mainPicture" slot-scope="text">
           <div class="anty-img-wrap">
@@ -92,8 +92,8 @@
         :columns="columnsSecond"
         :dataSource="dataSourceSecond"
         style="margin-bottom: 24px"
-        :scroll="{ x: true }"
-
+        :scroll="{ x: 2500 }"
+       
       >
         <template slot="mainPicture" slot-scope="text">
           <div class="anty-img-wrap">

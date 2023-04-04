@@ -119,10 +119,10 @@
 
 <script>
   import StoreCashierRoutingModal from './modules/StoreCashierRoutingModal'
-  import { JeecgListMixin } from '@/mixins/JeecgListMixin'
+  import { JeecgListMixinTwo } from '@/mixins/JeecgListMixinTwo'
   export default {
     name: "StoreCashierRoutingList",
-    mixins:[JeecgListMixin],
+    mixins:[JeecgListMixinTwo],
     components: {
       StoreCashierRoutingModal
     },
@@ -170,7 +170,32 @@
             }
           },
           {
-            title: '是否店铺',
+            title: '商户名称',
+            align:"center",
+            dataIndex: 'storeName',
+            customRender(text){
+              if(text){
+                return text;
+              }else{
+                return '-';
+              }
+            }
+          },
+          {
+            title: '角色',
+            align:"center",
+            dataIndex: 'roleType',
+            customRender(text){
+              if(text==0){
+                return '会员';
+              }
+              if(text==1){
+                return '商户';
+              }
+            }
+          },
+          {
+            title: '是否本商户',
             align:"center",
             dataIndex: 'isStore',
             customRender(text){
@@ -209,62 +234,15 @@
             dataIndex: 'fashionableProportion'
           },
 		   {
-            title: '银行卡号',
-            align:"center",
-            dataIndex: 'bankCard',
-         customRender(text){
-              if(text){
-                return text;
-              }else{
-                return '-';
-              }
-         }
-           },
-		   {
-            title: '真实姓名',
-            align:"center",
-            dataIndex: 'realName',
-         customRender(text){
-           if(text){
-             return text;
-           }else{
-             return '-';
-           }
-         }
-           },
-		   {
-            title: '身份证号',
-            align:"center",
-            dataIndex: 'idNumber',
-         customRender(text){
-           if(text){
-             return text;
-           }else{
-             return '-';
-           }
-         }
-           },
-		   {
-            title: '手机号',
-            align:"center",
-            dataIndex: 'phone',
-         customRender(text){
-           if(text){
-             return text;
-           }else{
-             return '-';
-           }
-         }
-           },
-		   {
             title: '汇付结算账户',
             align:"center",
-            dataIndex: 'settleAccount',
-         customRender(text){
-           if(text){
-             return text;
-           }else{
-             return '-';
+            dataIndex: 'storeSettleAccount',
+         customRender(text,record){
+           if(record.storeSettleAccount){
+             return record.storeSettleAccount;
+           }
+           if(record.memberSettleAccount){
+             return record.memberSettleAccount;
            }
          }
            },
@@ -302,6 +280,7 @@
         this.visible=false;
       },
       show(record){
+        this.ipagination.current = 1
         this.dataSource=[];
         this.visible=true;
         console.log(record);

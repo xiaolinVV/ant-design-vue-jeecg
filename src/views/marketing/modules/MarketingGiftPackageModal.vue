@@ -19,7 +19,7 @@
             :rowKey="record => record.id"
             :loading="loading"
             :pagination="false"
-            :scroll="{x:true}"
+            :scroll="{x:2000}"
           >
         <span slot="id" slot-scope="text, record" style="color: red;">
          {{text}}
@@ -57,7 +57,7 @@
             :rowKey="record => record.id"
             :loading="loading"
             :pagination="false"
-            :scroll="{x:true}"
+            :scroll="{x:2000}"
           >
         <span slot="id" slot-scope="text, record" style="color: red;">
          {{text}}

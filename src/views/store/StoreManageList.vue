@@ -146,7 +146,7 @@
       <a-table
         ref="table"
         size="middle"
-        :scroll="{ x: true }"
+        :scroll="{ x: 5000 }"
         rowKey="id"
         bordered
         :columns="columns"
@@ -341,6 +341,9 @@
                 <a @click="storeCashierRoutingListClick(record,'0')">收银分账设置</a>
               </a-menu-item>
               <a-menu-item>
+                <a @click="storeOrderSettingModalClick(record)">订单设置</a>
+              </a-menu-item>
+              <a-menu-item>
                 <a @click="storeCashierRoutingListClick(record,'1')">订单分账设置</a>
               </a-menu-item>
               <a-menu-item>
@@ -361,6 +364,9 @@
 
     <!--收银设置-->
     <store-cashier-setting-modal ref="storeCashierSettingModal"></store-cashier-setting-modal>
+
+    <!--订单设置-->
+    <store-order-setting-modal ref="storeOrderSettingModal"></store-order-setting-modal>
 
     <!--分账设置-->
     <store-cashier-routing-list ref="storeCashierRoutingList"></store-cashier-routing-list>
@@ -386,6 +392,7 @@ import { colAuthFilter } from '@/utils/authFilter'
 import selectAddress from '@/components/selectAddress/selectAddress'
 import StoreManageReceivingCode from './modules/StoreManageReceivingCode'
 import StoreCashierSettingModal from'./modules/StoreCashierSettingModal'
+import StoreOrderSettingModal from'./modules/StoreOrderSettingModal'
 import StoreFunctionSetModal from './modules/StoreFunctionSetModal'
 import StoreCashierRoutingList from'./StoreCashierRoutingList'
 
@@ -399,7 +406,8 @@ export default {
     selectAddress,
     StoreCashierSettingModal,
     StoreFunctionSetModal,
-    StoreCashierRoutingList
+    StoreCashierRoutingList,
+    StoreOrderSettingModal
   },
   inject: ['rush'],
   data() {
@@ -926,6 +934,9 @@ export default {
     },
     storeCashierSettingModalClick(record){
       this.$refs.storeCashierSettingModal.showSettting(record);
+    },
+    storeOrderSettingModalClick(record){
+      this.$refs.storeOrderSettingModal.showSettting(record);
     },
     storeFunctionSetModalClick(record){
       this.$refs.storeFunctionSetModal.showSettting(record);

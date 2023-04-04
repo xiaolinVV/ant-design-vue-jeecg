@@ -107,7 +107,87 @@
             <img alt="example" style="width: 100%" :src="postersPreviewImage" />
           </a-modal>
         </a-form-item>
-        <a-form-item label="使用门槛" :label-col="labelCol" :wrapper-col="{ span: 12 }">
+
+        <a-form-item label="券类型" :label-col="labelCol" :wrapper-col="{ span: 12 }" class="line-special">
+          <!--          v-model="AllData.isNomal"-->
+          <a-radio-group
+            v-decorator="['isNomal', { rules: [{ required: true, message: '请选择券类型' }] }]"
+            @change="couponClassification"
+          >
+            <a-radio :style="radioStyle" :value="0">
+              普通券
+            </a-radio>
+            <a-radio :style="radioStyle" :value="1">
+              活动券
+            </a-radio>
+            <a-radio :style="radioStyle" :value="2">
+              折扣券
+            </a-radio>
+          </a-radio-group>
+        </a-form-item>
+        <a-form-item
+          label="领取人限制"
+          :label-col="labelCol"
+          :wrapper-col="{ span: 12 }"
+          v-if="AllData.isNomal == 0"
+          class="line-special"
+        >
+          <!--          v-model="AllData.getRestrict"-->
+          <a-checkbox-group
+            :options="plainOptions1"
+            v-decorator="[
+              'getRestrict',
+              { rules: [{ required: AllData.isNomal == 0 ? true : false, message: '请选择领取人限制' }] }
+            ]"
+          />
+        </a-form-item>
+        <a-form-item
+          label="再次领取"
+          :label-col="labelCol"
+          :wrapper-col="{ span: 12 }"
+          class="line-special"
+          v-if="AllData.isNomal == 0"
+        >
+          <!--          v-model="AllData.isGetThe"-->
+          <a-radio-group
+            v-decorator="[
+              'isGetThe',
+              { rules: [{ required: AllData.isNomal == 0 ? true : false, message: '请设置再次领取' }] }
+            ]"
+            @change="noCouponGet"
+          >
+            <a-radio :style="radioStyle" :value="0">
+              不支持
+            </a-radio>
+            <a-radio :style="radioStyle" :value="1">
+              支持
+            </a-radio>
+          </a-radio-group>
+        </a-form-item>
+        <a-form-item
+          label="再次领取条件"
+          :label-col="labelCol"
+          :wrapper-col="{ span: 14 }"
+          class="line-special"
+          v-if="AllData.isGetThe == 1 && AllData.isNomal == 0"
+        >
+          <!--          v-model="AllData.againGet"-->
+          <a-checkbox-group
+            :options="receiveAgainplainOptions"
+            v-decorator="[
+              'againGet',
+              {
+                rules: [
+                  {
+                    required: AllData.isGetThe == 1 && AllData.isNomal == 0 ? true : false,
+                    message: '请选择再次领取条件'
+                  }
+                ]
+              }
+            ]"
+          />
+        </a-form-item>
+        <a-form-item label="使用门槛" :label-col="labelCol" :wrapper-col="{ span: 12 }"  v-if="AllData.isNomal == 0 || AllData.isNomal == 1">
           <!--          v-model="AllData.isThreshold"-->
           <a-radio-group
             v-decorator="['isThreshold', { rules: [{ required: true, message: '请选择使用门槛' }] }]"
@@ -121,25 +201,25 @@
             </a-radio>
           </a-radio-group>
         </a-form-item>
-        <a-form-item label="优惠内容" :label-col="labelCol" :wrapper-col="{ span: 12 }" class="Discount">
-          <!--          v-model="AllData.subtract"-->
+        <a-form-item label="优惠内容" :label-col="labelCol" :wrapper-col="{ span: 12 }" class="Discount" v-if="AllData.isNomal == 0 || AllData.isNomal == 1">
           减
-          <a-input
-            v-decorator="[
-              'subtract',
-              {
-                rules: [
-                  { required: true, message: '请输入优惠内容' },
-                  {
-                    pattern: /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/,
-                    message: '请填写正确的金额'
-                  }
-                ]
-              }
-            ]"
-          />
+          <a-input v-decorator="['subtract',{rules: [{ required: true, message: '请输入优惠内容' },
+                  {pattern: /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/,
+                    message: '请填写正确的金额'}]}]"/>
           元
         </a-form-item>
+        <a-form-item label="上限金额" :label-col="labelCol" :wrapper-col="{ span: 12 }" class="Discount" v-if="AllData.isNomal == 2">
+          <a-input v-decorator="['discountLimitAmount',{rules: [{ required: true, message: '请输入上限金额容' },
+            {pattern: /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/,message: '请填写正确的金额'}]}]" />
+            元
+        </a-form-item>
+        <a-form-item label="优惠折扣" :label-col="labelCol" :wrapper-col="{ span: 12 }" class="Discount" v-if="AllData.isNomal == 2">
+          <a-input v-decorator="['discountPercent',{rules: [{ required: true, message: '请输入优惠折扣' },
+            {pattern: /^(\d|10)(\.\d)?$/,message: '请填写正确的金额'}]}]" />
+            折（请填写0-10之间的数字）
+        </a-form-item>
+
+
         <a-form-item label="用券时间" :label-col="labelCol" :wrapper-col="{ span: 18 }">
           <!--          v-model="AllData.vouchersWay"-->
           <a-radio-group
@@ -297,82 +377,7 @@
             </a-radio>
           </a-radio-group>
         </a-form-item>
-        <a-form-item label="券类型" :label-col="labelCol" :wrapper-col="{ span: 12 }" class="line-special">
-          <!--          v-model="AllData.isNomal"-->
-          <a-radio-group
-            v-decorator="['isNomal', { rules: [{ required: true, message: '请选择券类型' }] }]"
-            @change="couponClassification"
-          >
-            <a-radio :style="radioStyle" :value="0">
-              普通券
-            </a-radio>
-            <a-radio :style="radioStyle" :value="1">
-              活动券
-            </a-radio>
-          </a-radio-group>
-        </a-form-item>
-        <a-form-item
-          label="领取人限制"
-          :label-col="labelCol"
-          :wrapper-col="{ span: 12 }"
-          v-show="AllData.isNomal == 0"
-          class="line-special"
-        >
-          <!--          v-model="AllData.getRestrict"-->
-          <a-checkbox-group
-            :options="plainOptions1"
-            v-decorator="[
-              'getRestrict',
-              { rules: [{ required: AllData.isNomal == 0 ? true : false, message: '请选择领取人限制' }] }
-            ]"
-          />
-        </a-form-item>
-        <a-form-item
-          label="再次领取"
-          :label-col="labelCol"
-          :wrapper-col="{ span: 12 }"
-          class="line-special"
-          v-show="AllData.isNomal == 0"
-        >
-          <!--          v-model="AllData.isGetThe"-->
-          <a-radio-group
-            v-decorator="[
-              'isGetThe',
-              { rules: [{ required: AllData.isNomal == 0 ? true : false, message: '请设置再次领取' }] }
-            ]"
-            @change="noCouponGet"
-          >
-            <a-radio :style="radioStyle" :value="0">
-              不支持
-            </a-radio>
-            <a-radio :style="radioStyle" :value="1">
-              支持
-            </a-radio>
-          </a-radio-group>
-        </a-form-item>
-        <a-form-item
-          label="再次领取条件"
-          :label-col="labelCol"
-          :wrapper-col="{ span: 14 }"
-          class="line-special"
-          v-if="AllData.isGetThe == 1 && AllData.isNomal == 0"
-        >
-          <!--          v-model="AllData.againGet"-->
-          <a-checkbox-group
-            :options="receiveAgainplainOptions"
-            v-decorator="[
-              'againGet',
-              {
-                rules: [
-                  {
-                    required: AllData.isGetThe == 1 && AllData.isNomal == 0 ? true : false,
-                    message: '请选择再次领取条件'
-                  }
-                ]
-              }
-            ]"
-          />
-        </a-form-item>
+        
         <!-- <a-form-item label="投放渠道" :label-col="labelCol" :wrapper-col="{ span: 12 }" v-show="AllData.isNomal == 0">
           <a-checkbox-group
             :options="deliveryChannel"
@@ -931,34 +936,37 @@ export default {
     let allData
     this.part = part
     let that = this
+    
     if (part == 2 && marketingDiscountListTerraceData) {
       //编辑
       marketingDiscountListTerraceData = JSON.parse(marketingDiscountListTerraceData)
+      console.log("marketingDiscountListTerraceData",marketingDiscountListTerraceData);
+
       allData = {
-        // id: marketingDiscountListTerraceData.id,
-        // delFlag: marketingDiscountListTerraceData.delFlag,//删除状态
-        // name: marketingDiscountListTerraceData.name,//优惠券名称marketingDiscountData.delFlag
-        // completely: marketingDiscountListTerraceData.completely,//满多少钱
+        id: marketingDiscountListTerraceData.id,
+        delFlag: marketingDiscountListTerraceData.delFlag,//删除状态
+        name: marketingDiscountListTerraceData.name,//优惠券名称marketingDiscountData.delFlag
+        completely: marketingDiscountListTerraceData.completely,//满多少钱
         isThreshold: marketingDiscountListTerraceData.isThreshold * 1, //有无门槛
-        // subtract: marketingDiscountListTerraceData.subtract,//减多少钱  优惠内容
-        // total: marketingDiscountListTerraceData.total,//发放总量
+        subtract: marketingDiscountListTerraceData.subtract,//减多少钱  优惠内容
+        total: marketingDiscountListTerraceData.total,//发放总量
         userRestrict: marketingDiscountListTerraceData.userRestrict.split(','), //使用人限制
         getRestrict: marketingDiscountListTerraceData.getRestrict.split(','), //领取人限制
         isGive: marketingDiscountListTerraceData.isGive * 1, //赠送设置
         isWarn: marketingDiscountListTerraceData.isWarn * 1, //是否过期提醒
         vouchersWay: marketingDiscountListTerraceData.vouchersWay * 1, //用券方式
-        // warnDays: marketingDiscountListTerraceData.warnDays,//过期前多少天提醒
+        warnDays: marketingDiscountListTerraceData.warnDays,//过期前多少天提醒
         isGetThe: marketingDiscountListTerraceData.isGetThe * 1, //再次领取
         isNomal: marketingDiscountListTerraceData.isNomal * 1, //券类型
         isUniqueness: marketingDiscountListTerraceData.isUniqueness * 1 == 1 ? true : false, //使用方式
         //用券时间
-        // startTime: marketingDiscountListTerraceData.startTime,//开始时间
-        // endTime: marketingDiscountListTerraceData.endTime,//结束时间
-        // disData: marketingDiscountListTerraceData.disData,//多少天、周、月  数字形式
-        // monad: marketingDiscountListTerraceData.monad,//单位
-        // goodStoreListIds: marketingDiscountListTerraceData.goodStoreListIds,//商品ids
-        // marketingChannelId:marketingDiscountListTerraceData.marketingChannelId?marketingDiscountListTerraceData.marketingChannelId.split(','):'', //投放渠道选择值
-        // discountExplain: marketingDiscountListTerraceData.discountExplain,//券说明
+        startTime: marketingDiscountListTerraceData.startTime,//开始时间
+        endTime: marketingDiscountListTerraceData.endTime,//结束时间
+        disData: marketingDiscountListTerraceData.disData,//多少天、周、月  数字形式
+        monad: marketingDiscountListTerraceData.monad,//单位
+        goodStoreListIds: marketingDiscountListTerraceData.goodStoreListIds,//商品ids
+        marketingChannelId:marketingDiscountListTerraceData.marketingChannelId?marketingDiscountListTerraceData.marketingChannelId.split(','):'', //投放渠道选择值
+        discountExplain: marketingDiscountListTerraceData.discountExplain,//券说明
         againGet: marketingDiscountListTerraceData.againGet.split(',') //再次领取条件
       }
 

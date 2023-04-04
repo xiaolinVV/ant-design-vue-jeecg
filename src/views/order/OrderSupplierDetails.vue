@@ -139,7 +139,7 @@
           :loading="loading"
           @change="handleTableChange"
           style="margin-bottom: 24px"
-          :scroll="{ x: true}">
+          :scroll="{ x: 1500}">
           <template slot="mainPicture" slot-scope="text, record, index">
             <div class="anty-img-wrap">
               <a-avatar shape="square" v-if="record.mainPicture != undefined "
@@ -194,7 +194,7 @@
         :loading="loading"
         @change="handleTableChange"
         style="margin-bottom: 24px"
-        :scroll="{ x: true}">
+        :scroll="{ x: 1500}">
       </a-table>
 
     </a-card>

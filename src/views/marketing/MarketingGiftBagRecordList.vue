@@ -127,7 +127,7 @@
         size="middle"
         rowKey="id"
         :columns="columns"
-        :scroll="{ x: true }"
+        :scroll="{ x: 2500 }"
         :dataSource="dataSource"
         :pagination="ipagination"
         :loading="loading"
@@ -135,7 +135,7 @@
         @change="handleTableChange"
       >
         <template slot="headPortrait" slot-scope="text, record, index">
-          <img class="clickShowImage " :preview="'headPortrait' + index" :src="record.headPortrait" alt="" height="25px" style="max-width:80px;font-size: 12px;font-style: italic;" />
+          <img class="clickShowImage " :preview="'headPortrait' + index" :src="record.headPortrait" alt="" />
         </template>
         <template slot="giftContent" slot-scope="text, record, index">
           <a href="javascript:;" @click="showContentModal(record)">{{ record.giftName }}</a>
@@ -154,8 +154,8 @@
         </template>
         <template slot="channelName" slot-scope="text, record, index">
           <div class="anty-img-wrap">
-            <span v-if="record.channelName == null">-</span>
-            <span v-if="record.channelName != null">{{ record.channelName }}</span>
+            <span v-if="record.channelName == null"><a @click="marketingGiftBagRecordChannelModelClick(record)">-</a></span>
+            <span v-if="record.channelName != null"><a @click="marketingGiftBagRecordChannelModelClick(record)">{{ record.channelName }}</a></span>
           </div>
         </template>
         <span slot="action" slot-scope="text, record">
@@ -181,7 +181,8 @@
     <marketingGiftBagRecord-modal ref="modalForm" @ok="modalFormOk"></marketingGiftBagRecord-modal>
     <MarketingGiftPackageModal ref="MarketingGiftPackageModal"></MarketingGiftPackageModal>
     <marketing-gift-record-qrcode ref="marketingGiftRecordQrcodeModal" @ok="modalFormOk"></marketing-gift-record-qrcode>
-
+    <!--销售渠道的修改-->
+    <marketing-gift-bag-record-channel-model ref="marketingGiftBagRecordChannelModel"  @ok="modalFormOk"></marketing-gift-bag-record-channel-model>
   </a-card>
 </template>
 
@@ -189,6 +190,7 @@
 import MarketingGiftBagRecordModal from './modules/MarketingGiftBagRecordModal'
 import MarketingGiftPackageModal from './modules/MarketingGiftPackageModal'
 import MarketingGiftRecordQrcode from'./modules/MarketingGiftRecordQrcode'
+import MarketingGiftBagRecordChannelModel from './modules/MarketingGiftBagRecordChannelModel'
 import { JeecgListMixin } from '@/mixins/JeecgListMixin'
 import { filterObj } from '@/utils/util'
 export default {
@@ -197,7 +199,8 @@ export default {
   components: {
     MarketingGiftBagRecordModal,
     MarketingGiftPackageModal,
-    MarketingGiftRecordQrcode
+    MarketingGiftRecordQrcode,
+    MarketingGiftBagRecordChannelModel
   },
   data() {
     return {
@@ -318,6 +321,9 @@ export default {
     }
   },
   methods: {
+    marketingGiftBagRecordChannelModelClick(record){
+      this.$refs.marketingGiftBagRecordChannelModel.showModal(record);
+    },
     showContentModal(record) {
       this.$refs.MarketingGiftPackageModal.totalModal(record)
     },

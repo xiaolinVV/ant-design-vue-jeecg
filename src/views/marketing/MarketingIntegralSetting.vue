@@ -109,67 +109,6 @@
         <!-- <a-input placeholder="请输入首页广告词" v-decorator="rules.advertisingCommentary"> </a-input> -->
       </a-form-item>
 
-      <!-- <a-form-item
-        :label-col="labelCol"
-        :wrapper-col="wrapperCol"
-        help="尺寸1428*2540，支持jpg、jpeg、png格式，大小不超过2M。必须预留好二维码位置。以免影响展示效果。"
-        validate-status="error"
-      >
-        <span slot="label">
-          <span class="dataCheckedStar">
-            *
-          </span>
-          默认海报图
-        </span>
-        <a-upload
-          :action="uploadAction"
-          :beforeUpload="postersFileUpload"
-          :fileList="postersFileList"
-          :headers="headers"
-          @change="postersHandleChange"
-          @preview="postersHandlePreview"
-          listType="picture-card"
-        >
-          <div v-if="postersFileList.length < 1">
-            <a-icon type="plus" />
-            <div class="ant-upload-text">Upload</div>
-          </div>
-        </a-upload>
-        <a-modal :footer="null" :visible="postersPreviewVisible" @cancel="postersHandleCancel">
-          <img :src="postersPreviewImage" alt="example" style="width: 100%" />
-        </a-modal>
-      </a-form-item>
-
-      <a-form-item
-        :label-col="labelCol"
-        :wrapper-col="wrapperCol"
-        help="尺寸531*540 支持jpg、jpeg、png格式，大小不超过2M"
-        validate-status="error"
-      >
-        <span slot="label">
-          <span class="dataCheckedStar">
-            *
-          </span>
-          封面图
-        </span>
-        <a-upload
-          :action="uploadAction"
-          :beforeUpload="surfacePlotFileUpload"
-          :fileList="surfacePlotFileList"
-          :headers="headers"
-          @change="surfacePlotHandleChange"
-          @preview="surfacePlotHandlePreview"
-          listType="picture-card"
-        >
-          <div v-if="surfacePlotFileList.length < 1">
-            <a-icon type="plus" />
-            <div class="ant-upload-text">Upload</div>
-          </div>
-        </a-upload>
-        <a-modal :footer="null" :visible="surfacePlotPreviewVisible" @cancel="surfacePlotHandleCancel">
-          <img :src="surfacePlotPreviewImage" alt="example" style="width: 100%" />
-        </a-modal>
-      </a-form-item> -->
     </a-form>
     <div class="button-end"></div>
     <div class="button-operation">
@@ -310,59 +249,11 @@ export default {
     diagramHandleChange({ fileList }) {
       this.diagramFileList = fileList
     },
-    //海报图
-    // postersFileUpload(file) {
-    //   const isLt2M = file.size / 1024 / 1024 < 5
-    //   if (!isLt2M) {
-    //     this.$message.error('图片大小必须在5M以内!')
-    //   }
-    //   this.postersFilePic = isLt2M
-    //   return isLt2M
-    // },
-    // postersHandleCancel() {
-    //   this.postersPreviewVisible = false
-    // },
-    // postersHandlePreview(file) {
-    //   this.postersPreviewImage = file.url || file.thumbUrl
-    //   this.postersPreviewVisible = true
-    // },
-    // postersHandleChange({ fileList }) {
-    //   this.postersFileList = fileList
-    // },
-
-    //封面图
-    // surfacePlotFileUpload(file) {
-    //   const isLt2M = file.size / 1024 / 1024 < 5
-    //   if (!isLt2M) {
-    //     this.$message.error('图片大小必须在5M以内!')
-    //   }
-    //   this.surfacePlotFilePic = isLt2M
-    //   return isLt2M
-    // },
-    // surfacePlotHandleCancel() {
-    //   this.surfacePlotPreviewVisible = false
-    // },
-    // surfacePlotHandlePreview(file) {
-    //   this.surfacePlotPreviewImage = file.url || file.thumbUrl
-    //   this.surfacePlotPreviewVisible = true
-    // },
-    // surfacePlotHandleChange({ fileList }) {
-    //   this.surfacePlotFileList = fileList
-    // },
-
     sure() {
       if (!Array.isArray(this.diagramFileList) || this.diagramFileList.length <= 0) {
         this.$message.warn('请上传积分图标！')
         return false
       }
-      // if (!Array.isArray(this.postersFileList) || this.postersFileList.length <= 0) {
-      //   this.$message.warn('请上传海报图！')
-      //   return false
-      // }
-      // if (!Array.isArray(this.surfacePlotFileList) || this.surfacePlotFileList.length <= 0) {
-      //   this.$message.warn('请上传积分图标！')
-      //   return false
-      // }
       if (!this.AllData.rule) {
         this.$message.warn('请填写规则说明！')
         return false

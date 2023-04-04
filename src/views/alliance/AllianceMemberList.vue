@@ -100,7 +100,7 @@
       <a-table
         ref="table"
         size="middle"
-        :scroll="{x:true}"
+        :scroll="{x:2500}"
         rowKey="id"
         :columns="columns"
         :dataSource="dataSource"

@@ -116,7 +116,7 @@
         size="middle"
         rowKey="id"
         :columns="columns"
-        :scroll="{ x: true }"
+        :scroll="{ x: 3000 }"
         :dataSource="dataSource"
         :pagination="ipagination"
         :loading="loading"
@@ -144,6 +144,12 @@
           <div class="anty-img-wrap">
             <span shape="square" v-if="record.isWarn == 0">不提醒</span>
             <span shape="square" v-if="record.isWarn == 1">过期前{{ record.warnDays }}提醒</span>
+          </div>
+        </template>
+        <template slot="aboveBelowUse" slot-scope="text, record, index">
+          <div class="anty-img-wrap">
+            <span shape="square" v-if="record.aboveUse == 1">线上核销<br/></span>
+            <span shape="square" v-if="record.belowUse == 1">线下核销</span>
           </div>
         </template>
         <template slot="isGive" slot-scope="text, record, index">
@@ -323,6 +329,12 @@ export default {
           title: '推广佣金',
           align: 'center',
           dataIndex: 'promoteCommission'
+        },
+        {
+          title: '核销方式',
+          align: 'center',
+          dataIndex: 'aboveBelowUse',
+          scopedSlots: { customRender: 'aboveBelowUse' }
         },
 
         {

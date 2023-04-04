@@ -65,11 +65,11 @@
         :dataSource="dataSource"
         :pagination="ipagination"
         :loading="loading"
-        :scroll="{x:true}"
+        :scroll="{x:2000}"
         :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
         @change="handleTableChange">
         <template slot="headPortrait" slot-scope="text, record, index">
-            <img class="clickShowImage" :preview="'headPortrait' + index" height="25px"  :src="record.headPortrait" alt="" style="max-width:80px;font-size: 12px;font-style: italic;">
+            <img class="clickShowImage" :preview="'headPortrait' + index"  :src="record.headPortrait" alt="">
         </template>
         <template slot="frameStatus" slot-scope="text, record, index">
           <div class="anty-img-wrap">
@@ -157,7 +157,7 @@
             title: '商品名称',
             align:"center",
             dataIndex: 'goodName',
-            customRender: (t) => (<j-ellipsis value={t} length={8}/>)
+            width:300
           },
           {
             title: '收藏时价格',

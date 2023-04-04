@@ -3,7 +3,7 @@
 
     <!-- 查询区域 -->
     <div class="table-page-search-wrapper">
-      <a-form layout="inline" @keyup.enter.native="searchQuery">
+      <a-form layout="inline">
         <a-row :gutter="24">
 
           <a-col :span="6">
@@ -32,9 +32,9 @@
     <div class="table-operator">
       <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
       <a-button type="primary" icon="download" @click="handleExportXls('系统通告')">导出</a-button>
-<!--      <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">-->
-<!--        <a-button type="primary" icon="import">导入</a-button>-->
-<!--      </a-upload>-->
+      <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">
+        <a-button type="primary" icon="import">导入</a-button>
+      </a-upload>
       <a-dropdown v-if="selectedRowKeys.length > 0">
         <a-menu slot="overlay">
           <a-menu-item key="1" @click="batchDel">
@@ -68,32 +68,31 @@
         @change="handleTableChange">
 
         <span slot="action" slot-scope="text, record">
-          <a  v-if="record.sendStatus == 0" @click="handleEdit(record)">编辑</a>
+          <a @click="handleEdit(record)">编辑</a>
 
-          <a-divider type="vertical" v-if="record.sendStatus == 0"/>
-          <a-dropdown>
-            <a class="ant-dropdown-link">更多 <a-icon type="down"/></a>
-            <a-menu slot="overlay">
-              <a-menu-item v-if="record.sendStatus != 1">
-                <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.id)">
-                  <a>删除</a>
-                </a-popconfirm>
-              </a-menu-item>
-              <a-menu-item v-if="record.sendStatus == 0">
-                <a-popconfirm title="确定发布吗?" @confirm="() => releaseData(record.id)">
+          <a-divider type="vertical"/>
+
+                <a-popconfirm v-if="record.sendStatus == 0" title="确定发布吗?" @confirm="() => releaseData(record.id)">
                   <a>发布</a>
                 </a-popconfirm>
-              </a-menu-item>
-              <a-menu-item v-if="record.sendStatus == 1">
-                <a-popconfirm title="确定撤销吗?" @confirm="() => reovkeData(record.id)">
+           <a-divider v-if="record.sendStatus == 0" type="vertical"/>
+
+                <a-popconfirm v-if="record.sendStatus == 1" title="确定撤销吗?" @confirm="() => reovkeData(record.id)">
                   <a>撤销</a>
                 </a-popconfirm>
-              </a-menu-item>
+             <a-divider v-if="record.sendStatus == 1" type="vertical"/>
+           <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.id)">
+                  <a>删除</a>
+                </a-popconfirm>
+        <!--  <a-dropdown>
+            <a class="ant-dropdown-link">更多 <a-icon type="down"/></a>
+            <a-menu slot="overlay">
               <a-menu-item>
-                  <a @click="handleDetail(record)">查看</a>
+
               </a-menu-item>
+
             </a-menu>
-          </a-dropdown>
+          </a-dropdown>-->
         </span>
 
       </a-table>
@@ -102,20 +101,13 @@
 
     <!-- 表单区域 -->
     <sysAnnouncement-modal ref="modalForm" @ok="modalFormOk"></sysAnnouncement-modal>
-    <!-- 查看详情 -->
-    <j-modal class="detail-modal" title="查看详情" :visible.sync="detailModal.visible" :top="50" :width="600" switchFullscreen :footer="null">
-      <iframe v-if="detailModal.url" class="detail-iframe" :src="detailModal.url"/>
-    </j-modal>
-
   </a-card>
 </template>
 
 <script>
   import SysAnnouncementModal from './modules/SysAnnouncementModal'
   import {doReleaseData, doReovkeData} from '@/api/api'
-  import {getAction} from '@/api/manage'
   import {JeecgListMixin} from '@/mixins/JeecgListMixin'
-  import { ACCESS_TOKEN } from '@/store/mutation-types'
 
   export default {
     name: "SysAnnouncementList",
@@ -243,7 +235,6 @@
             scopedSlots: {customRender: 'action'},
           }
         ],
-        detailModal: {visible: false, url: '',},
         url: {
           list: "/sys/annountCement/list",
           delete: "/sys/annountCement/delete",
@@ -281,52 +272,14 @@
           if (res.success) {
             that.$message.success(res.message);
             that.loadData(1);
-            this.syncHeadNotic(id)
           } else {
             that.$message.warning(res.message);
           }
         });
       },
-      syncHeadNotic(anntId){
-        getAction("sys/annountCement/syncNotic",{anntId:anntId})
-      },
-      handleDetail:function(record){
-        const domain = window._CONFIG['domianURL']
-        const token = this.$ls.get(ACCESS_TOKEN)
-        this.detailModal.url = `${domain}/sys/annountCement/show/${record.id}?token=${token}`
-        this.detailModal.visible = true
-      },
     }
   }
 </script>
-<style scoped lang="less">
-  @import '~@assets/less/common.less';
-
-  /** 查看详情弹窗的样式 */
-  .detail-modal {
-    .detail-iframe {
-      border: 0;
-      width: 100%;
-      height: 88vh;
-      min-height: 600px;
-    }
-
-    &.fullscreen .detail-iframe {
-      height: 100%;
-    }
-  }
-
-  .detail-modal /deep/ .ant-modal {
-    top: 30px;
-
-    .ant-modal-body {
-      font-size: 0;
-      padding: 0;
-    }
-  }
-
-  .detail-modal.fullscreen /deep/ .ant-modal {
-    top: 0;
-  }
-
+<style scoped>
+  @import '~@assets/less/common.less'
 </style>

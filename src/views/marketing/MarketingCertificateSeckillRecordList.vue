@@ -107,7 +107,7 @@
             :loading="loading"
             :rowSelection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
             @change="handleTableChange"
-            :scroll="{ x: true }"
+            :scroll="{ x: 2500 }"
           >
             <template slot="headPortrait" slot-scope="text">
               <a-avatar preview="1" :src="text" alt="" style="width: 40px;height: 40px;" />

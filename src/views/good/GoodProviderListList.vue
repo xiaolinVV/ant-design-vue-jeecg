@@ -176,14 +176,12 @@
     <!-- table区域-end -->
 
     <!-- 表单区域 -->
-    <goodList-modal ref="modalForm" @ok="modalFormOk"></goodList-modal>
     <good-list-price-modal ref="modalForm1" @ok="modalFormOk"></good-list-price-modal>
 
   </a-card>
 </template>
 
 <script>
-  import GoodListModal from './modules/GoodListModal'
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
   import {getAction} from '@/api/manage';
   import GoodListPriceModal from './modules/GoodListPriceModal'
@@ -194,7 +192,6 @@
     name: "GoodListList",
     mixins:[JeecgListMixin],
     components: {
-      GoodListModal,
       GoodListPriceModal,
       JDate
     },

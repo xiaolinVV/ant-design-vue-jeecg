@@ -93,7 +93,7 @@
         :loading="loading"
         :rowSelection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
         @change="handleTableChange"
-        :scroll="{ x: true }"
+        :scroll="{ x: 2500 }"
       >
         <!-- <template slot="taskeMode" slot-scope="text">
           <div class="anty-img-wrap">

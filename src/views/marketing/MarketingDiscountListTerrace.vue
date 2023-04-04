@@ -112,7 +112,7 @@
         ref="table"
         size="middle"
         bordered
-        :scroll="{ x: true }"
+        :scroll="{ x: 2600 }"
         rowKey="id"
         :columns="columns"
         :dataSource="dataSource"
@@ -198,7 +198,8 @@
         </template>
         <template slot="subtract" slot-scope="text, record, index">
           <div class="anty-img-wrap">
-            <span shape="square">减{{ record.subtract }}元</span>
+            <span shape="square" v-if="record.isNomal == 2">已使用{{record.discountUseAmount}}元</span>
+            <span shape="square" v-else>减{{ record.subtract }}元</span>
           </div>
         </template>
         <template slot="channelInfo" slot-scope="text, record, index">
@@ -223,6 +224,7 @@
           <div class="anty-img-wrap">
             <span v-if="record.isNomal == 1">活动券</span>
             <span v-if="record.isNomal == 0">普通券</span>
+            <span v-if="record.isNomal == 2">折扣券</span>
           </div>
         </template>
         <span slot="action" slot-scope="text, record">
@@ -411,6 +413,15 @@ export default {
           align: 'center',
           dataIndex: 'isDistribution',
           scopedSlots: { customRender: 'isDistribution' }
+        },
+        {
+          title: '上限金额',
+          align: 'center',
+          dataIndex: 'discountLimitAmount'
+        },{
+          title: '优惠折扣',
+          align: 'center',
+          dataIndex: 'discountPercent'
         },
         {
           title: '状态',

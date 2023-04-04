@@ -122,7 +122,7 @@
         ref="table"
         size="middle"
         bordered
-        :scroll="{ x: true }"
+        :scroll="{ x: 2600 }"
         rowKey="id"
         :columns="columns"
         :dataSource="dataSource"
@@ -233,6 +233,7 @@
           <div class="anty-img-wrap">
             <span v-if="record.isNomal == 1">活动券</span>
             <span v-if="record.isNomal == 0">普通券</span>
+            <span v-if="record.isNomal == 2">折扣券</span>
           </div>
         </template>
         <span slot="action" slot-scope="text, record">
@@ -420,7 +421,6 @@ export default {
           dataIndex: 'isDistribution',
           scopedSlots: { customRender: 'isDistribution' }
         },
-
         {
           title: '状态',
           align: 'center',

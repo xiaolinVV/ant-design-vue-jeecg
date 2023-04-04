@@ -36,7 +36,7 @@
           :rowKey="record => record.id"
           :columns="columns"
           :data-source="dataSource"
-          :scroll="{x:true}"
+          :scroll="{x:2000}"
         >
         <span slot="action" slot-scope="text, record">
           <a @click="edit(record)">修改</a>

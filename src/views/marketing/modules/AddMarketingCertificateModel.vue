@@ -372,6 +372,24 @@
           <a-checkbox v-model="AllData.rewardDayOne">同一家店同一天仅能核销1次</a-checkbox>
         </a-form-item>
 
+        <!-- <a-form-item :label-col="labelCol" :wrapper-col="{ span: 12 }">
+          <span slot="label">
+            <span class="dataCheckedStar">*</span>
+            核销支持方式
+          </span>
+          <a-checkbox v-model="AllData.aboveUse">线上核销</a-checkbox>
+          <a-checkbox v-model="AllData.belowUse">线下核销</a-checkbox>
+        </a-form-item>
+      -->
+
+        <a-form-item :label-col="labelCol" :wrapper-col="{ span: 12 }" class="line-special" label="核销支持方式">
+          <a-checkbox-group  :options="aboveBelowUse" v-decorator="['aboveBelowUseDe', { rules: [{ required: true, message: '请选择核销支持方式' }] }]"/>
+        </a-form-item>
+
+
+
+
+
         <a-form-item :label-col="labelCol" :wrapper-col="{ span: 12 }" label="核销奖励">
           <!--          v-model="AllData.theReward"-->
           <a-input
@@ -895,6 +913,7 @@ export default {
       cancelStoresSelectedRowKeys: [], //核销门店keys
       plainOptions: ['普通会员', 'VIP会员'],
       checkedList: ['普通会员', 'VIP会员'],
+      aboveBelowUse: ['线上核销', '线下核销'], // 线上与线下的数据
       ShowPopUp: false,
       previewVisible1: false, //主图上传
       //判断是点击添加进入页面还是编辑   编辑 2 添加 1
@@ -950,7 +969,12 @@ export default {
         coverPlans: '',
         posters: '', //海报图
         sort: '', //排序
-        promoteCommission: '' //推广佣金
+        promoteCommission: '', //推广佣金
+        aboveUse: '0', //线上使用: 0 关闭 1开启
+        belowUse: '0', //线下使用: 0 关闭 1开启
+        aboveBelowUseDe: ['线上核销', '线下核销'], // 线上与线下的数据
+
+
       }
     }
   },
@@ -1361,6 +1385,20 @@ export default {
               this.AllData.userRestrict = sz.join(',')
             }
 
+            if (this.AllData.aboveBelowUseDe) {
+              let sz = []
+              this.AllData.aboveUse = 0
+              this.AllData.belowUse = 0
+              for (let item of this.AllData.aboveBelowUseDe) {
+                console.log("aboveBelowUseDe",item);
+                if (item == '线上核销') {
+                  this.AllData.aboveUse = 1
+                }
+                if (item == '线下核销') {
+                  this.AllData.belowUse = 1
+                }
+              }
+            }
             // this.AllData.goodListIds = this.exchangeStoreSelectedRowKeys.join(',') //兑换商品
             let goodListIds = []
             for (let item of this.exchangeStoreData) {
@@ -1375,7 +1413,7 @@ export default {
             this.AllData.goodListIds = goodListIds.length > 0 ? JSON.stringify(goodListIds) : ''
             this.AllData.sysUserIds = this.cancelStoresSelectedRowKeys.join(',') //核销门店
             console.log(this.AllData)
-            debugger
+            // debugger
             if (this.part == 2) {
               postAction(url, this.AllData)
                 .then(res => {
@@ -1511,6 +1549,15 @@ export default {
     if (part == 2 && marketingCertificateData) {
       //编辑
       marketingCertificateData = JSON.parse(marketingCertificateData)
+      console.log("marketingCertificateData", marketingCertificateData);
+      let aboveBelowUseDe = []
+      if(marketingCertificateData.aboveUse == 1){
+        aboveBelowUseDe.push('线上核销')
+      }
+      if(marketingCertificateData.belowUse == 1){
+        aboveBelowUseDe.push('线下核销')
+      }
+      
       let allData = {
         // id:marketingCertificateData.id,
         // delFlag:marketingCertificateData.delFlag,//删除状态
@@ -1518,6 +1565,7 @@ export default {
         // name:marketingCertificateData.name,//优惠券名称 marketingDiscountData.delFlag
         // total:marketingCertificateData.total,//发放总量
         userRestrict: marketingCertificateData.userRestrict.split(','), //使用人限制
+        aboveBelowUseDe:  aboveBelowUseDe,
         isGive: marketingCertificateData.isGive * 1, //赠送设置
         isWarn: marketingCertificateData.isWarn * 1, //是否过期提醒
         vouchersWay: marketingCertificateData.vouchersWay * 1, //用券方式
@@ -1536,6 +1584,8 @@ export default {
         sellRewardStore: marketingCertificateData.sellRewardStore * 1 == 1 ? true : false, //仅销售店铺可核销（有记录到销售店铺则该券仅销售店铺可核销）
         rewardDayOne: marketingCertificateData.rewardDayOne * 1 == 1 ? true : false //同一家店同一天仅能核销1次
       }
+      console.log("allData",allData);
+      
       allData = Object.assign({}, marketingCertificateData, allData)
       if (allData.startTime && allData.endTime) {
         this.selectDateToTime = [moment(allData.startTime, this.dateFormat), moment(allData.endTime, this.dateFormat)]

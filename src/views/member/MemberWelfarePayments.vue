@@ -49,7 +49,7 @@
       @change="handleTableChange"
     >
       <template slot="headPortrait" slot-scope="text, record, index">
-        <img class="clickShowImage" :preview="'headPortrait' + index" :src="record.headPortrait" alt="" height="25px" style="max-width:80px;font-size: 12px;font-style: italic;" />
+        <img class="clickShowImage" :preview="'headPortrait' + index" :src="record.headPortrait" alt="" />
       </template>
       <span slot="action" slot-scope="text, record">
         <a @click="showModal(record)">余额明细</a>

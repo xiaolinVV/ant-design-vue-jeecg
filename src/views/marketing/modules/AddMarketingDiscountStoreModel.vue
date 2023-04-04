@@ -15,6 +15,19 @@
           ]"
         />
       </a-form-item>
+      <a-form-item label="选择店铺" :label-col="labelCol" :wrapper-col="wrapperCol" v-if="isMerchant">
+            <a-select show-search style="width: 300px" placeholder="请输入对应手机号并选择店铺"
+              @focus="filterOptionStore" @search="filterOptionStore"
+              :filter-option="false" :not-found-content="fetchingStore ? undefined : null"
+              v-decorator="['storeManageId', verificationRules.storeManageId]"
+            >
+              <a-spin v-if="fetchingStore" slot="notFoundContent" size="small"/>
+              <a-select-option value="" disabled  v-else>请输入对应手机号并选择店铺</a-select-option>
+              <a-select-option v-for="item in dianpulist" :value="item.sys_user_id">{{item.NAME}}({{item.boss_phone}})</a-select-option>
+            </a-select>
+          </a-form-item>
+
+
 
       <a-form-item
         :label-col="labelCol"
@@ -93,40 +106,120 @@
         </a-modal>
       </a-form-item>
 
-      <a-form-item :label-col="labelCol" :wrapper-col="{ span: 12 }" label="使用门槛">
-        <!--        v-model="AllData.isThreshold"-->
+      
+      <a-form-item label="券类型" :label-col="labelCol" :wrapper-col="{ span: 12 }" class="line-special">
         <a-radio-group
-          @change="useThreshold"
-          v-decorator="['isThreshold', { rules: [{ required: true, message: '请选择使用门槛' }] }]"
+          v-decorator="['isNomal', { rules: [{ required: true, message: '请选择券类型' }] }]"
+          @change="couponClassification"
         >
-          <a-radio :style="radioStyle" :value="0">无门槛</a-radio>
+          <a-radio :style="radioStyle" :value="0">
+            普通券
+          </a-radio>
           <a-radio :style="radioStyle" :value="1">
-            订单满
-            <a-input :disabled="AllData.isThreshold == 0" v-model="AllData.completely" />
-            元
+            活动券
+          </a-radio>
+          <a-radio :style="radioStyle" :value="2">
+            折扣券
           </a-radio>
         </a-radio-group>
       </a-form-item>
-
-      <a-form-item :label-col="labelCol" :wrapper-col="{ span: 12 }" class="Discount" label="优惠内容">
-        减
-        <!--        v-model="AllData.subtract"-->
-        <a-input
+      <a-form-item
+        label="领取人限制"
+        :label-col="labelCol"
+        :wrapper-col="{ span: 12 }"
+        v-if="AllData.isNomal == 0"
+        class="line-special"
+      >
+        <!--          v-model="AllData.getRestrict"-->
+        <a-checkbox-group
+          :options="plainOptions1"
           v-decorator="[
-            'subtract',
+            'getRestrict',
+            { rules: [{ required: AllData.isNomal == 0 ? true : false, message: '请选择领取人限制' }] }
+          ]"
+        />
+      </a-form-item>
+      <a-form-item
+        label="再次领取"
+        :label-col="labelCol"
+        :wrapper-col="{ span: 12 }"
+        class="line-special"
+        v-if="AllData.isNomal == 0"
+      >
+        <!--          v-model="AllData.isGetThe"-->
+        <a-radio-group
+          v-decorator="[
+            'isGetThe',
+            { rules: [{ required: AllData.isNomal == 0 ? true : false, message: '请设置再次领取' }] }
+          ]"
+          @change="noCouponGet"
+        >
+          <a-radio :style="radioStyle" :value="0">
+            不支持
+          </a-radio>
+          <a-radio :style="radioStyle" :value="1">
+            支持
+          </a-radio>
+        </a-radio-group>
+      </a-form-item>
+      <a-form-item
+        label="再次领取条件"
+        :label-col="labelCol"
+        :wrapper-col="{ span: 14 }"
+        class="line-special"
+        v-if="AllData.isGetThe == 1 && AllData.isNomal == 0"
+      >
+        <!--          v-model="AllData.againGet"-->
+        <a-checkbox-group
+          :options="receiveAgainplainOptions"
+          v-decorator="[
+            'againGet',
             {
               rules: [
-                { required: true, message: '请输入优惠内容' },
                 {
-                  pattern: /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/,
-                  message: '请填写正确的金额'
+                  required: AllData.isGetThe == 1 && AllData.isNomal == 0 ? true : false,
+                  message: '请选择再次领取条件'
                 }
               ]
             }
           ]"
         />
+      </a-form-item>
+      <a-form-item label="使用门槛" :label-col="labelCol" :wrapper-col="{ span: 12 }"  v-if="AllData.isNomal == 0 || AllData.isNomal == 1">
+        <!--          v-model="AllData.isThreshold"-->
+        <a-radio-group
+          v-decorator="['isThreshold', { rules: [{ required: true, message: '请选择使用门槛' }] }]"
+          @change="useThreshold"
+        >
+          <a-radio :style="radioStyle" :value="0">无门槛</a-radio>
+          <a-radio :style="radioStyle" :value="1">
+            订单满
+            <a-input v-model="AllData.completely" :disabled="AllData.isThreshold == 0" />
+            元
+          </a-radio>
+        </a-radio-group>
+      </a-form-item>
+      <a-form-item label="优惠内容" :label-col="labelCol" :wrapper-col="{ span: 12 }" class="Discount" v-if="AllData.isNomal == 0 || AllData.isNomal == 1">
+        减
+        <a-input v-decorator="['subtract',{rules: [{ required: true, message: '请输入优惠内容' },
+                {pattern: /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/,
+                  message: '请填写正确的金额'}]}]"/>
         元
       </a-form-item>
+      <a-form-item label="上限金额" :label-col="labelCol" :wrapper-col="{ span: 12 }" class="Discount" v-if="AllData.isNomal == 2">
+        <a-input v-decorator="['discountLimitAmount',{rules: [{ required: true, message: '请输入上限金额容' },
+          {pattern: /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/,message: '请填写正确的金额'}]}]" />
+          元
+      </a-form-item>
+      <a-form-item label="优惠折扣" :label-col="labelCol" :wrapper-col="{ span: 12 }" class="Discount" v-if="AllData.isNomal == 2">
+        <a-input v-decorator="['discountPercent',{rules: [{ required: true, message: '请输入优惠折扣' },
+          {pattern: /^(\d|10)(\.\d)?$/,message: '请填写正确的金额'}]}]" />
+          折（请填写0-10之间的数字）
+      </a-form-item>
+
+
+
+
       <a-form-item :label-col="labelCol" :wrapper-col="{ span: 18 }" label="用券时间">
         <!--        v-model="AllData.vouchersWay"-->
         <a-radio-group
@@ -279,83 +372,7 @@
         </a-radio-group>
       </a-form-item>
 
-      <a-form-item :label-col="labelCol" :wrapper-col="{ span: 12 }" class="line-special" label="券类型">
-        <!--        v-model="AllData.isNomal"-->
-        <a-radio-group
-          @change="couponClassification"
-          v-decorator="['isNomal', { rules: [{ required: true, message: '请选择券类型' }] }]"
-        >
-          <a-radio :style="radioStyle" :value="0">
-            普通券
-          </a-radio>
-          <a-radio :style="radioStyle" :value="1">
-            活动券
-          </a-radio>
-        </a-radio-group>
-      </a-form-item>
-      <a-form-item
-        :label-col="labelCol"
-        :wrapper-col="{ span: 12 }"
-        class="line-special"
-        label="领取人限制"
-        v-show="AllData.isNomal == 0"
-      >
-        <!--        v-model="AllData.getRestrict"-->
-        <a-checkbox-group
-          :options="plainOptions1"
-          v-decorator="[
-            'getRestrict',
-            { rules: [{ required: AllData.isNomal == 0 ? true : false, message: '请选择领取人限制' }] }
-          ]"
-        />
-      </a-form-item>
-
-      <a-form-item
-        :label-col="labelCol"
-        :wrapper-col="{ span: 12 }"
-        class="line-special"
-        label="再次领取"
-        v-show="AllData.isNomal == 0"
-      >
-        <!--        v-model="AllData.isGetThe"-->
-        <a-radio-group
-          @change="noCouponGet"
-          v-decorator="[
-            'isGetThe',
-            { rules: [{ required: AllData.isNomal == 0 ? true : false, message: '请设置再次领取' }] }
-          ]"
-        >
-          <a-radio :style="radioStyle" :value="0">
-            不支持
-          </a-radio>
-          <a-radio :style="radioStyle" :value="1">
-            支持
-          </a-radio>
-        </a-radio-group>
-      </a-form-item>
-      <a-form-item
-        :label-col="labelCol"
-        :wrapper-col="{ span: 14 }"
-        class="line-special"
-        label="再次领取条件"
-        v-if="AllData.isGetThe == 1 && AllData.isNomal == 0"
-      >
-        <!--        v-model="AllData.againGet"-->
-        <a-checkbox-group
-          :options="receiveAgainplainOptions"
-          v-decorator="[
-            'againGet',
-            {
-              rules: [
-                {
-                  required: AllData.isGetThe == 1 && AllData.isNomal == 0 ? true : false,
-                  message: '请选择再次领取条件'
-                }
-              ]
-            }
-          ]"
-        />
-      </a-form-item>
+      
 
       <!-- <a-form-item :label-col="labelCol" :wrapper-col="{ span: 12 }" label="投放渠道" v-show="AllData.isNomal == 0">
         <a-checkbox-group
@@ -386,6 +403,7 @@
       ref="selectGoodsToAddPopUp"
       :selectGoodsPopUpLists="isSelectData"
       apiName="queryGoodStoreStoreList"
+      :sysUserId="AllData.storeManageId"
       @handleCancel="PopUp"
       @handleOk="selectGoodsHandleOk"
       :selectGoodsPopUpIds="selectGoodsPopUpIds"
@@ -449,6 +467,7 @@ const selectStoreColumns = [
 export default {
   name: 'AddMarketingDiscountStoreModel',
   data() {
+    this.lastFetchIdStore = 0
     return {
       form: this.$form.createForm(this),
       radioStyle: {
@@ -564,7 +583,9 @@ export default {
         //投放渠道列表
         queryChannelList: '/marketingChannel/marketingChannel/queryList',
         //使用商品选择商品弹窗数据
-        queryGoodStoreList: '/goodStoreList/goodStoreList/findStoreList'
+        queryGoodStoreList: '/goodStoreList/goodStoreList/findStoreList',
+        //bossPhone 通过手机号码获取店铺信息
+        findStoreList: '/storeManage/storeManage/getStoreByBossPhone',
       },
       //开始结束时间未处理
       selectDateToTime: '',
@@ -606,9 +627,18 @@ export default {
         mainPicture: '',
         coverPlan: '',
         mainPictures: '',
-        coverPlans: ''
+        coverPlans: '',
+        storeManageId:'',
       },
-      goodStoreListIds: ''
+      goodStoreListIds: '',
+      wrapperCol: { span: 17 },
+      fetchingStore: false,
+      verificationRules: {
+          storeManageId: { rules: [{ required: true, message: '请选择店铺' }] },
+      },
+      dianpulist: [],
+      isMerchant: false,
+
     }
   },
   components: {
@@ -690,6 +720,9 @@ export default {
     },
     PopUp() {
       this.ShowPopUp = !this.ShowPopUp
+      this.form.validateFields((err, values) => {
+        this.AllData.storeManageId = values.storeManageId
+      })
       this.$nextTick(() => {
         if (this.ShowPopUp) {
           this.$refs.selectGoodsToAddPopUp.open()
@@ -805,6 +838,12 @@ export default {
             }
             this.AllData.marketingChannelId = sz2.join(',')
             this.AllData.channelIds = sz2.join(',')
+            
+            if(this.isMerchant) {
+              this.AllData.sysUserId = this.AllData.storeManageId
+            }
+
+
             console.log(this.AllData)
             debugger
             postAction(url, this.AllData)
@@ -864,9 +903,40 @@ export default {
       this.postersFileList = fileList
     },
     //选择商品分页加载
-    loadingPage() {}
+    loadingPage() {},
+
+    filterOptionStore(value) {
+        let bossPhone = value
+        this.lastFetchIdStore += 1
+        const fetchId = this.lastFetchIdStore
+        //this.dianpulist = [];
+        this.fetchingStore = true
+        if (fetchId !== this.lastFetchIdStore) {
+          return
+        }
+        getAction(this.url.findStoreList, { bossPhone: bossPhone }).then((res) => {
+          this.fetchingStore = false
+          if (res.success === false) return
+          if (res) {
+            this.dianpulist = res
+          }
+        })
+      },
+
   },
   created() {
+    // 获取当前用户习惯信息
+    let userInfo = localStorage.getItem('pro__Login_Userinfo')
+    if (userInfo) {
+      userInfo = JSON.parse(userInfo)
+      if (userInfo.value.userRole && userInfo.value.userRole.indexOf('Merchant') == -1) {
+        this.isMerchant = true
+      }else{
+        this.isMerchant = false
+      }
+    }
+
+
     const token = Vue.ls.get('Access-Token')
     this.headers = { 'X-Access-Token': token }
     //页面加载判断是否是点击编辑进入页面  编辑返回2
@@ -901,6 +971,7 @@ export default {
               isThreshold: marketingDiscountData.isThreshold * 1, //有无门槛
               // subtract: marketingDiscountData.subtract,//减多少钱  优惠内容
               // total: marketingDiscountData.total,//发放总量
+              storeManageId: marketingDiscountData.sysUserId, 
               userRestrict: marketingDiscountData.userRestrict.split(','), //使用人限制
               getRestrict: marketingDiscountData.getRestrict.split(','), //领取人限制
               isGive: marketingDiscountData.isGive * 1, //赠送设置
@@ -1036,9 +1107,11 @@ export default {
         })
         if (this.part == 1) {
           this.AllData.marketingChannelId.push(res[0].name)
+          console.log("this.AllData1", this.AllData)
           this.$nextTick(() => {
             this.form.setFieldsValue(this.AllData)
           })
+          
         }
       }
     })

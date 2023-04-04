@@ -46,7 +46,7 @@
         v-bind="tableProps"
       >
         <template slot="headPortrait" slot-scope="text, record, index">
-          <img class="clickShowImage" :preview="'headPortrait' + index" :src="record.headPortrait" alt="" height="25px" style="max-width:80px;font-size: 12px;font-style: italic;" />
+          <img class="clickShowImage" :preview="'headPortrait' + index" :src="record.headPortrait" alt="" />
         </template>
         <a slot="teamCount" slot-scope="text, record" @click="showTeamCount(record)">
           {{ text }}

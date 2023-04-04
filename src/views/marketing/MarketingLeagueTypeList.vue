@@ -70,7 +70,7 @@
         :pagination="ipagination"
         :loading="loading"
         :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
-        :scroll="{x:true}"
+        :scroll="{x:2000}"
         @change="handleTableChange">
 
         <span slot="action" slot-scope="text, record">

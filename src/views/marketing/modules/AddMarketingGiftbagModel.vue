@@ -186,11 +186,6 @@
         </a-form-item>
 
         <a-form-item :label-col="labelCol" :wrapper-col="{ span: 10 }" label="福利金">
-          <!--          v-model="AllData.welfarePayments"-->
-          <!--          {-->
-          <!--          pattern:  /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/,-->
-          <!--          message: '请输入正确的福利金！',-->
-          <!--          },-->
           <a-input-number
             placeholder="请输入福利金"
             :min="0"
@@ -280,6 +275,34 @@
             </div>
           </div>
         </a-form-item>
+
+        <a-form-item :label-col="labelCol" :wrapper-col="{ span: 10 }" label="分销福利金">
+          推广人一级奖励
+          <a-input-number
+            placeholder="请输入分销福利金"
+            :min="0"
+            :precision="2"
+            style="width: 120px"
+            v-decorator="[
+              'promoterWelfarePayments',
+              {
+                rules: [
+                  {
+                    required: true,
+                    message: '请输入分销福利金!'
+                  }
+                ]
+              }
+            ]"
+          />
+          <div>0即没有</div>
+        </a-form-item>
+
+
+
+
+
+
         <a-form-item
           :label-col="labelCol"
           :wrapper-col="wrapperCol"
@@ -422,6 +445,50 @@
             </div>
           </div>
         </a-form-item>
+
+        <a-form-item :label-col="labelCol" :wrapper-col="{ span: 10 }" label="分享人奖励">
+          <a-input-number
+            placeholder="请输入分享人奖励"
+            :min="0"
+            :precision="2"
+            style="width: 120px"
+            v-decorator="[
+              'shareRewards',
+              {
+                rules: [
+                  {
+                    required: true,
+                    message: '请输入分享人奖励!'
+                  }
+                ]
+              }
+            ]"
+          />
+          <div>0即没有</div>
+        </a-form-item>
+
+        <a-form-item :label-col="labelCol" :wrapper-col="{ span: 10 }" label="经销商奖励">
+          <a-input-number
+            placeholder="请输入经销商奖励"
+            :min="0"
+            :precision="2"
+            style="width: 120px"
+            v-decorator="[
+              'dealerAwards',
+              {
+                rules: [
+                  {
+                    required: true,
+                    message: '请输入经销商奖励!'
+                  }
+                ]
+              }
+            ]"
+          />
+          <div>0即没有</div>
+        </a-form-item>
+
+
         <a-form-item :label-col="labelCol" :wrapper-col="wrapperCol" v-if="showIsThreshold">
           <span slot="label"> 分销特权 </span>
           <a-radio-group
@@ -792,31 +859,17 @@
               <a-input v-model="queryParam.issuer" style="width: 200px" />
             </div>
             <div v-if="popPart == '0'">
-              兑换方式：
+            <!--  兑换方式：
               <a-select v-model="queryParam.certificateType" placeholder="请选择" style="width: 200px">
                 <a-select-option value="">请选择</a-select-option>
                 <a-select-option value="0">可兑换的商品全部兑换</a-select-option>
                 <a-select-option value="1">可兑换的商品任选一个</a-select-option>
-              </a-select>
+              </a-select>-->
             </div>
             <div v-if="popPart == 2">
-              <!--门店名称：
-              <a-input v-model="searchName"/>-->
-              <!--分店名称：
-              <a-input/>-->
+
             </div>
-            <!--<div v-if="popPart == 2">
-              所属城市：
-              <a-select defaultValue="请选择" style="width: 120px">
 
-              </a-select>
-              <a-select defaultValue="请选择" style="width: 120px;margin-left: 20px;">
-
-              </a-select>
-              <a-select defaultValue="请选择" style="width: 120px;margin-left: 20px;">
-
-              </a-select>
-            </div>-->
 
             <a-button @click="PopUp(popPart, 'true')" type="primary"> 查询 </a-button>
           </div>
@@ -1252,6 +1305,9 @@ export default {
         buyLimit: [], //购买限制
         vipPrivilege: 0, //vip特权
         distributionPrivileges: 0, //分销特权
+        dealerAwards:0,//经销商奖励
+        shareRewards:0,//分享人奖励
+        promoterWelfarePayments: 0, //分销福利金
         teamPrivileges: 0, //团队特权
         limitTimes: '', //每人限购买次数
         viewScope: 1, //上架门店类型

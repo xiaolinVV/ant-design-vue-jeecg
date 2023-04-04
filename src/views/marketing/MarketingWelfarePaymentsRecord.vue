@@ -90,7 +90,7 @@
         ref="table"
         size="middle"
         bordered
-        :scroll="{x:true}"
+        :scroll="{x:1700}"
         rowKey="id"
         :columns="columns"
         :dataSource="dataSource"

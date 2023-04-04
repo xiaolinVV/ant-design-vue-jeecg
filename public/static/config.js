@@ -7,5 +7,7 @@ window._CONFIG = {
   //单点登录地址
   VUE_APP_CAS_BASE_URL: '',
   //文件预览路径
-  VUE_APP_ONLINE_BASE_URL: ''
+  VUE_APP_ONLINE_BASE_URL: '',
+  //图片预览地址
+  imgDomainURL: ''
 }

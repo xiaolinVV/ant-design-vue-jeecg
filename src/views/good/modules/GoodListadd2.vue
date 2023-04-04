@@ -60,7 +60,7 @@
           <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="商品名称">
             <a-input
               placeholder="请输入商品名称"
-              maxlength="30"
+              maxlength="100"
               v-decorator="['goodName', { rules: [{ required: true, message: '请输入商品名称' }] }]"
               @click="ReleaseContentChange(0)"
             />

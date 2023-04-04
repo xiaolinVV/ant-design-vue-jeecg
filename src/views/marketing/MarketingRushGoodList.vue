@@ -1,21 +1,6 @@
 <template>
   <div class="MarketingPrefectureGoodList">
-    <div style="width:calc(100vw - 250px)">
-      <div style="clear: both"></div>
-      <a-card :bordered="false" style="width: 19%;min-height: 700px;background: white;float: left">
-        <a-spin :spinning="cardLoading">
-          <a-input-search placeholder="请输入" @search="onSearch" enterButton />
-          <a-list itemLayout="horizontal" :dataSource="listData">
-            <div class="line-render-item" slot="renderItem" slot-scope="item, index" @click="loadData(item)">
-              <!-- <img preview="1" :src="item['logoAddr']" alt="" /> -->
-              <div :class="{ 'select-color': item.id == marketingRushTypeId }">
-                {{ item.rushName }}
-              </div>
-            </div>
-          </a-list>
-        </a-spin>
-      </a-card>
-      <a-card :bordered="false" style="width: 79%;min-height: 700px;background: white;float: right">
+      <a-card :bordered="false">
         <!-- 查询区域 -->
         <div class="table-page-search-wrapper">
           <a-form layout="inline">
@@ -34,7 +19,7 @@
                     style="width:30%;margin-right: 5%;"
                   >
                     <a-select-option value="">请选择</a-select-option>
-                    <a-select-option v-for="item in listGoodType" :value="item.id">{{ item.name }}</a-select-option>
+                    <a-select-option v-for="item in listGoodType" :value="item.id" :key="item.id">{{ item.name }}</a-select-option>
                   </a-select>
                   <a-select
                     v-model="queryParam.gtTwoId"
@@ -43,12 +28,12 @@
                     style="width:30%;margin-right: 5%;"
                   ><!--v-model="id"-->
                     <a-select-option value="">请选择</a-select-option>
-                    <a-select-option v-for="item in listGoodType1" :value="item.id">{{ item.name }}</a-select-option>
+                    <a-select-option v-for="item in listGoodType1" :value="item.id" :key="item.id">{{ item.name }}</a-select-option>
                     <!--:defaultValue="listGoodType1.length>0?listGoodType1[0].name : ''"-->
                   </a-select>
                   <a-select v-model="queryParam.gtThreeId" placeholder="请选择" style="width:30%">
                     <a-select-option value="">请选择</a-select-option>
-                    <a-select-option v-for="item in listGoodType2" :value="item.id">{{ item.name }}</a-select-option>
+                    <a-select-option v-for="item in listGoodType2" :value="item.id" :key="item.id">{{ item.name }}</a-select-option>
                     <!--:defaultValue="listGoodType2.length>0?listGoodType2[0].name : ''"-->
                   </a-select>
                 </a-form-item>
@@ -86,10 +71,10 @@
         </div>
         <div class="table-operator">
           <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
-            <a-button type="primary" @click="loadData({ id: marketingRushTypeId })" icon="search">查询</a-button>
+            <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
             <a-button
               type="primary"
-              @click="loadData({ id: marketingRushTypeId }, false, true)"
+              @click="searchReset"
               icon="reload"
               style="margin-left: 8px"
             >重置</a-button
@@ -134,7 +119,7 @@
             :dataSource="dataSource"
             :loading="loading"
             :pagination="ipagination"
-            :scroll="{ x: true }"
+            :scroll="{ x: 2000 }"
             :rowSelection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
             @change="handleTableChange"
             ref="table"
@@ -177,27 +162,20 @@
           @ok="modalForm2Ok"
         ></textAreaModal>
       </a-card>
-      <MarketingRushGroupGoodModal ref="modalForm" @ok="modalFormOk"></MarketingRushGroupGoodModal>
       <div style="clear: both"></div>
     </div>
-  </div>
 </template>
 
 <script>
 import { JeecgListMixin } from '@/mixins/JeecgListMixin'
-import { getAction } from '@/api/manage'
-
-import { filterObj } from '@/utils/util'
-import MarketingRushGroupGoodModal from './modules/MarketingRushGroupGoodModal'
+import { getAction,postAction } from '@/api/manage'
 import textAreaModal from '@/components/popUp/textAreaModal'
-import { postAction } from '@/api/manage'
 
 export default {
   name: 'MarketingPrefectureGoodList',
   mixins: [JeecgListMixin],
   components: {
-    textAreaModal,
-    MarketingRushGroupGoodModal
+    textAreaModal
   },
   data() {
     return {
@@ -206,7 +184,6 @@ export default {
       marketingPrefectureTypeIds: [], //当前选择分类id
       classifactionList: '', //专区分类列表
       description: '专区商品管理页面',
-      listData: [],
       //卡片加载
       cardLoading: false,
       marketingRushTypeId: '',
@@ -298,14 +275,14 @@ export default {
           dataIndex: 'statusExplain'
         },
         {
-          title: '加入者',
+          title: '开始时间',
           align: 'center',
-          dataIndex: 'createBy'
+          dataIndex: 'startTime'
         },
         {
-          title: '加入时间',
+          title: '结束时间',
           align: 'center',
-          dataIndex: 'createTime'
+          dataIndex: 'endTime'
         },
 
         {
@@ -321,25 +298,12 @@ export default {
         edit: 'marketingRushGood/marketingRushGood/edit',
         list: '/marketingRushGood/marketingRushGood/list',
         delete: '/marketingRushGood/marketingRushGood/delete',
-        deleteBatch: '/marketingZoneGroupGood/marketingZoneGroupGood/deleteBatch',
-        exportXlsUrl: 'marketingZoneGroupGood/marketingZoneGroupGood/exportXls',
-        importExcelUrl: 'marketingZoneGroupGood/marketingZoneGroupGood/importExcel',
-        //专区分类左边  参数 zoneName null || 指定名字
-        getMarketingPrefecture: '/marketingRushType/marketingRushType/list',
         imgerver: window._CONFIG['domianURL'] + '/sys/common/view',
         getgoodTypeListcascade: '/goodType/goodType/getgoodTypeListcascade',
-        getMarketingPrefectureGoodUrl: '/marketingPrefectureGood/marketingPrefectureGood/getMarketingPrefectureGoodUrl',
-        getMarketingPrefectureTypeAll: 'marketingPrefectureType/marketingPrefectureType/getMarketingPrefectureTypeAll'
       }
     }
   },
-  computed: {
-    importExcelUrl: function() {
-      return `${window._CONFIG['domianURL']}/${this.url.importExcelUrl}`
-    }
-  },
   created() {
-    this.leftListMethods()
     this.goodTypeListcascade('0')
   },
 
@@ -390,126 +354,28 @@ export default {
         obj.sort = infos.sort
         result = await postAction(this.url.edit, obj)
       }
+      this.modalFormOk();
       if (result.success) {
         this.$message.success(result.message)
-        this.loadData()
       } else {
         this.$message.error(result.message)
       }
 
       console.log(infos)
     },
-    //获取当前专区下的所有分类
-    getMarketingPrefectureTypeAll() {
-      getAction(this.url.getMarketingPrefectureTypeAll, { marketingRushTypeId: this.marketingRushTypeId }).then(
-        res => {
-          if (res.success) {
-            this.classifactionList = res.result
-          }
-        }
-      )
-    },
     //新增
     routerTo() {
-      if (!this.marketingRushTypeId) {
-        this.$message.warn('请在左侧选择对应专区')
-        return
-      }
-      let marketingZoneGroupRecord = this.listData.filter(item => item.id == this.marketingRushTypeId)
       this.$router.push({
         path: '/marketing/modules/AddMarketingRushGoodsModel',
         query: {
-          marketingZoneGroupRecord,
-          marketingRushTypeId: this.marketingRushTypeId,
-          price: this.price
         }
       })
     },
     openPop(state = 1, item) {
       this.$refs.modalForm.open(state, item)
     },
-    // 分类左边方法封装
-    leftListMethods(rushName = '') {
-      this.cardLoading = true
-      getAction(this.url.getMarketingPrefecture, {
-        rushName
-      }).then(res => {
-        if (res.success) {
-          let records = (res.result && res.result.records) || []
-          if (records.length > 0) {
-            this.marketingRushTypeId = records[0].id
-            this.price =  records[0].price
-            this.loadData(records[0])
-            console.log(records,'111')
-          }
-
-          this.listData = records
-        }
-        this.cardLoading = false
-      })
-    },
     handleTableChange(pagination, filters, sorter) {
       this.ipagination = pagination
-      this.loadData(
-        {
-          id: this.marketingRushTypeId
-        },
-        true
-      )
-    },
-    loadData(
-      item = {
-        id: this.marketingRushTypeId
-      },
-      isMore = false,
-      isReset = false
-    ) {
-      // this.getMarketingPrefectureTypeAll()
-
-      // if (item.buyLimit) {
-      //   this.buyLimit = item.buyLimit
-      // }
-
-      if (!item) {
-        item = {
-          id: this.marketingRushTypeId
-        }
-      }
-      if (!isMore) {
-        this.ipagination.current = 1
-      }
-      if (isReset) {
-        this.queryParam = {}
-        this.marketingPrefectureTypeIds = []
-        this.ipagination.current = 1
-      }
-      let marketingRushTypeId = item.id
-      this.loading = true
-
-      this.marketingRushTypeId = marketingRushTypeId
-      this.price = item.price
-      console.log(this.price,'this.price')
-      let info = Object.assign({}, { marketingRushTypeId: marketingRushTypeId}, this.queryParam, {
-        pageNo: this.ipagination.current,
-        pageSize: this.ipagination.pageSize
-      })
-      getAction(this.url.list, info).then(res => {
-        if (res.success) {
-          for (let item of res.result.records) {
-            if (item.mainPicture) {
-              item.mainPicture = this.url.imgerver + '/' + Object.values(JSON.parse(item.mainPicture))[0]
-            }
-
-          }
-          this.dataSource = res.result.records
-          this.ipagination.total = res.result.total
-        }
-        this.loading = false
-      })
-    },
-    //搜索
-    onSearch(value) {
-      this.leftListMethods(value)
     },
     onDateChange: function(value, dateString) {
       this.queryParam.createTime_begin = dateString[0]
@@ -584,12 +450,6 @@ export default {
           getAction(that.url.updateStatus, { ids: id, closeExplian: '', status: status }).then(res => {
             if (res.success) {
               that.$message.success(res.message)
-              that.loadData(
-                {
-                  id: this.marketingRushTypeId
-                },
-                true
-              )
               that.onClearSelected()
             } else {
               that.$message.warning(res.message)
@@ -604,65 +464,7 @@ export default {
       this.$refs.modalForm1.title = '停用'
       this.$refs.modalForm1.disableSubmit = false
     },
-    //复制地址
-    copyAddress(id) {
-      let that = this
-      that.goodUrl = ''
-      let clipBoardContent = ''
-      that.getGoodUrlss(id)
-    },
-    //复制地址调用方法
-    getGoodUrlss(id) {
-      let that = this
-      that.goodUrl = ''
-      getAction(this.url.getMarketingPrefectureGoodUrl, { marketingPrefectureGoodId: id }).then(res => {
-        if (res.success) {
-          // debugger
-          that.goodUrl = res.result.url
-          let parameter = res.result.parameter
-          parameter = JSON.parse(parameter)
-          that.goodUrl = res.result.url + encodeURIComponent(JSON.stringify(parameter))
-
-          that.$nextTick(() => {
-            var textArea = document.createElement('textarea')
-            textArea.style.position = 'fixed'
-            textArea.style.top = '0'
-            textArea.style.left = '0'
-            textArea.style.width = '2em'
-            textArea.style.height = '2em'
-            textArea.style.padding = '0'
-            textArea.style.border = 'none'
-            textArea.style.outline = 'none'
-            textArea.style.boxShadow = 'none'
-            textArea.style.background = 'transparent'
-            textArea.value = that.goodUrl
-            document.body.appendChild(textArea)
-            textArea.select()
-            try {
-              var successful = document.execCommand('copy')
-              var msg = successful ? '成功复制到剪贴板' : '该浏览器不支持点击复制到剪贴板'
-              this.$message.success(msg)
-            } catch (err) {
-              // alert('该浏览器不支持点击复制到剪贴板');
-              this.$message.success('该浏览器不支持点击复制到剪贴板')
-            }
-            document.body.removeChild(textArea)
-          })
-        } else {
-          this.$message.warning(res.message)
-        }
-      })
-    }
   },
-  watch: {
-    marketingPrefectureTypeIds: function(newData, oldData) {
-      if (newData.length == 2) {
-        this.queryParam.marketingPrefectureTypeId = newData[1]
-      } else {
-        this.queryParam.marketingPrefectureTypeId = newData[0]
-      }
-    }
-  }
 }
 </script>
 <style lang="less">

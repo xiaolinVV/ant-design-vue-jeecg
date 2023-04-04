@@ -135,7 +135,7 @@
         ref="table"
         size="middle"
         rowKey="id"
-        :scroll="{x:true}"
+        :scroll="{x:3000}"
         :columns="columns"
         :dataSource="dataSource"
         :pagination="ipagination"
@@ -144,7 +144,20 @@
         :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
         @change="handleTableChange">
         <template slot="headPortrait" slot-scope="text, record, index">
-            <img class="clickShowImage" :preview="'headPortrait' + index"  :src="record.headPortrait" alt="" height="25px" style="max-width:80px;font-size: 12px;font-style: italic;">
+            <img class="clickShowImage" :preview="'headPortrait' + index"  :src="record.headPortrait" alt="">
+        </template>
+        <template slot="isNomal" slot-scope="text, record, index">
+          <div class="anty-img-wrap">
+            <span v-if="record.isNomal == 1">活动券</span>
+            <span v-if="record.isNomal == 0">普通券</span>
+            <span v-if="record.isNomal == 2">折扣券</span>
+          </div>
+        </template>
+        <template slot="preferentialContent" slot-scope="text, record, index">
+          <div class="anty-img-wrap">
+            <span v-if="record.isNomal == 2">已使用{{record.discountUseAmount}}元</span>
+            <span v-else>{{record.preferentialContent}}</span>
+          </div>
         </template>
         <template slot="applyGood" slot-scope="text, record, index">
           <div class="anty-img-wrap">
@@ -232,6 +245,12 @@
             dataIndex: 'name'
           },
           {
+            title: '券类型',
+            align: 'center',
+            dataIndex: 'isNomal',
+            scopedSlots: { customRender: 'isNomal' }
+          },
+          {
             title: '优惠券状态',
             align: "center",
             dataIndex: 'status_dictText'
@@ -249,7 +268,8 @@
           {
             title: '优惠内容',
             align: "center",
-            dataIndex: 'preferentialContent'
+            dataIndex: 'preferentialContent',
+            scopedSlots: {customRender: "preferentialContent"}
           },
           {
             title: '适用商品',

@@ -56,19 +56,15 @@
         size="middle"
         bordered
         rowKey="id"
-        :scroll="{x:true}"
+        :scroll="{x:2000}"
         :columns="columns"
         :dataSource="dataSource"
         :pagination="ipagination"
         :loading="loading"
         :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
         @change="handleTableChange">
-        <template slot="ellipsisText" slot-scope="text">
-          <j-ellipsis :value="text" :length="textMaxLength"></j-ellipsis>
-        </template>
         <template slot="headPortrait" slot-scope="text, record, index">
-          <span v-if="!text" style="font-size: 12px;font-style: italic;">无图片</span>
-          <img v-else :src="text" :preview="record.id" height="25px" alt="" style="max-width:80px;font-size: 12px;font-style: italic;"/>
+          <img v-if="record.headPortrait" class="clickShowImage" :preview="'headPortrait' + index"  :src="record.headPortrait" alt="">
         </template>
         <template slot="frameStatus" slot-scope="text, record, index">
           <div class="anty-img-wrap">
@@ -121,7 +117,6 @@
       return {
         description: '浏览记录管理页面',
         browsingTime:[],
-        textMaxLength:8,
         // 表头
         columns: [
           {
@@ -153,8 +148,7 @@
           {
             title: '商品名称',
             align:"center",
-            dataIndex: 'goodName',
-            scopedSlots: {customRender: "ellipsisText"}
+            dataIndex: 'goodName'
           },
           {
             title: '浏览时价格',

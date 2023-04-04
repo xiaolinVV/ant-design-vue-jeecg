@@ -101,7 +101,7 @@
       <a-table
         ref="table"
         size="middle"
-        :scroll="{ x: true }"
+        :scroll="{ x: 2500 }"
         rowKey="id"
         :columns="columns"
         :dataSource="dataSource"
@@ -112,7 +112,7 @@
         @change="handleTableChange"
       >
         <template slot="headPortrait" slot-scope="text, record, index">
-          <img class="clickShowImage" :preview="'headPortrait' + index" :src="record.headPortrait" height="25px" style="max-width:80px;font-size: 12px;font-style: italic;" />
+          <img class="clickShowImage" :preview="'headPortrait' + index" :src="record.headPortrait" />
         </template>
         <template slot="updateCertificateOne" slot-scope="text, record, index">
           <img

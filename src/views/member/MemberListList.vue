@@ -147,8 +147,11 @@
         :loading="loading"
         :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
         @change="handleTableChange">
+        <template slot="gradeName" slot-scope="text,record">
+          <a @click="gradeClick(record)">【{{text}}】</a>
+        </template>
         <template slot="headPortrait" slot-scope="text, record, index">
-          <img class="clickShowImage" :preview="'headPortrait' + index"  :src="record.headPortrait" height="25px" style="max-width:80px;font-size: 12px;font-style: italic;">
+          <img class="clickShowImage" :preview="'headPortrait' + index"  :src="record.headPortrait">
         </template>
         <template slot="qrcodeAddr" slot-scope="text, record, index">
           <img class="clickShowImage" :preview="'qrcodeAddr' + index"  :src="ssAddressView(record.qrcodeAddr)" >
@@ -180,6 +183,7 @@
       <br/>
       <br/>
     </div>
+    <member-grade-settting-modal ref="memberGradeSetttingModal" @ok="modalFormOk"></member-grade-settting-modal>
   </a-card>
 </template>
 
@@ -188,16 +192,15 @@
   import MemberListListActionModal from './modules/MemberListListActionModal'
   import {JeecgListMixin} from '@/mixins/JeecgListMixin'
   import {filterObj} from '@/utils/util';
-  import {deleteAction, getAction, downFile} from '@/api/manage'
-  import Vue from 'vue'
-  import {ACCESS_TOKEN} from "@/store/mutation-types"
-  import {putAction} from '@/api/manage'
+  import {getAction} from '@/api/manage'
+  import MemberGradeSetttingModal from'./modules/MemberGradeSetttingModal'
   export default {
     name: "MemberListList",
     mixins: [JeecgListMixin],
     components: {
       MemberListModal,
-      MemberListListActionModal
+      MemberListListActionModal,
+      MemberGradeSetttingModal
     },
     data () {
       return {
@@ -258,6 +261,7 @@
             title: '会员等级',
             align: "center",
             dataIndex: 'gradeName',
+            scopedSlots:{customRender:'gradeName'}
           },
           {
             title: '会员称号',
@@ -295,11 +299,6 @@
             align: "center",
             dataIndex: 'browsingHistory'
           },
-          /*{
-            title: '是否开店',
-            align: "center",
-            dataIndex: 'isOpenStores',
-          },*/
           {
             title: '推广码',
             align: "center",
@@ -382,6 +381,13 @@
       }
     },
     methods: {
+      gradeClick(param){
+        console.log(param);
+        this.$refs.memberGradeSetttingModal.show({
+          memberId:param.id,
+          memberGradeId:param.memberGradeId
+        });
+      },
       //启动停用弹窗
       showModal(id) {
         this.memberId = id;

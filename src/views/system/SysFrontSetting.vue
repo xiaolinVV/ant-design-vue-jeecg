@@ -258,7 +258,7 @@ import dayjs from 'dayjs'
 const storeSourceOptions = [{ label: '京东', value: '1' }, { label: '淘宝', value: '2' }]
 export default {
   name: 'SysFrontSetting',
-  // inject: ['rush'],
+  inject: ['rush'],
   components: {
     AInput,
     AUpload

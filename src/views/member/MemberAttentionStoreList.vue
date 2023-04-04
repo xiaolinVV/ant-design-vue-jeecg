@@ -60,7 +60,7 @@
       :columns="columns"
       :dataSource="dataSource"
       :pagination="ipagination"
-      :scroll="{ x: true }"
+      :scroll="{ x: 2000 }"
       :loading="loading"
       bordered
       :rowSelection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
@@ -70,9 +70,8 @@
         <img
           class="clickShowImage"
           :preview="'headPortrait' + index"
-          :src="record.headPortrait"
+          :src="getAvatarView(record.headPortrait)"
           alt=""
-          height="25px" style="max-width:80px;font-size: 12px;font-style: italic;"
         />
       </template>
       <template slot="logoAddr" slot-scope="text, record, index">

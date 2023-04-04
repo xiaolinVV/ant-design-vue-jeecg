@@ -80,7 +80,7 @@
       :dataSource="dataSource"
       :pagination="ipagination"
       :loading="loading"
-      :scroll="{x:true}"
+      :scroll="{x:2000}"
       :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
       @change="handleTableChange">
       <template slot="isDefault" slot-scope="text, record, index">
@@ -90,7 +90,7 @@
         </div>
       </template>
       <template slot="headPortrait" slot-scope="text, record, index">
-        <img class="clickShowImage" :preview="'headPortrait' + index"  :src="record.headPortrait" alt="" height="25px" style="max-width:80px;font-size: 12px;font-style: italic;">
+        <img class="clickShowImage" :preview="'headPortrait' + index"  :src="record.headPortrait" alt="">
       </template>
     </a-table>
 

@@ -27,7 +27,7 @@
                   style="width:100px;margin-right: 10px;"
                 >
                   <a-select-option value="">请选择</a-select-option>
-                  <a-select-option v-for="item in listGoodType" :value="item.id">{{ item.name }}</a-select-option>
+                  <a-select-option v-for="item in listGoodType" :value="item.id" :key="item.id">{{ item.name }}</a-select-option>
                 </a-select>
                 <a-select
                   v-model="queryParam.goodTypeIdTwo"
@@ -36,7 +36,7 @@
                   style="width:100px;margin-right: 10px;"
                   ><!--v-model="id"-->
                   <a-select-option value="">请选择</a-select-option>
-                  <a-select-option v-for="item in listGoodType1" :value="item.id">{{ item.name }}</a-select-option>
+                  <a-select-option v-for="item in listGoodType1" :value="item.id" :key="item.id">{{ item.name }}</a-select-option>
                   <!--:defaultValue="listGoodType1.length>0?listGoodType1[0].name : ''"-->
                 </a-select>
                 <a-select
@@ -45,7 +45,7 @@
                   style="width:100px;margin-right: 10px;"
                 >
                   <a-select-option value="">请选择</a-select-option>
-                  <a-select-option v-for="item in listGoodType2" :value="item.id">{{ item.name }}</a-select-option>
+                  <a-select-option v-for="item in listGoodType2" :value="item.id" :key="item.id">{{ item.name }}</a-select-option>
                   <!--:defaultValue="listGoodType2.length>0?listGoodType2[0].name : ''"-->
                 </a-select>
               </a-form-item>
@@ -296,7 +296,9 @@ export default {
         //添加商品列表(免单)
         chooseGoodList: 'marketing/marketingFreeGoodList/chooseGoodList',
         //添加商品列表（拼团）
-        marketingGroupGoodList: 'marketing/marketingGroupGoodList/chooseGoodList'
+        marketingGroupGoodList: 'marketing/marketingGroupGoodList/chooseGoodList',
+        //限时抢购
+        marketingRushChooseGoodList:'marketingRushGood/marketingRushGood/chooseGoodList'
       },
       //table
       dataSource: [],
@@ -426,7 +428,16 @@ export default {
         goodTypeId: this.goodTypeId
       }
       info = Object.assign({}, this.queryParam, info)
-      let url = this.types == 2 ? this.url.marketingGroupGoodList : this.url.chooseGoodList
+      let url = '';
+      if(this.types==1){
+        url=this.url.chooseGoodList;
+      }
+      if(this.types==2){
+        url=this.url.marketingGroupGoodList;
+      }
+      if(this.types==3){
+        url=this.url.marketingRushChooseGoodList;
+      }
       getAction(url, info).then(res => {
         if (res.success) {
           for (let item of res.result.records) {

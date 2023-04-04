@@ -87,7 +87,7 @@
         size="middle"
         bordered
         rowKey="id"
-        :scroll="{x:true}"
+        :scroll="{x:1000}"
         :columns="columns"
         :dataSource="dataSource"
         :pagination="ipagination"

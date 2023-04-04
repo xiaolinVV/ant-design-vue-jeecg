@@ -51,10 +51,10 @@
     <!-- 操作按钮区域 -->
     <div class="table-operator">
       <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
-      <a-button type="primary" icon="download" @click="handleExportXls('展品列表')">导出</a-button>
+  <!--    <a-button type="primary" icon="download" @click="handleExportXls('展品列表')">导出</a-button>
       <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">
         <a-button type="primary" icon="import">导入</a-button>
-      </a-upload>
+      </a-upload>-->
       <a-dropdown v-if="selectedRowKeys.length > 0">
         <a-menu slot="overlay">
           <a-menu-item key="1" @click="batchDel"><a-icon type="delete"/>删除</a-menu-item>
@@ -82,13 +82,28 @@
         :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
         @change="handleTableChange">
 
+        <template slot="mainPicture" slot-scope="text,record">
+          <img v-if="JSON.parse(text).length>0" :src="getImgUrl(JSON.parse(text)[0])" style="width: 40px;height: 40px">
+        </template>
+
         <span slot="action" slot-scope="text, record">
           <a @click="handleEdit(record)">编辑</a>
 
           <a-divider type="vertical" />
+           <a-popconfirm  v-if="record.frameStatus==0" title="确定上架商品吗?" @confirm="() => upAndDown(record.id)">
+                  <a>上架</a>
+                </a-popconfirm>
+          <a-divider  v-if="record.frameStatus==0" type="vertical" />
+           <a-popconfirm  v-if="record.frameStatus==1" title="确定下架商品吗?" @confirm="() => upAndDown(record.id)">
+                  <a>下架</a>
+                </a-popconfirm>
+          <a-divider  v-if="record.frameStatus==1" type="vertical" />
           <a-dropdown>
             <a class="ant-dropdown-link">更多 <a-icon type="down" /></a>
             <a-menu slot="overlay">
+                <a-menu-item>
+                  <a @click="goodExhibitsSortModalClick(record)">排序</a>
+              </a-menu-item>
               <a-menu-item>
                 <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.id)">
                   <a>删除</a>
@@ -104,18 +119,24 @@
 
     <!-- 表单区域 -->
     <goodExhibits-modal ref="modalForm" @ok="modalFormOk"></goodExhibits-modal>
+
+    <!--排序-->
+    <good-exhibits-sort-modal ref="goodExhibitsSortModal" @ok="modalFormOk"></good-exhibits-sort-modal>
   </a-card>
 </template>
 
 <script>
   import GoodExhibitsModal from './modules/GoodExhibitsModal'
+  import GoodExhibitsSortModal from './modules/GoodExhibitsSortModal'
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
+  import {getAction} from '@/api/manage';
 
   export default {
     name: "GoodExhibitsList",
     mixins:[JeecgListMixin],
     components: {
-      GoodExhibitsModal
+      GoodExhibitsModal,
+      GoodExhibitsSortModal
     },
     data () {
       return {
@@ -133,26 +154,6 @@
             }
            },
 		   {
-            title: '创建年',
-            align:"center",
-            dataIndex: 'year'
-           },
-		   {
-            title: '创建月',
-            align:"center",
-            dataIndex: 'month'
-           },
-		   {
-            title: '创建日',
-            align:"center",
-            dataIndex: 'day'
-           },
-		   {
-            title: '删除状态（0，正常，1已删除）',
-            align:"center",
-            dataIndex: 'delFlag'
-           },
-		   {
             title: '编号',
             align:"center",
             dataIndex: 'serialNumber'
@@ -160,7 +161,8 @@
 		   {
             title: '主图',
             align:"center",
-            dataIndex: 'mainPicture'
+            dataIndex: 'mainPicture',
+         scopedSlots:{customRender:'mainPicture'}
            },
 		   {
             title: '名称',
@@ -168,40 +170,49 @@
             dataIndex: 'exhibitsName'
            },
 		   {
-            title: '店铺列表id',
-            align:"center",
-            dataIndex: 'storeManageId'
-           },
-		   {
             title: '描述',
             align:"center",
-            dataIndex: 'describe'
+            dataIndex: 'exhibitsDescribe'
            },
 		   {
-            title: '视频',
+            title: '上下架',
             align:"center",
-            dataIndex: 'video'
+            dataIndex: 'frameStatus',
+         customRender(text){
+              if(text==0){
+                return '下架';
+              }
+              if(text==1){
+                return '上架';
+              }
+         }
            },
-		   {
-            title: '详情图',
+          {
+            title: '店铺名称',
             align:"center",
-            dataIndex: 'detailsFigure'
-           },
-		   {
-            title: '上下架；0：下架；1：上架',
-            align:"center",
-            dataIndex: 'frameStatus'
-           },
+            dataIndex: 'storeName'
+          },
 		   {
             title: '排序',
             align:"center",
             dataIndex: 'sort'
            },
-		   {
-            title: '状态；0：未通过；1：通过',
-            align:"center",
-            dataIndex: 'status'
-           },
+          {
+            title: '状态',
+            align: "center",
+            dataIndex: 'status',
+            customRender(text) {
+              if (text == 0) {
+                return '审核中';
+              }
+              if (text == 1) {
+                return '通过';
+              }
+              if (text == 2) {
+                return '未通过';
+              }
+            }
+          },
           {
             title: '操作',
             dataIndex: 'action',
@@ -210,11 +221,12 @@
           }
         ],
 		url: {
-          list: "/good/goodExhibits/list",
+          list: encodeURI("/good/goodExhibits/list?superQueryParams=[{'field':'delFlag','rule':'eq','val':'0'}]"),
           delete: "/good/goodExhibits/delete",
           deleteBatch: "/good/goodExhibits/deleteBatch",
           exportXlsUrl: "good/goodExhibits/exportXls",
           importExcelUrl: "good/goodExhibits/importExcel",
+          upAndDown:"good/goodExhibits/upAndDown"
        },
     }
   },
@@ -224,7 +236,22 @@
     }
   },
     methods: {
-     
+      getImgUrl(url){
+        return window._CONFIG['imgDomainURL']+'/'+url;
+      },
+      upAndDown(id){
+        getAction(this.url.upAndDown, {id: id}).then((res) => {
+
+          if (res.success) {
+            this.modalFormOk();
+          } else {
+            this.$message.warning(res.message);
+          }
+        });
+      },
+      goodExhibitsSortModalClick(record){
+        this.$refs.goodExhibitsSortModal.edit(record);
+      }
     }
   }
 </script>

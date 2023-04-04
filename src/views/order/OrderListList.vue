@@ -157,7 +157,7 @@
         size="middle"
         bordered
         rowKey="id"
-        :scroll="{ x: true }"
+        :scroll="{ x: 2500 }"
         :columns="columns"
         :dataSource="dataSource"
         :pagination="ipagination"
@@ -256,6 +256,8 @@
           <div v-if="record.status == '1'">
             <a @click="showModalCancelInformation(record.id)">取消</a>
             <a-divider type="vertical" />
+            <a @click="refundAndAbrogateOrderModalClick(record.id)">取消并退款</a>
+            <a-divider type="vertical" />
             <a @click="deliverGoods(record)">发货</a>
             <a-divider type="vertical" />
             <a @click="particulars(record, 3)">详情</a>
@@ -267,6 +269,8 @@
           <div v-if="record.status == '2'">
             <a @click="showModalCancelInformation(record.id)">取消</a>
             <a-divider type="vertical" />
+            <a @click="refundAndAbrogateOrderModalClick(record.id)">取消并退款</a>
+            <a-divider type="vertical" />
             <a @click="checkLogistics(record, 4)">查看物流</a>
             <a-divider type="vertical" />
             <a @click="particulars(record, 4)">详情</a>
@@ -274,6 +278,8 @@
           <!--交易成功订单操作-->
           <div v-if="record.status == '3'">
             <a @click="showAudiModal(record.id)" v-if="record.isEvaluate == 1">审批</a>
+            <a-divider type="vertical" />
+            <a @click="refundAndAbrogateOrderModalClick(record.id)">取消并退款</a>
             <!--v-if="record.isEvaluate == 1"-->
             <a-divider type="vertical" v-if="record.isEvaluate == 1" /><!--v-if="record.isEvaluate == 1"-->
             <a @click="showEvaluateModal(record.id)" v-if="record.isEvaluate == 1">查看评价</a>
@@ -293,6 +299,8 @@
           <div v-if="record.status == '5'">
             <a @click="showAudiModal(record.id)" v-if="record.isEvaluate == 1">审批</a
             ><!--v-if="record.isEvaluate == 1"-->
+            <a-divider type="vertical" />
+            <a @click="refundAndAbrogateOrderModalClick(record.id)">取消并退款</a>
             <a-divider type="vertical" v-if="record.isEvaluate == 1" /><!--v-if="record.isEvaluate == 1"-->
             <a @click="showEvaluateModal(record.id)" v-if="record.isEvaluate == 1">查看评价</a
             ><!--v-if="record.isEvaluate == '1'"-->
@@ -308,6 +316,9 @@
 
     <!-- 表单区域 -->
     <orderList-modal ref="modalForm" @ok="modalFormOk"></orderList-modal>
+
+    <!--取消并退款-->
+    <refund-and-abrogate-order-modal ref="refundAndAbrogateOrderModal" @ok="modalFormOk"></refund-and-abrogate-order-modal>
   </a-card>
 </template>
 
@@ -315,15 +326,16 @@
 import OrderListModal from './modules/OrderListModal'
 import { JeecgListMixin } from '@/mixins/JeecgListMixin'
 import { filterObj } from '@/utils/util'
-import { ACCESS_TOKEN } from '@/store/mutation-types'
-import { deleteAction, getAction, downFile, putAction } from '@/api/manage'
+import RefundAndAbrogateOrderModal from'./modules/RefundAndAbrogateOrderModal'
+import { deleteAction, getAction } from '@/api/manage'
 //字典
-import { filterDictText, initDictOptions } from '@/components/dict/JDictSelectUtil'
+import { initDictOptions } from '@/components/dict/JDictSelectUtil'
 export default {
   name: 'OrderListList',
   mixins: [JeecgListMixin],
   components: {
-    OrderListModal
+    OrderListModal,
+    RefundAndAbrogateOrderModal
   },
   data() {
     return {
@@ -483,6 +495,9 @@ export default {
     this.init()
   },
   methods: {
+    refundAndAbrogateOrderModalClick(param){
+      this.$refs.refundAndAbrogateOrderModal.open(param);
+    },
     /**查询栏时间区间查询*/
     getQueryParams() {
       console.log(this.queryParam.createTime)

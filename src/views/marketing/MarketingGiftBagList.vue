@@ -6,11 +6,6 @@
       <a-form layout="inline">
         <a-row :gutter="24">
           <a-col :md="8" :sm="8">
-            <a-form-item label="礼包编号">
-              <a-input placeholder="请输入" v-model="queryParam.giftName"></a-input>
-            </a-form-item>
-          </a-col>
-          <a-col :md="8" :sm="8">
             <a-form-item label="礼包名称">
               <a-input placeholder="请输入" v-model="queryParam.giftName"></a-input>
             </a-form-item>
@@ -104,7 +99,7 @@
         ref="table"
         size="middle"
         bordered
-        :scroll="{ x: true }"
+        :scroll="{ x: 3500 }"
         rowKey="id"
         :columns="columns"
         :dataSource="dataSource"
@@ -267,6 +262,11 @@ export default {
           title: '分销佣金',
           align: 'center',
           dataIndex: 'distributionCommission'
+        },
+        {
+          title: '分销福利金',
+          align: 'center',
+          dataIndex: 'promoterWelfarePayments'
         },
         {
           title: '推广奖励',

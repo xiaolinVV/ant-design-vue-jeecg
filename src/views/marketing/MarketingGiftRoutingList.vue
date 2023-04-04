@@ -118,11 +118,11 @@
 
 <script>
   import MarketingGiftRoutingModal from './modules/MarketingGiftRoutingModal'
-  import { JeecgListMixin } from '@/mixins/JeecgListMixin'
+  import { JeecgListMixinTwo } from '@/mixins/JeecgListMixinTwo'
 
   export default {
     name: "MarketingGiftRoutingList",
-    mixins:[JeecgListMixin],
+    mixins:[JeecgListMixinTwo],
     components: {
       MarketingGiftRoutingModal
     },
@@ -219,6 +219,7 @@
         this.visible=false;
       },
       show(record){
+        this.ipagination.current = 1
         this.url.list='/marketing/marketingGiftRouting/list';
         this.visible=true;
         console.log(record);

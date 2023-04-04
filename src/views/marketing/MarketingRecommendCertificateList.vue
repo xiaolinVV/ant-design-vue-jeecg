@@ -100,7 +100,7 @@
         ref="table"
         size="middle"
         bordered
-        :scroll="{ x: true }"
+        :scroll="{ x: 3000 }"
         rowKey="id"
         :columns="columns"
         :dataSource="dataSource"

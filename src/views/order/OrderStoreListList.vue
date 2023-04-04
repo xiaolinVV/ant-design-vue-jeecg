@@ -150,7 +150,7 @@
         size="middle"
         bordered
         rowKey="id"
-        :scroll="{ x: true }"
+        :scroll="{ x: 2500 }"
         :columns="columns"
         :dataSource="dataSource"
         :pagination="ipagination"
@@ -249,6 +249,8 @@
           </div>
           <!--待发货订单操作-->
           <div v-if="record.status == '1'">
+            <a @click="refundAndAbrogateOrderStoreClick(record.id)">取消并退款</a>
+            <a-divider type="vertical" />
             <a @click="deliverGoods(record)">发货</a>
             <a-divider type="vertical" />
             <a @click="particulars(record, 3)">详情</a>
@@ -258,12 +260,16 @@
           </div>
           <!--待收货订单操作-->
           <div v-if="record.status == '2'">
+               <a @click="refundAndAbrogateOrderStoreClick(record.id)">取消并退款</a>
+            <a-divider type="vertical" />
             <a @click="checkLogistics(record, 4)">查看物流</a>
             <a-divider type="vertical" />
             <a @click="particulars(record, 4)">详情</a>
           </div>
           <!--交易完成订单操作-->
           <div v-if="record.status == '3'">
+               <a @click="refundAndAbrogateOrderStoreClick(record.id)">取消并退款</a>
+            <a-divider type="vertical" />
             <a @click="showAudiModal(record.id)" v-if="record.isEvaluate == 1">审批</a
             ><!--v-if="record.isEvaluate == 1"-->
             <a-divider type="vertical" v-if="record.isEvaluate == 1" /><!--v-if="record.isEvaluate == 1"-->
@@ -283,6 +289,8 @@
           </div>
           <!--交易完成订单操作-->
           <div v-if="record.status == '5'">
+               <a @click="refundAndAbrogateOrderStoreClick(record.id)">取消并退款</a>
+            <a-divider type="vertical" />
             <a @click="showAudiModal(record.id)" v-if="record.isEvaluate == 1">审批</a
             ><!--v-if="record.isEvaluate == 1"-->
             <a-divider type="vertical" v-if="record.isEvaluate == 1" /><!--v-if="record.isEvaluate == 1"-->
@@ -301,6 +309,10 @@
 
     <!-- 表单区域 -->
     <orderStoreList-modal ref="modalForm" @ok="modalFormOk"></orderStoreList-modal>
+
+    <!--取消并退款-->
+
+    <refund-and-abrogate-order-store-modal ref="refundAndAbrogateOrderStoreModal" @ok="modalFormOk"></refund-and-abrogate-order-store-modal>
   </a-card>
 </template>
 
@@ -311,12 +323,15 @@ import { filterObj } from '@/utils/util'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
 import { deleteAction, getAction, downFile, putAction } from '@/api/manage'
 //字典
-import { filterDictText, initDictOptions } from '@/components/dict/JDictSelectUtil'
+import {initDictOptions } from '@/components/dict/JDictSelectUtil'
+
+import RefundAndAbrogateOrderStoreModal from'./modules/RefundAndAbrogateOrderStoreModal'
 export default {
   name: 'OrderStoreListList',
   mixins: [JeecgListMixin],
   components: {
-    OrderStoreListModal
+    OrderStoreListModal,
+    RefundAndAbrogateOrderStoreModal
   },
   data() {
     return {
@@ -467,6 +482,9 @@ export default {
     this.init()
   },
   methods: {
+    refundAndAbrogateOrderStoreClick(param){
+      this.$refs.refundAndAbrogateOrderStoreModal.open(param);
+    },
     /**查询栏时间区间查询*/
     getQueryParams() {
       console.log(this.queryParam.createTime)

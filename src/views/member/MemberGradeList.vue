@@ -107,7 +107,7 @@
         :loading="loading"
         :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
         @change="handleTableChange">
-        <template slot="gradeLogo" slot-scope="text, record">
+        <template slot="gradeLogo" slot-scope="text, record,index">
             <img class="clickShowImage" :preview="'gradeLogo' + index" v-if="record.gradeLogo " :src="getAvatarView(record.gradeLogo)" alt="">
             <a-avatar shape="square" v-else="!record.gradeLogo" :src="getAvatarView(record.gradeLogo)" icon="user"/>
         </template>
@@ -125,9 +125,9 @@
             <a class="ant-dropdown-link">更多 <a-icon type="down"/></a>
             <a-menu slot="overlay">
               <a-menu-item>
-<!--                <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.id)">-->
-                  <a @click="showDelete(record)">删除</a>
-<!--                </a-popconfirm>-->
+                <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.id)">
+                  <a>删除</a>
+                </a-popconfirm>
               </a-menu-item>
               <a-menu-item>
                 <a v-if="record.status != 1" @click="showStartStatus(record)">启用</a>
@@ -203,11 +203,6 @@
             dataIndex: 'gradeCondition'
           },
           {
-            title: '等级特权',
-            align: "center",
-            dataIndex: 'discountName'
-          },
-          {
             title: '状态',
             align: "center",
             dataIndex: 'status',
@@ -251,7 +246,6 @@
           deleteBatch: "/memberGrade/memberGrade/deleteBatch",
           exportXlsUrl: "memberGrade/memberGrade/exportXls",
           importExcelUrl: "memberGrade/memberGrade/importExcel",
-          deleteAndExplain: "/memberGrade/memberGrade/deleteAndExplain",//删除and说明(id,delExplain)
           imgerver: window._CONFIG['domianURL'] + '/sys/common/view',
         },
       }
@@ -275,9 +269,6 @@
       },
       showStartStatus(record = {}){
         this.$refs.modalForm2.showStartStatus(record);
-      },
-      showDelete(record = {}){
-        this.$refs.modalForm2.showDelete(record);
       },
       stuatusChangeOk(){
        this.loadData()
