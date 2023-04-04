@@ -110,7 +110,6 @@
             :dataSource="dataSource"
             :pagination="ipagination"
             :loading="loading"
-            class="j-table-force-nowrap"
             :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"
             @change="handleTableChange">
 
