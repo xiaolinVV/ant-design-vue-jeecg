@@ -390,7 +390,7 @@
         </div>
         <div style="margin-top: 60px;margin-bottom: 60px">
           <a-radio-group @change="onChange" v-model="areaAddressId">
-            <a-radio :style="radioStyle" v-for="item of listMemberShippingAddress" :value="item.id"
+            <a-radio :style="radioStyle" v-for="item of listMemberShippingAddress" :key="item.id" :value="item.id"
               >{{ item.linkman }}&nbsp;&nbsp;&nbsp; {{ item.phone }} &nbsp;&nbsp;&nbsp; {{ item.areaAddress }}
             </a-radio>
           </a-radio-group>
@@ -606,6 +606,324 @@
         </div>
       </div>
     </a-modal>
+
+    <!-- 点击拒绝 -->
+    <!--v-model="visiblRejectReason"-->
+    <a-modal
+      title="拒绝原因"
+      v-model="visiblRejectReason"
+      @ok="hideModalRejectReason()"
+      :width="800"
+      okText="确认"
+      cancelText="取消">
+
+    <div>
+      <a-form>
+        <a-form-item
+          label="取消原因">
+          <a-textarea  v-model="closeExplain"  placeholder="请输入100以内"  show-count :maxlength="100"/>
+        </a-form-item>
+      </a-form>
+    </div>
+  </a-modal>
+  <!-- 同意弹窗 -->
+  <!--v-model="visiblAgreeWith"-->
+  <a-modal
+      title=""
+      v-model="visiblAgreeWith"
+      @ok="confiemeModalAgreeWith()"
+      :width="600"
+      okText="确认"
+      cancelText="取消">
+
+    <div style="margin-top: 30px;">
+      <div class="agreeItem">
+        <div class="agreeTitle">商品原价</div>
+        <div class="agreeTitle">￥{{orderData.goodRecordTotal}}</div>
+      </div>
+      <div class="agreeItem">
+        <div class="agreeTitle">申请退款商品数量</div>
+        <div class="agreeTitle">1</div>
+      </div>
+      <div class="agreeItem">
+        <div class="agreeTitle">使用优惠卷金额</div>
+        <div class="agreeTitle">￥{{orderData.goodRecordCoupon}}</div>
+      </div>
+      <div class="agreeItem">
+        <div class="agreeTitle">实际支付金额</div>
+        <div class="agreeTitle">￥{{orderData.goodRecordActualPayment}}</div>
+      </div>
+      <div class="agreeItem">
+        <div class="agreeRedTitle">用户申请退款金额</div>
+        <div class="agreeRedTitle">￥{{orderData.goodRecordActualPayment}}</div>
+      </div>
+      <div class="agreeItem">
+        <div class="agreeTitle">请选择退款渠道及金额</div>
+        <div class="agreeTitle"></div>
+      </div>
+      <div class="agreeItem">
+        <div class="checkItem">
+          <a-checkbox v-model:checked="agreeData.balanceCheck">
+        </a-checkbox>
+          <div class="moneyItem">
+            <span>余额</span>
+            <a-input-number id="inputNumber" v-model:value="agreeData.balanceNum" :min="0" :precision="2" />
+            <span>元</span>
+          </div>
+        </div>
+       
+        <div class="checkItem">
+          <a-checkbox v-model:checked="agreeData.wetCheck">
+        </a-checkbox>
+          <div class="moneyItem">
+            <span>微信</span>
+            <a-input-number id="inputNumber" v-model:value="agreeData.wetNum" :min="0" :precision="2" />
+            <span>元</span>
+          </div>
+        </div>
+      </div>
+      <div class="agreeItem">
+        <div class="checkItem">
+          <a-checkbox disabled  v-model:checked="agreeData.bankCheck">
+        </a-checkbox>
+          <div class="moneyItem">
+            <span>银行卡</span>
+            <a-input-number disabled  id="inputNumber" v-model:value="agreeData.bankNum" :min="0" :precision="2" />
+            <span>元</span>
+          </div>
+        </div>
+        <div class="checkItem">
+          <a-checkbox disabled  v-model:checked="agreeData.payCheck">
+        </a-checkbox>
+          <div class="moneyItem">
+            <span>支付宝</span>
+            <a-input-number disabled  id="inputNumber" v-model:value="agreeData.payNum" :min="0" :precision="2" />
+            <span>元</span>
+          </div>
+        </div>
+       
+      </div>
+      <div class="agreeItem">
+        <div class="agreeRedTitle"> 点击确认后，将进入到退款流程，为用户退款。该商品使用的礼品卡、优惠券、福利金等也将退还。请递慎探作!</div>
+         
+        </div> 
+    </div>
+  </a-modal>
+
+  <!-- 查看物流 -->
+  <!--v-model="visiblLogistics"-->
+  <a-modal
+      title=""
+      v-model="visiblLogistics"
+      @ok="confiemeModalLogistics()"
+      :width="800"
+      :okText="orderRefund==1?'确认收货并同意退款':'确认收货并发出换货'"
+      cancelText="拒绝退款">
+
+    <div style="margin-top: 30px;">
+      <div class="logisticItem">物流公司：{{orderData.buyerLogisticsCompany}}</div>
+      <div class="logisticItem">物流单号：{{orderData.buyerTrackingNumber}}</div>
+      <div class="logisticItem">物流详情：{{orderData.buyerLogisticsTracking}}</div>
+    </div>
+  </a-modal>
+  <!-- 更改物流信息 -->
+   <!--v-model="visiblEditLogistics"-->
+   <a-modal
+      :title="orderRefund==1?'请填写买家退货邮寄地址':'请填写买家邮寄地址'"
+      v-model="visiblEditLogistics"
+      @ok="confiemeModalEditLogistics()"
+      :width="800"
+      okText="确认"
+      cancelText="取消">
+
+    <div style="margin-top: 30px;">
+      <div class="logisticItem">
+        <div class="logisticTitle">收件人姓名：</div>
+        <a-input style="width: 400px;" v-model:value="logistic.name" placeholder="请输入收件人姓名" />
+      </div>
+      <div class="logisticItem">
+        <div class="logisticTitle">收件人电话：</div>
+        <a-input style="width: 400px;" v-model:value="logistic.phone" placeholder="请输入收件人电话" />
+      </div>
+      <div class="logisticItem">
+        <div class="logisticTitle">收件人地址：</div>
+        <area-select
+        style="width: 400px;"
+      @change="selectArea"
+      :default-value="defaultArea"
+    />
+      </div>
+      <div class="logisticItem">
+        <div class="logisticTitle"></div>
+        <a-textarea v-model:value="logistic.detail" placeholder="请输入收件人详细地址" allow-clear />
+      </div>
+    </div>
+  </a-modal>
+  <!-- //选择快递公司 -->
+   <!--v-model="visiblExpress "-->
+   <a-modal
+      title=""
+      v-model="visiblExpress"
+      @ok="confiemeModalExpress()"
+      :width="800"
+      okText="确认"
+      cancelText="取消">
+
+    <div style="margin-top: 30px;">
+      <div class="logisticItem">
+        <div class="logisticTitle">物流公司：</div>
+        <j-dict-select-tag class="head-decorationGoods" style="width:400px" v-model="express.company" placeholder="请选择"
+                                 dictCode="logistics_company"/>
+        <!-- <a-select
+      ref="select"
+      v-model:value="express.company"
+      style="width: 120px"
+      @focus="focus"
+      @change="handleChange"
+    >
+      <a-select-option value="jack">Jack</a-select-option>
+      <a-select-option value="lucy">Lucy</a-select-option>
+      <a-select-option value="disabled" disabled>Disabled</a-select-option>
+      <a-select-option value="Yiminghe">yiminghe</a-select-option>
+    </a-select> -->
+      </div>
+      <div class="logisticItem">
+        <div class="logisticTitle">物流单号：</div>
+        <a-input  style="width:400px" v-model:value="express.code" placeholder="请输入物流单号" />
+      </div>
+      
+    </div>
+  </a-modal>
+
+    <!-- 资金明细 -->
+  <!--v-model="visiblAgreeWith"-->
+  <a-modal
+      title=""
+      v-model="visiblMoneyDetail"
+     :footer="null"
+      :width="600"
+      okText="确认"
+      cancelText="取消">
+
+    <div style="margin-top: 30px;">
+      <div class="agreeItem">
+        <div class="agreeTitle">商品原价</div>
+        <div class="agreeTitle">￥{{orderRefunInfo.goodRecordTotal}}</div>
+      </div>
+      <div class="agreeItem">
+        <div class="agreeTitle">申请退款商品数量</div>
+        <div class="agreeTitle">1</div>
+      </div>
+      <div class="agreeItem">
+        <div class="agreeTitle">使用优惠卷金额</div>
+        <div class="agreeTitle">￥{{orderRefunInfo.goodRecordCoupon}}</div>
+      </div>
+      <div class="agreeItem">
+        <div class="agreeTitle">实际支付金额</div>
+        <div class="agreeTitle">￥{{orderRefunInfo.goodRecordActualPayment}}</div>
+      </div>
+      <div class="agreeItem">
+        <div class="agreeRedTitle">用户申请退款金额</div>
+        <div class="agreeRedTitle">￥{{orderRefunInfo.goodRecordActualPayment}}</div>
+      </div>
+      <div class="agreeItem">
+        <div class="agreeTitle">退款渠道及金额</div>
+      </div>
+      <div class="agreeItem">
+        <div class="agreeTitle">金额：￥{{orderRefunInfo.refundPrice}}</div>
+      </div>
+      <!-- <div class="agreeItem">
+        <div class="agreeTitle">微信：￥80</div>
+      </div> -->
+      <div class="agreeItem">
+        <div class="agreeTitle">退款到账时间：{{ orderRefunInfo.status==3?'退款中':updateTime }}</div>
+      </div>
+    </div>
+  </a-modal>
+
+    <!-- 申请说明 -->
+   <!--v-model="visiblRemark "-->
+   <a-modal
+      title="申请说明"
+      v-model="visiblRemark"
+      @ok="confiemeModalExpress()"
+      :footer="null"
+      :width="800"
+      okText="确认"
+      cancelText="取消">
+
+    <div>
+      {{ remark }}
+      
+    </div>
+  </a-modal>
+     <!-- 换货明细 -->
+   <!--v-model="visiblChangeGoods "-->
+   <a-modal
+      title="换货商品"
+      v-model="visiblChangeGoods"
+      @ok="confiemeModalExpress()"
+      :footer="null"
+      :width="800"
+      okText="确认"
+      cancelText="取消">
+
+    <div>
+      <div>
+        <a-table
+          size="middle"
+          bordered
+          :columns="goodscolumns"
+          :pagination="false"
+          :dataSource="orderDTOList"
+        >
+          <!-- :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"-->
+          <template slot="goodMainPicture" slot-scope="text, record, index">
+            <div class="anty-img-wrap">
+              <a-avatar
+                shape="square"
+                v-if="record.goodMainPicture != undefined"
+                :src="getAvatarView(JSON.parse(record.goodMainPicture)[0])"
+                icon="user"
+              />
+              <a-avatar
+                shape="square"
+                v-if="record.goodMainPicture == undefined || record.goodMainPicture == ''"
+                :src="getAvatarView(record.goodMainPicture)"
+                icon="user"
+              />
+            </div>
+          </template>
+        </a-table>
+      </div>
+      <div class="goodsTitle">买家退回物流</div>
+      <div class="goodsItem">运单号码：<span style="color: #333;">{{orderRefunInfo.buyerTrackingNumber}}</span></div>
+      <div class="goodsItem">物流公司：
+        <span style="color: #333;" v-if="orderRefunInfo.buyerLogisticsCompany==0">顺丰速运</span>
+        <span style="color: #333;" v-if="orderRefunInfo.buyerLogisticsCompany==1">圆通快递</span>
+        <span style="color: #333;" v-if="orderRefunInfo.buyerLogisticsCompany==2">申通快递</span>
+        <span style="color: #333;" v-if="orderRefunInfo.buyerLogisticsCompany==3">中通快递</span>
+        <span style="color: #333;" v-if="orderRefunInfo.buyerLogisticsCompany==4">韵达快递</span>
+        <span style="color: #333;" v-if="orderRefunInfo.buyerLogisticsCompany==5">天天快递</span>
+        <span style="color: #333;" v-if="orderRefunInfo.buyerLogisticsCompany==6">中国邮政</span>
+        <span style="color: #333;" v-if="orderRefunInfo.buyerLogisticsCompany==7">EMS邮政特快专递</span>
+        <span style="color: #333;" v-if="orderRefunInfo.buyerLogisticsCompany==8">德邦快递</span>
+      </div>
+      <div class="goodsTitle">换货发出物流</div>
+      <div class="goodsItem">运单号码：<span style="color: #333;">{{orderRefunInfo.merchantTrackingNumber}}</span></div>
+      <div class="goodsItem">物流公司：
+        <span style="color: #333;" v-if="orderRefunInfo.merchantLogisticsCompany==0">顺丰速运</span>
+        <span style="color: #333;" v-if="orderRefunInfo.merchantLogisticsCompany==1">圆通快递</span>
+        <span style="color: #333;" v-if="orderRefunInfo.merchantLogisticsCompany==2">申通快递</span>
+        <span style="color: #333;" v-if="orderRefunInfo.merchantLogisticsCompany==3">中通快递</span>
+        <span style="color: #333;" v-if="orderRefunInfo.merchantLogisticsCompany==4">韵达快递</span>
+        <span style="color: #333;" v-if="orderRefunInfo.merchantLogisticsCompany==5">天天快递</span>
+        <span style="color: #333;" v-if="orderRefunInfo.merchantLogisticsCompany==6">中国邮政</span>
+        <span style="color: #333;" v-if="orderRefunInfo.merchantLogisticsCompany==7">EMS邮政特快专递</span>
+        <span style="color: #333;" v-if="orderRefunInfo.merchantLogisticsCompany==8">德邦快递</span>  
+      </div>
+    </div>
+  </a-modal>
   </a-card>
 </template>
 
@@ -615,14 +933,89 @@ import pick from 'lodash.pick'
 import moment from 'moment'
 import { JeecgListMixin } from '@/mixins/JeecgListMixin'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
-import { postAction, getAction } from '@/api/manage'
+import { postAction, getAction,postApplicationAction } from '@/api/manage'
 //字典
 import { filterDictText, initDictOptions } from '@/components/dict/JDictSelectUtil'
 
+import areaSelect from "@/components/city/areaselect";
+
 export default {
   name: 'OrderListModal',
+  // mixins: [JeecgListMixin],
+  components: {
+    areaSelect
+  },
   data() {
     return {
+      orderDTOList:[],
+      orderRefunInfo:{},
+      orderData:{},
+      orderRefund:'', //退款类型
+      orderRefundId:'',
+      agreeData:{
+        balanceCheck:false,
+        wetCheck:false,
+        payCheck:false,
+        bankCheck:false,
+        balanceNum:'',
+        wetNum:'',
+        payNum:'',
+        bankNum:'',
+      },
+      logistic:{
+        name:'',
+        phone:'',
+        address:[],
+        detail:''
+      },
+      express:{
+        company:'',
+        code:'',
+      },
+      defaultArea:[],
+      closeExplain:{},
+      remark:'',
+      goodscolumns:[
+      // {
+      //     title: '商品编号',
+      //     align: 'center',
+      //     dataIndex: 'goodNo'
+      //   },
+        {
+          title: '商品主图',
+          align: 'center',
+          dataIndex: 'goodMainPicture',
+          scopedSlots: { customRender: 'goodMainPicture' }
+        },
+        {
+          title: '商品名称',
+          align: 'center',
+          dataIndex: 'goodName',
+          width: 200
+        },
+        {
+          title: '商品规格',
+          align: 'center',
+          dataIndex: 'goodSpecification',
+          scopedSlots: { customRender: 'specification' }
+        },
+        {
+          title: '数量',
+          align: 'center',
+          dataIndex: 'goodRecordAmount',
+          scopedSlots: { customRender: 'amount' }
+        },
+       
+       
+      ],
+      visiblChangeGoods:false,
+      visiblRemark:false,
+      visiblMoneyDetail:false,
+      visiblExpress:false,
+      visiblEditLogistics:false,//更改物流
+      visiblLogistics:false,//查看物流
+      visiblAgreeWith:false,//同意
+      visiblRejectReason:false,//拒绝原因
       record: {},
       title: '操作',
       visible: false,
@@ -785,7 +1178,12 @@ export default {
         updateAddress: '/orderList/orderList/updateAddress',
         reviewInformation: '/orderEvaluate/orderEvaluate/reviewInformation',
         updateAuditStatus: '/orderEvaluate/orderEvaluate/updateStatus',
-        orderOff: 'orderList/orderList/orderOff'
+        orderOff: 'orderList/orderList/orderOff',
+        refundUrl:'/order/orderRefundList/refused',
+        refunAgreeUrl:'/order/orderRefundList/pass',
+        refunAllUrl:'/order/orderRefundList/confirm',
+        refunChangeUrl:'/order/orderRefundList/editLogisticsInfo',
+        refunInfo:'/order/orderRefundList/queryById'
       }
     }
   },
@@ -799,6 +1197,12 @@ export default {
     this.init()
   },
   methods: {
+    handleChange(value){
+
+    },
+    selectArea(selectedArea) {
+      this.logistic.address=selectedArea
+    },
     add() {
       this.edit({})
     },
@@ -1146,7 +1550,198 @@ export default {
           that.$message.success('修改失败')
         }
       })
-    }
+    },
+
+    //拒绝原因弹窗
+    hideModalRejectReason(){
+      console.log(this.closeExplain)
+      var that = this
+      postApplicationAction(that.url.refundUrl, { id: that.orderRefundId, refusedExplain :that.closeExplain },).then(res => {
+        if (res.code == 200) {
+          that.$message.success(res.message)
+          that.hideRejectReasonModa()
+          that.$emit('ok') //发送父级主键刷新
+        } else {
+          that.$message.error('修改失败')
+        }
+      })
+    },
+    showRejectReasonModa(id){
+      this.orderRefundId=id
+      this.visiblRejectReason=true
+
+    },
+    hideRejectReasonModa(){
+      this.visiblRejectReason=false
+    },
+
+    //同意弹窗
+    confiemeModalAgreeWith(){
+      var that = this
+      let obj={
+        id: this.orderRefundId
+      }
+      if(this.agreeData.balanceCheck){
+        obj.actualRefundBalance  =this.agreeData.balanceNum
+      }
+      if(this.agreeData.wetCheck){
+        obj.actualRefundPrice  =this.agreeData.wetNum
+      }
+      if(this.agreeData.payCheck){
+        obj.merchantConsigneeName =this.agreeData.payNum
+      }
+      if(this.agreeData.bankCheck){
+        obj.merchantConsigneeName =this.agreeData.bankNum
+      }
+      if(this.orderRefund==0){
+        
+      postApplicationAction(that.url.refunAgreeUrl, obj).then(res => {
+        if (res.code == 200) {
+          that.$message.success(res.message)
+          that.hideAgreeWithModa()
+          that.$emit('ok') //发送父级主键刷新
+        } else {
+          that.$message.error('修改失败')
+        }
+      })
+      }else{
+        postApplicationAction(that.url.refunAllUrl, obj).then(res => {
+        if (res.code == 200) {
+          that.$message.success('修改成功')
+          that.hideAgreeWithModa()
+          that.$emit('ok') //发送父级主键刷新
+        } else {
+          that.$message.error('修改失败')
+        }
+      })
+      }
+     
+    },
+    showAgreeWithModa(record){
+    
+      this.orderRefundId=record.id
+      this.orderRefund=record.refundType
+      this.orderData=record
+      this.visiblAgreeWith=true
+
+    },
+    hideAgreeWithModa(){
+      this.visiblAgreeWith=false
+    },
+    //查看物流
+    confiemeModalLogistics(){
+      console.log(this.orderRefund)
+      this.hideModalLogistics()
+      if(this.orderRefund==1){
+        this.showAgreeWithModa(this.orderData)
+      }else{
+        this.showModalExpress()
+      }
+    },
+    showModalLogistics(record){
+      this.orderData=record
+      this.orderRefundId=record.id
+      this.orderRefund=record.refundType
+      this.getOrderInfo(record.id)
+      this.visiblLogistics=true
+    },
+    hideModalLogistics(){
+      this.visiblLogistics=false
+    },
+    //更改物流
+    confiemeModalEditLogistics(){
+      let  that=this
+
+      let obj={
+        id:this.orderRefundId,
+        merchantConsigneeName  :this.logistic.name,
+        merchantConsigneeAddress :this.logistic.detail,
+        merchantConsigneePhone :this.logistic.phone,
+      }
+      if(this.logistic.address.length==3){
+        obj.merchantConsigneeProvinceId=this.logistic.address[0]
+        obj.merchantConsigneeCityId=this.logistic.address[1]
+        obj.merchantConsigneeAreaId=this.logistic.address[2]
+      }
+      postApplicationAction(that.url.refunAgreeUrl, obj).then(res => {
+        if (res.code == 200) {
+          that.$message.success(res.message)
+          that.hideModalEditLogistics()
+          that.$emit('ok') //发送父级主键刷新
+        } else {
+          that.$message.error('修改失败')
+        }
+      })
+
+      // this.hideModalEditLogistics()
+      // this.showModalLogistics()
+    },
+    showModalEditLogistics(record){
+      this.orderRefundId=record.id
+      this.orderData=record
+      this.orderRefund=record.refundType
+      this.visiblEditLogistics=true
+    },
+    hideModalEditLogistics(){
+      this.visiblEditLogistics=false
+    },
+    //选择快递公司
+    confiemeModalExpress(){
+      let that=this
+      let obj={
+        id:this.orderRefundId,
+        merchantTrackingNumber :this.express.code,
+        merchantLogisticsCompany  :this.express.company
+      }
+      postApplicationAction(that.url.refunChangeUrl, obj).then(res => {
+        if (res.code == 200) {
+          that.$message.success(res.message)
+          that.hideModalExpress()
+          that.$emit('ok') //发送父级主键刷新
+        } else {
+          that.$message.error(res.message)
+        }
+      })
+    },
+    showModalExpress(){
+      this.visiblExpress=true
+    },
+    hideModalExpress(){
+      this.visiblExpress=false
+    },
+    showModalMoneyDetail(record){
+      this.getOrderInfo(record.id)
+      this.visiblMoneyDetail=true
+    },
+    hideModalMoneyDetail(){
+      this.visiblMoneyDetail=false
+    },
+    //获取订单详情信息
+    getOrderInfo(id){
+      let that=this
+      getAction(that.url.refunInfo, { id: id }).then(res => {
+        if (res.success) {
+          console.log(res)
+         that.orderRefunInfo=res.result
+         that.orderDTOList=[]
+         that.orderDTOList.push(res.result)
+        } else {
+          that.$message.success('操作失败')
+        }
+      })
+    },
+
+    //申请弹窗
+    showModalRemark(record){
+      this.remark=record.remarks
+      this.visiblRemark=true
+    },
+
+    //换货明细展示
+    showMidalChangeGoods(record){
+      this.getOrderInfo(record.id)
+      this.visiblChangeGoods=true
+    },
   }
 }
 </script>
@@ -1261,5 +1856,46 @@ export default {
   height: 80px;
   width: 80px;
   text-align: center;
+}
+.agreeItem{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.checkItem{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.agreeTitle{
+
+}
+.agreeRedTitle{
+  color: red;
+}
+.moneyItem{
+  margin-left: 10px;
+}
+.logisticItem{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.logisticTitle{
+  width: 120px;
+}
+.goodsTitle{
+  font-size: 24px;
+  color: #000;
+  margin-bottom: 20px;
+}
+.goodsItem{
+  font-size: 18px;
+  color: #000;
+  margin-bottom: 20px;
 }
 </style>
