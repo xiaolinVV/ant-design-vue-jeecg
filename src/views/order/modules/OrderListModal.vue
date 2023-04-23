@@ -391,7 +391,7 @@
         <div style="margin-top: 60px;margin-bottom: 60px">
           <a-radio-group @change="onChange" v-model="areaAddressId">
             <a-radio :style="radioStyle" v-for="item of listMemberShippingAddress" :key="item.id" :value="item.id"
-              >{{ item.linkman }}&nbsp;&nbsp;&nbsp; {{ item.phone }} &nbsp;&nbsp;&nbsp; {{ item.areaAddress }}
+            >{{ item.linkman }}&nbsp;&nbsp;&nbsp; {{ item.phone }} &nbsp;&nbsp;&nbsp; {{ item.areaAddress }}
             </a-radio>
           </a-radio-group>
         </div>
@@ -617,18 +617,18 @@
       okText="确认"
       cancelText="取消">
 
-    <div>
-      <a-form>
-        <a-form-item
-          label="取消原因">
-          <a-textarea  v-model="closeExplain"  placeholder="请输入100以内"  show-count :maxlength="100"/>
-        </a-form-item>
-      </a-form>
-    </div>
-  </a-modal>
-  <!-- 同意弹窗 -->
-  <!--v-model="visiblAgreeWith"-->
-  <a-modal
+      <div>
+        <a-form>
+          <a-form-item
+            label="取消原因">
+            <a-textarea  v-model="closeExplain"  placeholder="请输入100以内"  show-count :maxlength="100"/>
+          </a-form-item>
+        </a-form>
+      </div>
+    </a-modal>
+    <!-- 同意弹窗 -->
+    <!--v-model="visiblAgreeWith"-->
+    <a-modal
       title=""
       v-model="visiblAgreeWith"
       @ok="confiemeModalAgreeWith()"
@@ -636,99 +636,104 @@
       okText="确认"
       cancelText="取消">
 
-    <div style="margin-top: 30px;">
-      <div class="agreeItem">
-        <div class="agreeTitle">商品原价</div>
-        <div class="agreeTitle">￥{{orderData.goodRecordTotal}}</div>
-      </div>
-      <div class="agreeItem">
-        <div class="agreeTitle">申请退款商品数量</div>
-        <div class="agreeTitle">1</div>
-      </div>
-      <div class="agreeItem">
-        <div class="agreeTitle">使用优惠卷金额</div>
-        <div class="agreeTitle">￥{{orderData.goodRecordCoupon}}</div>
-      </div>
-      <div class="agreeItem">
-        <div class="agreeTitle">实际支付金额</div>
-        <div class="agreeTitle">￥{{orderData.goodRecordActualPayment}}</div>
-      </div>
-      <div class="agreeItem">
-        <div class="agreeRedTitle">用户申请退款金额</div>
-        <div class="agreeRedTitle">￥{{orderData.goodRecordActualPayment}}</div>
-      </div>
-      <div class="agreeItem">
-        <div class="agreeTitle">请选择退款渠道及金额</div>
-        <div class="agreeTitle"></div>
-      </div>
-      <div class="agreeItem">
-        <div class="checkItem">
-          <a-checkbox v-model:checked="agreeData.balanceCheck">
-        </a-checkbox>
-          <div class="moneyItem">
-            <span>余额</span>
-            <a-input-number id="inputNumber" v-model:value="agreeData.balanceNum" :min="0" :precision="2" />
-            <span>元</span>
-          </div>
+      <div style="margin-top: 30px;">
+        <div class="agreeItem">
+          <div class="agreeTitle">商品原价</div>
+          <div class="agreeTitle">￥{{orderData.goodRecordTotal}}</div>
         </div>
-       
-        <div class="checkItem">
-          <a-checkbox v-model:checked="agreeData.wetCheck">
-        </a-checkbox>
-          <div class="moneyItem">
-            <span>微信</span>
-            <a-input-number id="inputNumber" v-model:value="agreeData.wetNum" :min="0" :precision="2" />
-            <span>元</span>
-          </div>
+        <div class="agreeItem">
+          <div class="agreeTitle">申请退款商品数量</div>
+          <div class="agreeTitle">1</div>
         </div>
-      </div>
-      <div class="agreeItem">
-        <div class="checkItem">
-          <a-checkbox disabled  v-model:checked="agreeData.bankCheck">
-        </a-checkbox>
-          <div class="moneyItem">
-            <span>银行卡</span>
-            <a-input-number disabled  id="inputNumber" v-model:value="agreeData.bankNum" :min="0" :precision="2" />
-            <span>元</span>
-          </div>
+        <div class="agreeItem">
+          <div class="agreeTitle">使用优惠卷金额</div>
+          <div class="agreeTitle">￥{{orderData.goodRecordCoupon}}</div>
         </div>
-        <div class="checkItem">
-          <a-checkbox disabled  v-model:checked="agreeData.payCheck">
-        </a-checkbox>
-          <div class="moneyItem">
-            <span>支付宝</span>
-            <a-input-number disabled  id="inputNumber" v-model:value="agreeData.payNum" :min="0" :precision="2" />
-            <span>元</span>
-          </div>
+        <div class="agreeItem">
+          <div class="agreeTitle">实际支付金额</div>
+          <div class="agreeTitle">￥{{orderData.goodRecordActualPayment}}</div>
         </div>
-       
-      </div>
-      <div class="agreeItem">
-        <div class="agreeRedTitle"> 点击确认后，将进入到退款流程，为用户退款。该商品使用的礼品卡、优惠券、福利金等也将退还。请递慎探作!</div>
-         
-        </div> 
-    </div>
-  </a-modal>
+        <div class="agreeItem">
+          <div class="agreeRedTitle">用户申请退款金额</div>
+          <div class="agreeRedTitle">￥{{orderData.goodRecordActualPayment}}</div>
+        </div>
+        <div class="agreeItem">
+          <div class="agreeTitle">请选择退款渠道及金额</div>
+          <div class="agreeTitle"></div>
+        </div>
+        <div class="agreeItem">
+          <div class="checkItem">
+            <a-checkbox v-model:checked="agreeData.balanceCheck">
+            </a-checkbox>
+            <div class="moneyItem">
+              <span>余额</span>
+              <a-input-number id="inputNumber" v-model:value="agreeData.balanceNum" :min="0" :precision="2" />
+              <span>元</span>
+            </div>
+          </div>
 
-  <!-- 查看物流 -->
-  <!--v-model="visiblLogistics"-->
-  <a-modal
+          <div class="checkItem">
+            <a-checkbox v-model:checked="agreeData.wetCheck">
+            </a-checkbox>
+            <div class="moneyItem">
+              <span>微信</span>
+              <a-input-number id="inputNumber" v-model:value="agreeData.wetNum" :min="0" :precision="2" />
+              <span>元</span>
+            </div>
+          </div>
+        </div>
+        <div class="agreeItem">
+          <div class="checkItem">
+            <a-checkbox disabled  v-model:checked="agreeData.bankCheck">
+            </a-checkbox>
+            <div class="moneyItem">
+              <span>银行卡</span>
+              <a-input-number disabled  id="inputNumber" v-model:value="agreeData.bankNum" :min="0" :precision="2" />
+              <span>元</span>
+            </div>
+          </div>
+          <div class="checkItem">
+            <a-checkbox disabled  v-model:checked="agreeData.payCheck">
+            </a-checkbox>
+            <div class="moneyItem">
+              <span>支付宝</span>
+              <a-input-number disabled  id="inputNumber" v-model:value="agreeData.payNum" :min="0" :precision="2" />
+              <span>元</span>
+            </div>
+          </div>
+
+        </div>
+        <div class="agreeItem">
+          <div class="agreeRedTitle"> 点击确认后，将进入到退款流程，为用户退款。该商品使用的礼品卡、优惠券、福利金等也将退还。请递慎探作!</div>
+
+        </div>
+      </div>
+    </a-modal>
+
+    <!-- 查看物流 -->
+    <!--v-model="visiblLogistics"-->
+    <a-modal
       title=""
       v-model="visiblLogistics"
       @ok="confiemeModalLogistics()"
       :width="800"
+      :footer="null"
       :okText="orderRefund==1?'确认收货并同意退款':'确认收货并发出换货'"
       cancelText="拒绝退款">
 
-    <div style="margin-top: 30px;">
-      <div class="logisticItem">物流公司：{{orderData.buyerLogisticsCompany}}</div>
-      <div class="logisticItem">物流单号：{{orderData.buyerTrackingNumber}}</div>
-      <div class="logisticItem">物流详情：{{orderData.buyerLogisticsTracking}}</div>
-    </div>
-  </a-modal>
-  <!-- 更改物流信息 -->
-   <!--v-model="visiblEditLogistics"-->
-   <a-modal
+      <div style="margin-top: 30px;">
+        <div class="logisticItem">物流公司：{{orderData.buyerLogisticsCompany==null?'用户暂未上传物流':orderData.buyerLogisticsCompany}}</div>
+        <div class="logisticItem">物流单号：{{orderData.buyerTrackingNumber==null?'用户暂未上传物流':orderData.buyerTrackingNumber}}</div>
+        <div class="logisticItem">物流详情：{{orderData.buyerLogisticsTracking==null?'用户暂未上传物流':orderData.buyerLogisticsTracking}}</div>
+      </div>
+      <div class="footerContainer">
+        <a-button style="margin-right: 30px;" @click="showCancel">拒绝退款</a-button>
+        <a-button type="primary" :disabled="(orderData.status==1&&orderRefund==2)?true:false"  @click="confiemeModalLogistics()">{{orderRefund==1?'确认收货并同意退款':'确认收货并发出换货'  }}</a-button>
+      </div>
+    </a-modal>
+    <!-- 更改物流信息 -->
+    <!--v-model="visiblEditLogistics"-->
+    <a-modal
       :title="orderRefund==1?'请填写买家退货邮寄地址':'请填写买家邮寄地址'"
       v-model="visiblEditLogistics"
       @ok="confiemeModalEditLogistics()"
@@ -736,32 +741,32 @@
       okText="确认"
       cancelText="取消">
 
-    <div style="margin-top: 30px;">
-      <div class="logisticItem">
-        <div class="logisticTitle">收件人姓名：</div>
-        <a-input style="width: 400px;" v-model:value="logistic.name" placeholder="请输入收件人姓名" />
+      <div style="margin-top: 30px;">
+        <div class="logisticItem">
+          <div class="logisticTitle">收件人姓名：</div>
+          <a-input style="width: 400px;" v-model:value="logistic.name" placeholder="请输入收件人姓名" />
+        </div>
+        <div class="logisticItem">
+          <div class="logisticTitle">收件人电话：</div>
+          <a-input-number style="width: 400px;"  v-model:value="logistic.phone" placeholder="请输入收件人电话" />
+        </div>
+        <div class="logisticItem">
+          <div class="logisticTitle">收件人地址：</div>
+          <area-select
+            style="width: 400px;"
+            @change="selectArea"
+            :default-value="defaultArea"
+          />
+        </div>
+        <div class="logisticItem">
+          <div class="logisticTitle"></div>
+          <a-textarea v-model:value="logistic.detail" placeholder="请输入收件人详细地址" allow-clear />
+        </div>
       </div>
-      <div class="logisticItem">
-        <div class="logisticTitle">收件人电话：</div>
-        <a-input style="width: 400px;" v-model:value="logistic.phone" placeholder="请输入收件人电话" />
-      </div>
-      <div class="logisticItem">
-        <div class="logisticTitle">收件人地址：</div>
-        <area-select
-        style="width: 400px;"
-      @change="selectArea"
-      :default-value="defaultArea"
-    />
-      </div>
-      <div class="logisticItem">
-        <div class="logisticTitle"></div>
-        <a-textarea v-model:value="logistic.detail" placeholder="请输入收件人详细地址" allow-clear />
-      </div>
-    </div>
-  </a-modal>
-  <!-- //选择快递公司 -->
-   <!--v-model="visiblExpress "-->
-   <a-modal
+    </a-modal>
+    <!-- //选择快递公司 -->
+    <!--v-model="visiblExpress "-->
+    <a-modal
       title=""
       v-model="visiblExpress"
       @ok="confiemeModalExpress()"
@@ -769,81 +774,81 @@
       okText="确认"
       cancelText="取消">
 
-    <div style="margin-top: 30px;">
-      <div class="logisticItem">
-        <div class="logisticTitle">物流公司：</div>
-        <j-dict-select-tag class="head-decorationGoods" style="width:400px" v-model="express.company" placeholder="请选择"
-                                 dictCode="logistics_company"/>
-        <!-- <a-select
-      ref="select"
-      v-model:value="express.company"
-      style="width: 120px"
-      @focus="focus"
-      @change="handleChange"
-    >
-      <a-select-option value="jack">Jack</a-select-option>
-      <a-select-option value="lucy">Lucy</a-select-option>
-      <a-select-option value="disabled" disabled>Disabled</a-select-option>
-      <a-select-option value="Yiminghe">yiminghe</a-select-option>
-    </a-select> -->
+      <div style="margin-top: 30px;">
+        <div class="logisticItem">
+          <div class="logisticTitle">物流公司：</div>
+          <j-dict-select-tag class="head-decorationGoods" style="width:400px" v-model="express.company" placeholder="请选择"
+                             dictCode="logistics_company"/>
+          <!-- <a-select
+        ref="select"
+        v-model:value="express.company"
+        style="width: 120px"
+        @focus="focus"
+        @change="handleChange"
+      >
+        <a-select-option value="jack">Jack</a-select-option>
+        <a-select-option value="lucy">Lucy</a-select-option>
+        <a-select-option value="disabled" disabled>Disabled</a-select-option>
+        <a-select-option value="Yiminghe">yiminghe</a-select-option>
+      </a-select> -->
+        </div>
+        <div class="logisticItem">
+          <div class="logisticTitle">物流单号：</div>
+          <a-input  style="width:400px" v-model:value="express.code" placeholder="请输入物流单号" />
+        </div>
+
       </div>
-      <div class="logisticItem">
-        <div class="logisticTitle">物流单号：</div>
-        <a-input  style="width:400px" v-model:value="express.code" placeholder="请输入物流单号" />
-      </div>
-      
-    </div>
-  </a-modal>
+    </a-modal>
 
     <!-- 资金明细 -->
-  <!--v-model="visiblAgreeWith"-->
-  <a-modal
+    <!--v-model="visiblAgreeWith"-->
+    <a-modal
       title=""
       v-model="visiblMoneyDetail"
-     :footer="null"
+      :footer="null"
       :width="600"
       okText="确认"
       cancelText="取消">
 
-    <div style="margin-top: 30px;">
-      <div class="agreeItem">
-        <div class="agreeTitle">商品原价</div>
-        <div class="agreeTitle">￥{{orderRefunInfo.goodRecordTotal}}</div>
+      <div style="margin-top: 30px;">
+        <div class="agreeItem">
+          <div class="agreeTitle">商品原价</div>
+          <div class="agreeTitle">￥{{orderRefunInfo.goodRecordTotal}}</div>
+        </div>
+        <div class="agreeItem">
+          <div class="agreeTitle">申请退款商品数量</div>
+          <div class="agreeTitle">1</div>
+        </div>
+        <div class="agreeItem">
+          <div class="agreeTitle">使用优惠券金额</div>
+          <div class="agreeTitle">￥{{orderRefunInfo.goodRecordCoupon}}</div>
+        </div>
+        <div class="agreeItem">
+          <div class="agreeTitle">实际支付金额</div>
+          <div class="agreeTitle">￥{{orderRefunInfo.goodRecordActualPayment}}</div>
+        </div>
+        <div class="agreeItem">
+          <div class="agreeRedTitle">用户申请退款金额</div>
+          <div class="agreeRedTitle">￥{{orderRefunInfo.goodRecordActualPayment}}</div>
+        </div>
+        <div class="agreeItem">
+          <div class="agreeTitle">退款渠道及金额</div>
+        </div>
+        <div class="agreeItem">
+          <div class="agreeTitle">余额：￥{{orderRefunInfo.actualRefundBalance}}</div>
+        </div>
+        <div class="agreeItem">
+          <div class="agreeTitle">微信：￥{{orderRefunInfo.actualRefundPrice}}</div>
+        </div>
+        <div class="agreeItem">
+          <div class="agreeTitle">退款到账时间：{{ orderRefunInfo.status==3?'退款中':updateTime }}</div>
+        </div>
       </div>
-      <div class="agreeItem">
-        <div class="agreeTitle">申请退款商品数量</div>
-        <div class="agreeTitle">1</div>
-      </div>
-      <div class="agreeItem">
-        <div class="agreeTitle">使用优惠卷金额</div>
-        <div class="agreeTitle">￥{{orderRefunInfo.goodRecordCoupon}}</div>
-      </div>
-      <div class="agreeItem">
-        <div class="agreeTitle">实际支付金额</div>
-        <div class="agreeTitle">￥{{orderRefunInfo.goodRecordActualPayment}}</div>
-      </div>
-      <div class="agreeItem">
-        <div class="agreeRedTitle">用户申请退款金额</div>
-        <div class="agreeRedTitle">￥{{orderRefunInfo.goodRecordActualPayment}}</div>
-      </div>
-      <div class="agreeItem">
-        <div class="agreeTitle">退款渠道及金额</div>
-      </div>
-      <div class="agreeItem">
-        <div class="agreeTitle">金额：￥{{orderRefunInfo.refundPrice}}</div>
-      </div>
-      <!-- <div class="agreeItem">
-        <div class="agreeTitle">微信：￥80</div>
-      </div> -->
-      <div class="agreeItem">
-        <div class="agreeTitle">退款到账时间：{{ orderRefunInfo.status==3?'退款中':updateTime }}</div>
-      </div>
-    </div>
-  </a-modal>
+    </a-modal>
 
     <!-- 申请说明 -->
-   <!--v-model="visiblRemark "-->
-   <a-modal
+    <!--v-model="visiblRemark "-->
+    <a-modal
       title="申请说明"
       v-model="visiblRemark"
       @ok="confiemeModalExpress()"
@@ -852,14 +857,14 @@
       okText="确认"
       cancelText="取消">
 
-    <div>
-      {{ remark }}
-      
-    </div>
-  </a-modal>
-     <!-- 换货明细 -->
-   <!--v-model="visiblChangeGoods "-->
-   <a-modal
+      <div>
+        {{ remark }}
+
+      </div>
+    </a-modal>
+    <!-- 换货明细 -->
+    <!--v-model="visiblChangeGoods "-->
+    <a-modal
       title="换货商品"
       v-model="visiblChangeGoods"
       @ok="confiemeModalExpress()"
@@ -868,62 +873,62 @@
       okText="确认"
       cancelText="取消">
 
-    <div>
       <div>
-        <a-table
-          size="middle"
-          bordered
-          :columns="goodscolumns"
-          :pagination="false"
-          :dataSource="orderDTOList"
-        >
-          <!-- :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"-->
-          <template slot="goodMainPicture" slot-scope="text, record, index">
-            <div class="anty-img-wrap">
-              <a-avatar
-                shape="square"
-                v-if="record.goodMainPicture != undefined"
-                :src="getAvatarView(JSON.parse(record.goodMainPicture)[0])"
-                icon="user"
-              />
-              <a-avatar
-                shape="square"
-                v-if="record.goodMainPicture == undefined || record.goodMainPicture == ''"
-                :src="getAvatarView(record.goodMainPicture)"
-                icon="user"
-              />
-            </div>
-          </template>
-        </a-table>
+        <div>
+          <a-table
+            size="middle"
+            bordered
+            :columns="goodscolumns"
+            :pagination="false"
+            :dataSource="orderDTOList"
+          >
+            <!-- :rowSelection="{selectedRowKeys: selectedRowKeys, onChange: onSelectChange}"-->
+            <template slot="goodMainPicture" slot-scope="text, record, index">
+              <div class="anty-img-wrap">
+                <a-avatar
+                  shape="square"
+                  v-if="record.goodMainPicture != undefined"
+                  :src="getAvatarView(JSON.parse(record.goodMainPicture)[0])"
+                  icon="user"
+                />
+                <a-avatar
+                  shape="square"
+                  v-if="record.goodMainPicture == undefined || record.goodMainPicture == ''"
+                  :src="getAvatarView(record.goodMainPicture)"
+                  icon="user"
+                />
+              </div>
+            </template>
+          </a-table>
+        </div>
+        <div class="goodsTitle">买家退回物流</div>
+        <div class="goodsItem">运单号码：<span style="color: #333;">{{orderRefunInfo.buyerTrackingNumber}}</span></div>
+        <div class="goodsItem">物流公司：
+          <span style="color: #333;" v-if="orderRefunInfo.buyerLogisticsCompany==0">顺丰速运</span>
+          <span style="color: #333;" v-if="orderRefunInfo.buyerLogisticsCompany==1">圆通快递</span>
+          <span style="color: #333;" v-if="orderRefunInfo.buyerLogisticsCompany==2">申通快递</span>
+          <span style="color: #333;" v-if="orderRefunInfo.buyerLogisticsCompany==3">中通快递</span>
+          <span style="color: #333;" v-if="orderRefunInfo.buyerLogisticsCompany==4">韵达快递</span>
+          <span style="color: #333;" v-if="orderRefunInfo.buyerLogisticsCompany==5">天天快递</span>
+          <span style="color: #333;" v-if="orderRefunInfo.buyerLogisticsCompany==6">中国邮政</span>
+          <span style="color: #333;" v-if="orderRefunInfo.buyerLogisticsCompany==7">EMS邮政特快专递</span>
+          <span style="color: #333;" v-if="orderRefunInfo.buyerLogisticsCompany==8">德邦快递</span>
+        </div>
+        <div class="goodsTitle">换货发出物流</div>
+        <div class="goodsItem">运单号码：<span style="color: #333;">{{orderRefunInfo.merchantTrackingNumber}}</span></div>
+        <div class="goodsItem">物流公司：
+          <span style="color: #333;" v-if="orderRefunInfo.merchantLogisticsCompany==0">顺丰速运</span>
+          <span style="color: #333;" v-if="orderRefunInfo.merchantLogisticsCompany==1">圆通快递</span>
+          <span style="color: #333;" v-if="orderRefunInfo.merchantLogisticsCompany==2">申通快递</span>
+          <span style="color: #333;" v-if="orderRefunInfo.merchantLogisticsCompany==3">中通快递</span>
+          <span style="color: #333;" v-if="orderRefunInfo.merchantLogisticsCompany==4">韵达快递</span>
+          <span style="color: #333;" v-if="orderRefunInfo.merchantLogisticsCompany==5">天天快递</span>
+          <span style="color: #333;" v-if="orderRefunInfo.merchantLogisticsCompany==6">中国邮政</span>
+          <span style="color: #333;" v-if="orderRefunInfo.merchantLogisticsCompany==7">EMS邮政特快专递</span>
+          <span style="color: #333;" v-if="orderRefunInfo.merchantLogisticsCompany==8">德邦快递</span>
+        </div>
       </div>
-      <div class="goodsTitle">买家退回物流</div>
-      <div class="goodsItem">运单号码：<span style="color: #333;">{{orderRefunInfo.buyerTrackingNumber}}</span></div>
-      <div class="goodsItem">物流公司：
-        <span style="color: #333;" v-if="orderRefunInfo.buyerLogisticsCompany==0">顺丰速运</span>
-        <span style="color: #333;" v-if="orderRefunInfo.buyerLogisticsCompany==1">圆通快递</span>
-        <span style="color: #333;" v-if="orderRefunInfo.buyerLogisticsCompany==2">申通快递</span>
-        <span style="color: #333;" v-if="orderRefunInfo.buyerLogisticsCompany==3">中通快递</span>
-        <span style="color: #333;" v-if="orderRefunInfo.buyerLogisticsCompany==4">韵达快递</span>
-        <span style="color: #333;" v-if="orderRefunInfo.buyerLogisticsCompany==5">天天快递</span>
-        <span style="color: #333;" v-if="orderRefunInfo.buyerLogisticsCompany==6">中国邮政</span>
-        <span style="color: #333;" v-if="orderRefunInfo.buyerLogisticsCompany==7">EMS邮政特快专递</span>
-        <span style="color: #333;" v-if="orderRefunInfo.buyerLogisticsCompany==8">德邦快递</span>
-      </div>
-      <div class="goodsTitle">换货发出物流</div>
-      <div class="goodsItem">运单号码：<span style="color: #333;">{{orderRefunInfo.merchantTrackingNumber}}</span></div>
-      <div class="goodsItem">物流公司：
-        <span style="color: #333;" v-if="orderRefunInfo.merchantLogisticsCompany==0">顺丰速运</span>
-        <span style="color: #333;" v-if="orderRefunInfo.merchantLogisticsCompany==1">圆通快递</span>
-        <span style="color: #333;" v-if="orderRefunInfo.merchantLogisticsCompany==2">申通快递</span>
-        <span style="color: #333;" v-if="orderRefunInfo.merchantLogisticsCompany==3">中通快递</span>
-        <span style="color: #333;" v-if="orderRefunInfo.merchantLogisticsCompany==4">韵达快递</span>
-        <span style="color: #333;" v-if="orderRefunInfo.merchantLogisticsCompany==5">天天快递</span>
-        <span style="color: #333;" v-if="orderRefunInfo.merchantLogisticsCompany==6">中国邮政</span>
-        <span style="color: #333;" v-if="orderRefunInfo.merchantLogisticsCompany==7">EMS邮政特快专递</span>
-        <span style="color: #333;" v-if="orderRefunInfo.merchantLogisticsCompany==8">德邦快递</span>  
-      </div>
-    </div>
-  </a-modal>
+    </a-modal>
   </a-card>
 </template>
 
@@ -976,11 +981,11 @@ export default {
       closeExplain:{},
       remark:'',
       goodscolumns:[
-      // {
-      //     title: '商品编号',
-      //     align: 'center',
-      //     dataIndex: 'goodNo'
-      //   },
+        // {
+        //     title: '商品编号',
+        //     align: 'center',
+        //     dataIndex: 'goodNo'
+        //   },
         {
           title: '商品主图',
           align: 'center',
@@ -1005,8 +1010,8 @@ export default {
           dataIndex: 'goodRecordAmount',
           scopedSlots: { customRender: 'amount' }
         },
-       
-       
+
+
       ],
       visiblChangeGoods:false,
       visiblRemark:false,
@@ -1562,7 +1567,7 @@ export default {
           that.hideRejectReasonModa()
           that.$emit('ok') //发送父级主键刷新
         } else {
-          that.$message.error('修改失败')
+          that.$message.error(res.message)
         }
       })
     },
@@ -1594,31 +1599,31 @@ export default {
         obj.merchantConsigneeName =this.agreeData.bankNum
       }
       if(this.orderRefund==0){
-        
-      postApplicationAction(that.url.refunAgreeUrl, obj).then(res => {
-        if (res.code == 200) {
-          that.$message.success(res.message)
-          that.hideAgreeWithModa()
-          that.$emit('ok') //发送父级主键刷新
-        } else {
-          that.$message.error('修改失败')
-        }
-      })
+
+        postApplicationAction(that.url.refunAgreeUrl, obj).then(res => {
+          if (res.code == 200) {
+            that.$message.success(res.message)
+            that.hideAgreeWithModa()
+            that.$emit('ok') //发送父级主键刷新
+          } else {
+            that.$message.error(res.message)
+          }
+        })
       }else{
         postApplicationAction(that.url.refunAllUrl, obj).then(res => {
-        if (res.code == 200) {
-          that.$message.success('修改成功')
-          that.hideAgreeWithModa()
-          that.$emit('ok') //发送父级主键刷新
-        } else {
-          that.$message.error('修改失败')
-        }
-      })
+          if (res.code == 200) {
+            that.$message.success('修改成功')
+            that.hideAgreeWithModa()
+            that.$emit('ok') //发送父级主键刷新
+          } else {
+            that.$message.error(res.message)
+          }
+        })
       }
-     
+
     },
     showAgreeWithModa(record){
-    
+
       this.orderRefundId=record.id
       this.orderRefund=record.refundType
       this.orderData=record
@@ -1648,6 +1653,10 @@ export default {
     hideModalLogistics(){
       this.visiblLogistics=false
     },
+    showCancel(){
+      this.hideModalLogistics()
+      this.showRejectReasonModa(this.orderRefundId)
+    },
     //更改物流
     confiemeModalEditLogistics(){
       let  that=this
@@ -1669,7 +1678,7 @@ export default {
           that.hideModalEditLogistics()
           that.$emit('ok') //发送父级主键刷新
         } else {
-          that.$message.error('修改失败')
+          that.$message.error(res.message)
         }
       })
 
@@ -1722,9 +1731,9 @@ export default {
       getAction(that.url.refunInfo, { id: id }).then(res => {
         if (res.success) {
           console.log(res)
-         that.orderRefunInfo=res.result
-         that.orderDTOList=[]
-         that.orderDTOList.push(res.result)
+          that.orderRefunInfo=res.result
+          that.orderDTOList=[]
+          that.orderDTOList.push(res.result)
         } else {
           that.$message.success('操作失败')
         }
@@ -1897,5 +1906,11 @@ export default {
   font-size: 18px;
   color: #000;
   margin-bottom: 20px;
+}
+.footerContainer{
+  border-top: 1px solid #cccccc;
+  margin-top: 20px;
+  padding-top: 20px;
+  text-align: right;
 }
 </style>
