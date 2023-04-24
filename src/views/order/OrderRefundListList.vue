@@ -10,8 +10,8 @@
               <a-input placeholder="请输入订单编号" v-model="queryParam.orderNo"></a-input>
             </a-form-item>
           </a-col>
-          
-        
+
+
           <a-col :md="6" :sm="8">
             <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
               <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
@@ -86,7 +86,7 @@
                   record.houseNumber
                 )
               "
-              >{{ record. memberId_dictText }}</a
+            >{{ record. memberId_dictText }}</a
             >
           </div>
         </template>
@@ -124,7 +124,7 @@
         <template slot="giveWelfarePayments" slot-scope="text, record, index">
           <div>
             <a v-if="record.giveWelfarePayments != 0" @click="showModalGivingInformation(record.giveWelfarePayments)"
-              >福利金</a
+            >福利金</a
             >
             <a v-else>-</a>
           </div>
@@ -144,7 +144,7 @@
         </template>
         <template slot="orderType" slot-scope="text, record, index">
           <div class="anty-img-wrap">
-            
+
             <span shape="square" v-if="record.orderType == 0">普通订单</span>
             <span shape="square" v-if="record.orderType == 1">拼团订单</span>
             <span shape="square" v-if="record.orderType == 2">抢购订单</span>
@@ -158,13 +158,13 @@
             <a-divider type="vertical" />
             <a @click="showModalAgreeWith(record)">通过</a>
           </div>
-         
+
           <a  v-if="record.status==3 || record.status==4" @click="showModalMoneyDetail(record)">退款金额明细</a>
-        
+
           <a v-if="record.status == 5" @click='showModalRefusedExplain(record)'>拒绝原因</a>
-          
+
           <a v-if="record.status == 1 || record.status == 2" @click="showModalLogitic(record)">查看物流</a>
-        
+
           <a v-if="record.status == 8" @click="showMidalChangeGoods(record)">换货明细</a>
           <!-- 待付款订单操作
           <div v-if="record.status == '0'">
@@ -293,16 +293,16 @@
       okText="确认"
       cancelText="取消">
 
-    <div>
-      <a-form>
-        <a-form-item
-          label="取消原因">
-          <a-textarea disabled v-model="closeExplain"  placeholder="请输入100以内"  show-count :maxlength="100"/>
-        </a-form-item>
-      </a-form>
-      
-    </div>
-  </a-modal>
+      <div>
+        <a-form>
+          <a-form-item
+            label="取消原因">
+            <a-textarea disabled v-model="closeExplain"  placeholder="请输入100以内"  show-count :maxlength="100"/>
+          </a-form-item>
+        </a-form>
+
+      </div>
+    </a-modal>
     <!-- 展示退款凭证 -->
     <a-modal
       title="退款凭证"
@@ -312,16 +312,16 @@
       okText="确认"
       cancelText="取消">
 
-    <div class="imageContainer">
-      <div class="imgLeft" @click="reduceImage"> 
-        <a-icon type="left" />
+      <div class="imageContainer">
+        <div class="imgLeft" @click="reduceImage">
+          <a-icon type="left" />
+        </div>
+        <img class="imageCover" :src="getAvatarView(refundCertificateList[indeImage])"  alt="">
+        <div class="imgLeft" @click="addImage">
+          <a-icon type="right" />
+        </div>
       </div>
-      <img class="imageCover" :src="getAvatarView(refundCertificateList[indeImage])"  alt="">
-      <div class="imgLeft" @click="addImage">
-        <a-icon type="right" />
-      </div>
-    </div>
-  </a-modal>
+    </a-modal>
     <!-- 表单区域 -->
     <orderList-modal ref="modalForm" @ok="modalFormOk"></orderList-modal>
 
@@ -355,11 +355,11 @@ export default {
       visiblGoodsInformation:false,
       orderProviderGoodRecordDTOList:[],
       goodscolumns:[
-      // {
-      //     title: '商品编号',
-      //     align: 'center',
-      //     dataIndex: 'goodNo'
-      //   },
+        // {
+        //     title: '商品编号',
+        //     align: 'center',
+        //     dataIndex: 'goodNo'
+        //   },
         {
           title: '商品主图',
           align: 'center',
@@ -396,7 +396,7 @@ export default {
           align: 'center',
           dataIndex: 'goodRecordTotal'
         },
-       
+
       ],
       description: '订单列表管理页面',
       distribution: '',
@@ -416,6 +416,11 @@ export default {
           title: '订单编号',
           align: 'center',
           dataIndex: 'orderNo'
+        },
+        {
+          title: '售后单编号',
+          align: 'center',
+          dataIndex: 'id'
         },
         {
           title: '订单类型',
@@ -539,7 +544,8 @@ export default {
         delete: '/orderList/orderList/delete',
         deleteBatch: '/orderList/orderList/deleteBatch',
         exportXlsUrl: 'orderList/orderList/exportXls',
-        importExcelUrl: 'orderList/orderList/importExcel'
+        importExcelUrl: 'orderList/orderList/importExcel',
+        imgerver: window._CONFIG['domianURL'] + '/sys/common/view',
         //checkGoodsRepertory:"/orderList/orderList/checkGoodsRepertory"
       }
     }
@@ -773,8 +779,8 @@ export default {
         this.$refs.modalForm.title = ''
         this.$refs.modalForm.disableSubmit = false
       }
-     
-     
+
+
     },
     //拒绝原因展示
     showModalRefusedExplain(record){
