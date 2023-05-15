@@ -27,6 +27,22 @@ export function postAction(url,parameter) {
     headers: signHeader
   })
 }
+//post
+export function postApplicationAction(url,parameter) {
+  let sign = signMd5Utils.getSign(url, parameter);
+  //将签名和时间戳，添加在请求接口 Header
+  // update-begin--author:taoyan---date:20220421--for: VUEN-410【签名改造】 X-TIMESTAMP牵扯
+  let signHeader = {"X-Sign": sign,"X-TIMESTAMP": signMd5Utils.getTimestamp(),'Content-Type': 'application/x-www-form-urlencoded',};
+  // update-end--author:taoyan---date:20220421--for: VUEN-410【签名改造】 X-TIMESTAMP牵扯
+
+  return axios({
+    url: url,
+    method:'post' ,
+    params: parameter,
+    headers: signHeader
+  })
+}
+
 
 //post method= {post | put}
 export function httpAction(url,parameter,method) {
