@@ -177,10 +177,10 @@
   import {filterMultiDictText} from '@/components/dict/JDictSelectUtil'
   import Area from '@/components/_util/Area'
   import {getAction} from "@api/manage";
-  import ActApplyBtn from "@views/flowable/components/ActApplyBtn";
-  import ActCancelBtn from "@views/flowable/components/ActCancelBtn";
-  import ActHandleBtn from "@views/flowable/components/ActHandleBtn";
-  import ActHistoricDetailBtn from "@views/flowable/components/ActHistoricDetailBtn";
+  import ActApplyBtn from "@views/flowable/components/btn/ActApplyBtn";
+  import ActCancelBtn from "@views/flowable/components/btn/ActCancelBtn";
+  import ActHandleBtn from "@views/flowable/components/btn/ActHandleBtn";
+  import ActHistoricDetailBtn from "@views/flowable/components/btn/ActHistoricDetailBtn";
   import {FlowableMixin} from "@views/flowable/mixin/FlowableMixin";
 
   export default {

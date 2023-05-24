@@ -100,7 +100,7 @@
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
   import {FlowableMixin} from "@views/flowable/mixin/FlowableMixin";
   import ActHandleModal from '@views/flowable/components/ActHandleModal'
-  import ActHistoricDetailBtn from '@views/flowable/components/ActHistoricDetailBtn'
+  import ActHistoricDetailBtn from '@views/flowable/components/btn/ActHistoricDetailBtn'
 
   export default {
     name: 'MyTodoList',

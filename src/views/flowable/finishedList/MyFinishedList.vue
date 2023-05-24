@@ -115,7 +115,7 @@
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
   import { ACCESS_TOKEN } from '@/store/mutation-types'
   import {FlowableMixin} from "@views/flowable/mixin/FlowableMixin";
-  import ActHistoricDetailBtn from "@views/flowable/components/ActHistoricDetailBtn";
+  import ActHistoricDetailBtn from "@views/flowable/components/btn/ActHistoricDetailBtn";
   import Vue from 'vue'
   import ActHandleModal from '@views/flowable/components/ActHandleModal'
 
