@@ -687,3 +687,30 @@ export const EXPORT_FILE_SUFFIX = ".xlsx";
 export function stringIsNull(str) {
   return str == null || str === 'null' || str === 'undefined';
 }
+
+/**
+ * 获取路由地址指点参数值
+ * @param paraName 参数名
+ * @returns {string}
+ */
+export function getUrlParam(paraName) {
+  let url = document.location.toString();
+  let arrObj = url.split("?");
+
+  if (arrObj.length > 1) {
+    let arrPara = arrObj[1].split("&");
+    let arr;
+
+    for (let i = 0; i < arrPara.length; i++) {
+      arr = arrPara[i].split("=");
+
+      if (arr != null && arr[0] == paraName) {
+        return arr[1];
+      }
+    }
+    return "";
+  }
+  else {
+    return "";
+  }
+}
