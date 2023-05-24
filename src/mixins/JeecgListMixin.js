@@ -3,7 +3,7 @@
  * 高级查询按钮调用 superQuery方法  高级查询组件ref定义为superQueryModal
  * data中url定义 list为查询列表  delete为删除单条记录  deleteBatch为批量删除
  */
-import { filterObj } from '@/utils/util';
+import { filterObj,getUrlParams } from '@/utils/util';
 import { deleteAction, getAction,downFile,getFileAccessHttpUrl } from '@/api/manage'
 import Vue from 'vue'
 import { ACCESS_TOKEN, TENANT_ID } from "@/store/mutation-types"
@@ -124,7 +124,8 @@ export const JeecgListMixin = {
         sqp['superQueryParams']=encodeURI(this.superQueryParams)
         sqp['superQueryMatchType'] = this.superQueryMatchType
       }
-      var param = Object.assign(sqp, this.queryParam, this.isorter ,this.filters);
+      let pathQueryParam = getUrlParams()
+      var param = Object.assign(sqp, this.queryParam, this.isorter ,this.filters, pathQueryParam);
       param.field = this.getQueryField();
       param.pageNo = this.ipagination.current;
       param.pageSize = this.ipagination.pageSize;
