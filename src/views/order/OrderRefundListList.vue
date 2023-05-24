@@ -16,7 +16,7 @@
             <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
               <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
               <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
-             
+
             </span>
           </a-col>
         </a-row>
@@ -213,10 +213,10 @@
             <a @click="showAudiModal(record.id)" v-if="record.isEvaluate == 1">审批</a>
             <a-divider type="vertical" />
             <a @click="refundAndAbrogateOrderModalClick(record.id)">取消并退款</a>
-           
+
             <a-divider type="vertical" v-if="record.isEvaluate == 1" />
             <a @click="showEvaluateModal(record.id)" v-if="record.isEvaluate == 1">查看评价</a>
-          
+
             <a-divider type="vertical" v-if="record.isEvaluate == 1" />
             <a @click="checkLogistics(record, 5)">查看物流</a>
             <a-divider type="vertical" />
@@ -316,7 +316,7 @@
         <div class="imgLeft" @click="reduceImage">
           <a-icon type="left" />
         </div>
-        <img class="imageCover" :src="getAvatarView(refundCertificateList[indeImage])"  alt="">
+        <img class="imageCover" :src="refundCertificateList[indeImage]"  alt="">
         <div class="imgLeft" @click="addImage">
           <a-icon type="right" />
         </div>
@@ -425,8 +425,8 @@ export default {
         {
           title: '订单类型',
           align: 'center',
-          dataIndex: 'orderType',
-          scopedSlots: { customRender: 'orderType' }
+          dataIndex: 'orderType_dictText',
+          // scopedSlots: { customRender: 'orderType' }
           // sorter:true,
         },
         // {
@@ -500,7 +500,7 @@ export default {
         {
           title: '售后原因',
           align: 'center',
-          dataIndex: 'refundReason'
+          dataIndex: 'refundReason_dictText'
           // sorter:true,
         },
         {
@@ -663,6 +663,9 @@ export default {
     },
     //申请说明
     showModalRemark(record){
+      if(record.remarks==''){
+        return this.$message.success('暂无说明')
+      }
       this.$refs.modalForm.showModalRemark(record)
       this.$refs.modalForm.title = '申请说明'
       this.$refs.modalForm.disableSubmit = false

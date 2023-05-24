@@ -646,7 +646,7 @@
           <div class="agreeTitle">1</div>
         </div>
         <div class="agreeItem">
-          <div class="agreeTitle">使用优惠卷金额</div>
+          <div class="agreeTitle">使用优惠券金额</div>
           <div class="agreeTitle">￥{{orderData.goodRecordCoupon}}</div>
         </div>
         <div class="agreeItem">
@@ -666,9 +666,9 @@
             <a-checkbox v-model:checked="agreeData.balanceCheck">
             </a-checkbox>
             <div class="moneyItem">
-              <span>余额</span>
-              <a-input-number id="inputNumber" v-model:value="agreeData.balanceNum" :min="0" :precision="2" />
-              <span>元</span>
+              <div  style="width:50px">余额</div>
+              <a-input-number id="inputNumber"  :disabled="!agreeData.balanceCheck" v-model:value="agreeData.balanceNum" :min="0" :precision="2" />
+              <div>元</div>
             </div>
           </div>
 
@@ -676,9 +676,9 @@
             <a-checkbox v-model:checked="agreeData.wetCheck">
             </a-checkbox>
             <div class="moneyItem">
-              <span>微信</span>
-              <a-input-number id="inputNumber" v-model:value="agreeData.wetNum" :min="0" :precision="2" />
-              <span>元</span>
+              <div  style="width:50px">微信</div>
+              <a-input-number id="inputNumber" :disabled="!agreeData.wetCheck" v-model:value="agreeData.wetNum" :min="0" :precision="2" />
+              <div>元</div>
             </div>
           </div>
         </div>
@@ -687,18 +687,18 @@
             <a-checkbox disabled  v-model:checked="agreeData.bankCheck">
             </a-checkbox>
             <div class="moneyItem">
-              <span>银行卡</span>
+              <div style="width:50px">银行卡</div>
               <a-input-number disabled  id="inputNumber" v-model:value="agreeData.bankNum" :min="0" :precision="2" />
-              <span>元</span>
+              <div>元</div>
             </div>
           </div>
           <div class="checkItem">
             <a-checkbox disabled  v-model:checked="agreeData.payCheck">
             </a-checkbox>
             <div class="moneyItem">
-              <span>支付宝</span>
+              <div  style="width:50px">支付宝</div>
               <a-input-number disabled  id="inputNumber" v-model:value="agreeData.payNum" :min="0" :precision="2" />
-              <span>元</span>
+              <div>元</div>
             </div>
           </div>
 
@@ -840,8 +840,10 @@
         <div class="agreeItem">
           <div class="agreeTitle">微信：￥{{orderRefunInfo.actualRefundPrice}}</div>
         </div>
-        <div class="agreeItem">
-          <div class="agreeTitle">退款到账时间：{{ orderRefunInfo.status==3?'退款中':updateTime }}</div>
+        <div class="agreeItemEnd">
+          <div class="agreeTitle">退款到账时间：</div>
+          <div class="agreeTitle" style="margin-right: 20px">微信：{{ orderRefunInfo.status==3?'退款中':orderRefunInfo.huifuReceiveTime}}</div>
+          <div class="agreeTitle">余额：{{ orderRefunInfo.status==3?'退款中':orderRefunInfo.balanceReceiveTime }}</div>
         </div>
       </div>
     </a-modal>
@@ -1583,6 +1585,19 @@ export default {
     //同意弹窗
     confiemeModalAgreeWith(){
       var that = this
+      if(!this.agreeData.wetCheck&&!this.agreeData.balanceCheck){
+        return that.$message.error('请先勾选退款渠道')
+      }
+      if(this.agreeData.balanceCheck){
+        if(this.agreeData.balanceNum==''||this.agreeData.balanceNum==null||this.agreeData.balanceNum==undefined){
+          return that.$message.error('请输入退款金额')
+        }
+      }
+      if(this.agreeData.wetCheck){
+        if(this.agreeData.wetNum==''||this.agreeData.wetNum==null||this.agreeData.wetNum==undefined){
+          return that.$message.error('请输入退款金额')
+        }
+      }
       let obj={
         id: this.orderRefundId
       }
@@ -1598,6 +1613,7 @@ export default {
       if(this.agreeData.bankCheck){
         obj.merchantConsigneeName =this.agreeData.bankNum
       }
+
       if(this.orderRefund==0){
 
         postApplicationAction(that.url.refunAgreeUrl, obj).then(res => {
@@ -1660,7 +1676,10 @@ export default {
     //更改物流
     confiemeModalEditLogistics(){
       let  that=this
-
+      const regCN = /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/
+      if (!regCN.test(that.logistic.phone)) {
+        return that.$message.error('请输入正确手机号码')
+      }
       let obj={
         id:this.orderRefundId,
         merchantConsigneeName  :this.logistic.name,
@@ -1873,6 +1892,12 @@ export default {
   justify-content: space-between;
   margin-bottom: 10px;
 }
+.agreeItemEnd{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 10px;
+}
 .checkItem{
   display: flex;
   flex-direction: row;
@@ -1886,6 +1911,9 @@ export default {
   color: red;
 }
 .moneyItem{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   margin-left: 10px;
 }
 .logisticItem{
@@ -1898,7 +1926,7 @@ export default {
   width: 120px;
 }
 .goodsTitle{
-  font-size: 24px;
+  font-size: 21px;
   color: #000;
   margin-bottom: 20px;
 }
