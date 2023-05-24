@@ -325,6 +325,11 @@
             scopedSlots: {customRender: "amount"}
           },
           {
+            title: '商品状态',
+            align: "center",
+            dataIndex: 'status_dictText'
+          },
+          {
             title: '选择包裹',
             align: "center",
             dataIndex: 'parcel',
@@ -428,6 +433,7 @@
               goodName: "",//名称
               specification: '',//规格
               amount: '',//数量
+              status_dictText: '', //商品状态
               parcel: '',//选择包裹
             }],
             OrderProviderGoodRecordId:[],
