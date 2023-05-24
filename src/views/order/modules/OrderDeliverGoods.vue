@@ -692,7 +692,7 @@
                   that.$message.success(res.message);
                   that.$router.push({ path: '/order/OrderListListToSendTheGoods'})
                 } else {
-                  that.$message.success(res.error500);
+                  that.$message.error(res.message);
                 }
               });
             },
