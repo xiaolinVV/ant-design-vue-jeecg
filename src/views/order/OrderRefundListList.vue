@@ -333,7 +333,7 @@
 <script>
 import OrderListModal from './modules/OrderListModal'
 import { JeecgListMixin } from '@/mixins/JeecgListMixin'
-import { filterObj } from '@/utils/util'
+import { filterObj, getUrlParams } from '@/utils/util'
 import RefundAndAbrogateOrderModal from'./modules/RefundAndAbrogateOrderModal'
 import { deleteAction, getAction } from '@/api/manage'
 //字典
@@ -596,7 +596,8 @@ export default {
     /**查询栏时间区间查询*/
     getQueryParams() {
       console.log(this.queryParam.createTime)
-      var param = Object.assign({}, this.queryParam, this.isorter)
+      let pathQueryParam = getUrlParams()
+      var param = Object.assign({}, this.queryParam, this.isorter,pathQueryParam)
       param.field = this.getQueryField()
       param.pageNo = this.ipagination.current
       param.pageSize = this.ipagination.pageSize
