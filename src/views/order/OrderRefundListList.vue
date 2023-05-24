@@ -338,7 +338,6 @@ import RefundAndAbrogateOrderModal from'./modules/RefundAndAbrogateOrderModal'
 import { deleteAction, getAction } from '@/api/manage'
 //字典
 import { initDictOptions } from '@/components/dict/JDictSelectUtil'
-import { getUrlParam } from '@/utils/util'
 export default {
   name: 'OrderListList',
   mixins: [JeecgListMixin],
@@ -560,10 +559,6 @@ export default {
     this.init()
   },
   methods: {
-    beforeSearch(params) {
-      // 获取路由中的订单类型
-      params.isPlatform = getUrlParam("isPlatform")
-    },
     reduceImage(){
       if(this.indeImage==0){
         this.indeImage=this.refundCertificateList.length-1

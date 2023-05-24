@@ -714,3 +714,28 @@ export function getUrlParam(paraName) {
     return "";
   }
 }
+
+/**
+ * 获取路由地址指点参数值
+ * @returns {string}
+ */
+export function getUrlParams() {
+  let url = document.location.toString();
+  let arrObj = url.split("?");
+
+  let params = {}
+  if (arrObj.length > 1) {
+    let arrPara = arrObj[1].split("&");
+    let arr;
+
+
+    for (let i = 0; i < arrPara.length; i++) {
+      arr = arrPara[i].split("=");
+
+      if (arr != null) {
+        params[arr[0]] = arr[1];
+      }
+    }
+  }
+  return params
+}
