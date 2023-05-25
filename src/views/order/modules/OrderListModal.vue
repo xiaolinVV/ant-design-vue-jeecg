@@ -835,15 +835,15 @@
           <div class="agreeTitle">退款渠道及金额</div>
         </div>
         <div class="agreeItem">
-          <div class="agreeTitle">余额：￥{{orderRefunInfo.actualRefundBalance}}</div>
+          <div class="agreeTitle" v-if="orderRefunInfo.refundChannelType!=0">余额：￥{{orderRefunInfo.actualRefundBalance}}</div>
         </div>
         <div class="agreeItem">
-          <div class="agreeTitle">微信：￥{{orderRefunInfo.actualRefundPrice}}</div>
+          <div class="agreeTitle" v-if="orderRefunInfo.refundChannelType!=1">微信：￥{{orderRefunInfo.actualRefundPrice}}</div>
         </div>
         <div class="agreeItemEnd">
           <div class="agreeTitle">退款到账时间：</div>
-          <div class="agreeTitle" style="margin-right: 20px">微信：{{ orderRefunInfo.status==3?'退款中':orderRefunInfo.huifuReceiveTime}}</div>
-          <div class="agreeTitle">余额：{{ orderRefunInfo.status==3?'退款中':orderRefunInfo.balanceReceiveTime }}</div>
+          <div class="agreeTitle" v-if="orderRefunInfo.refundChannelType!=1" style="margin-right: 20px">微信：{{ orderRefunInfo.status==3?'退款中':orderRefunInfo.huifuReceiveTime}}</div>
+          <div class="agreeTitle" v-if="orderRefunInfo.refundChannelType!=0">余额：{{ orderRefunInfo.status==3?'退款中':orderRefunInfo.balanceReceiveTime }}</div>
         </div>
       </div>
     </a-modal>
@@ -1749,10 +1749,20 @@ export default {
       let that=this
       getAction(that.url.refunInfo, { id: id }).then(res => {
         if (res.success) {
-          console.log(res)
+          console.log(res,'-------')
           that.orderRefunInfo=res.result
           that.orderDTOList=[]
           that.orderDTOList.push(res.result)
+          if(res.result.refundChannel == null){
+            that.orderRefunInfo.refundChannelType=2
+          }else{
+            let refundChannel=res.result.refundChannel.split(',')
+            if(refundChannel.length==2){
+              that.orderRefunInfo.refundChannelType=2
+            }else{
+              that.orderRefunInfo.refundChannelType=refundChannel[0]
+            }
+          }
         } else {
           that.$message.success('操作失败')
         }
@@ -1926,7 +1936,7 @@ export default {
   width: 120px;
 }
 .goodsTitle{
-  font-size: 21px;
+  font-size: 19px;
   color: #000;
   margin-bottom: 20px;
 }

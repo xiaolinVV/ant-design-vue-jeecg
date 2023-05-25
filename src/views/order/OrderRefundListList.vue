@@ -476,7 +476,7 @@ export default {
         {
           title: '售后商品总原价',
           align: 'center',
-          dataIndex: 'goodRecordTotal'
+          dataIndex: 'goodUnitPrice'
           // sorter:true,
         },
         {
@@ -506,14 +506,14 @@ export default {
         {
           title: '申请说明',
           align: 'center',
-          dataIndex: 'orderType_dictText',
+          dataIndex: 'application',
           scopedSlots: { customRender: 'application' }
           // sorter:true,
         },
         {
           title: '凭证',
           align: 'center',
-          dataIndex: 'orderType_dictText',
+          dataIndex: 'voucher',
           scopedSlots: { customRender: 'voucher' }
           // sorter:true,
         },
