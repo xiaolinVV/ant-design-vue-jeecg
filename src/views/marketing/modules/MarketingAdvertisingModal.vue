@@ -112,6 +112,9 @@
               <a-radio v-if="adType == 0" value="3">
                 素材
               </a-radio>
+              <a-radio value="4">
+                封坛礼包
+              </a-radio>
             </a-radio-group>
           </div>
         </a-form-item>
