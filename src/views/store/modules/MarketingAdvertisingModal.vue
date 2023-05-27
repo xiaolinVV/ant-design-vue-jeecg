@@ -66,6 +66,9 @@
               <a-radio value="2">
                 详情图
               </a-radio>
+              <a-radio value="4">
+                封坛礼包
+              </a-radio>
             </a-radio-group>
           </div>
         </a-form-item>
