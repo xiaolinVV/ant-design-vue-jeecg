@@ -4,7 +4,6 @@
     <div class="wrap">
       <a-form :form="form">
         <a-form-item :label-col="labelCol" :wrapper-col="{ span: 7 }" label="礼包名称">
-          <!--          v-model="AllData.giftName"-->
           <a-input
             placeholder="请输入礼包名称,字数不超过50个字"
             v-decorator="[
@@ -25,7 +24,6 @@
           />
         </a-form-item>
         <a-form-item :label-col="labelCol" :wrapper-col="{ span: 7 }" label="礼包价格">
-          <!--            v-model="AllData.price"-->
           <a-input
             placeholder="请输入礼包价格"
             type="number"
@@ -46,6 +44,80 @@
             ]"
           />
         </a-form-item>
+        <a-form-item :label-col="labelCol" :wrapper-col="{ span: 10 }" label="直推奖励">
+          <a-input-number
+            :min="0"
+            :precision="2"
+            v-decorator="[
+              'giftPromoterAward',
+              {
+                rules: [
+                  {
+                    required: true,
+                    message: '请输入直推奖励!'
+                  }
+                ]
+              }
+            ]"
+          />%. 0即为没有
+        </a-form-item>
+        <a-form-item :label-col="labelCol" :wrapper-col="{ span: 10 }" label="店铺收益">
+          <a-input-number
+            :min="0"
+            :precision="2"
+            v-decorator="[
+              'giftEarnings',
+              {
+                rules: [
+                  {
+                    required: true,
+                    message: '请输入店铺收益!'
+                  }
+                ]
+              }
+            ]"
+          />%. 0即为没有
+        </a-form-item>
+        <a-form-item :label-col="labelCol" :wrapper-col="{ span: 20 }" label="价格活动配置">
+          <div>
+            <a-checkbox v-model="AllData.isPriceAdd">
+              价格递增:当购买礼包每超过
+              <a-input-number
+                :disabled="!AllData.isPriceAdd"
+                :min="0"
+                :precision="0"
+                v-model="AllData.priceAddRuleExceed"
+              ></a-input-number>
+              个时, 礼包价格上涨
+              <a-input-number
+                :disabled="!AllData.isPriceAdd"
+                :min="0"
+                :precision="0"
+                v-model="AllData.priceAddRuleIncrease"
+              ></a-input-number>
+              元
+            </a-checkbox>
+            <br />
+            <a-checkbox v-model="AllData.isPriceDiscounts">
+              价格特惠:特惠数量
+              <a-input-number
+                :disabled="!AllData.isPriceDiscounts"
+                :min="0"
+                :precision="0"
+                v-model="AllData.priceDiscountsRuleQuantity"
+              ></a-input-number>
+              个, 特惠价格
+              <a-input-number
+                :disabled="!AllData.isPriceDiscounts"
+                :min="0"
+                :precision="0"
+                v-model="AllData.priceDiscountsRulePrice"
+              ></a-input-number>
+              元
+            </a-checkbox>
+          </div>
+        </a-form-item>
+
         <a-form-item :label-col="labelCol" :wrapper-col="{ span: 20 }" label="兑换券">
           <a-button @click="PopUp(0)"> 选择兑换券 </a-button>
           <a-alert
@@ -298,11 +370,6 @@
           <div>0即没有</div>
         </a-form-item>
 
-
-
-
-
-
         <a-form-item
           :label-col="labelCol"
           :wrapper-col="wrapperCol"
@@ -357,7 +424,11 @@
             >
               <!--  vip等级-->
               <a-radio-group v-model="AllData.memberDesignationId" v-if="teamList.length > 0">
-                <a-radio :style="radioStyle" :key="index" v-for="(item, index) in teamList" :value="item.memberDesignationId"
+                <a-radio
+                  :style="radioStyle"
+                  :key="index"
+                  v-for="(item, index) in teamList"
+                  :value="item.memberDesignationId"
                   >{{ item.name }}
                 </a-radio>
               </a-radio-group>
@@ -488,6 +559,28 @@
           <div>0即没有</div>
         </a-form-item>
 
+        <a-form-item :label-col="labelCol" :wrapper-col="{ span: 20 }" label="经销商身份">
+          <div>
+            <a-checkbox v-model="AllData.isGiftFranchiser">
+              直推礼包满
+              <a-input-number
+                :disabled="!AllData.isGiftFranchiser"
+                :min="0"
+                :precision="0"
+                v-model="AllData.giftFranchiserRule"
+              ></a-input-number>
+              个时, 个小时,获得经销商身份,享受
+              <a-input-number
+                :disabled="!AllData.isGiftFranchiser"
+                :min="0"
+                :precision="2"
+                v-model="AllData.giftFranchiserEarnings"
+              ></a-input-number>
+              %推荐佣金
+            </a-checkbox>
+          </div>
+          <span>每个礼包最多只有1个经销商身份,采用就近原则</span>
+        </a-form-item>
 
         <a-form-item :label-col="labelCol" :wrapper-col="wrapperCol" v-if="showIsThreshold">
           <span slot="label"> 分销特权 </span>
@@ -797,8 +890,8 @@
                 </a-checkbox>
               </a-col>
               <a-col :span="8">
-                <a-checkbox  value="1">
-                 支付宝
+                <a-checkbox value="1">
+                  支付宝
                 </a-checkbox>
               </a-col>
               <a-col :span="8">
@@ -807,7 +900,6 @@
                 </a-checkbox>
               </a-col>
             </a-row>
-
           </a-checkbox-group>
         </a-form-item>
         <a-form-item :label-col="labelCol" :wrapper-col="wrapperCol" label="支付次数">
@@ -859,17 +951,14 @@
               <a-input v-model="queryParam.issuer" style="width: 200px" />
             </div>
             <div v-if="popPart == '0'">
-            <!--  兑换方式：
+              <!--  兑换方式：
               <a-select v-model="queryParam.certificateType" placeholder="请选择" style="width: 200px">
                 <a-select-option value="">请选择</a-select-option>
                 <a-select-option value="0">可兑换的商品全部兑换</a-select-option>
                 <a-select-option value="1">可兑换的商品任选一个</a-select-option>
               </a-select>-->
             </div>
-            <div v-if="popPart == 2">
-
-            </div>
-
+            <div v-if="popPart == 2"></div>
 
             <a-button @click="PopUp(popPart, 'true')" type="primary"> 查询 </a-button>
           </div>
@@ -1305,8 +1394,8 @@ export default {
         buyLimit: [], //购买限制
         vipPrivilege: 0, //vip特权
         distributionPrivileges: 0, //分销特权
-        dealerAwards:0,//经销商奖励
-        shareRewards:0,//分享人奖励
+        dealerAwards: 0, //经销商奖励
+        shareRewards: 0, //分享人奖励
         promoterWelfarePayments: 0, //分销福利金
         teamPrivileges: 0, //团队特权
         limitTimes: '', //每人限购买次数
@@ -1338,11 +1427,20 @@ export default {
         participation: '', //礼包分红
         isPreposition: false, //是否有前置礼包；0：无 false；1：有 true
         prepositionMarketingGiftBag: '', //前置礼包的id
-        selectDateToTime: '' ,//礼包发行时间(未解析)
-        paymentMode:'',
-        payTimes:1
+        selectDateToTime: '', //礼包发行时间(未解析)
+        paymentMode: '',
+        payTimes: 1,
+        isPriceAdd: false, //是否开启价格递增：0 未开启 1开启
+        isPriceDiscounts: false, //是否开启价格特惠：0 未开启 1开启
+        priceAddRuleExceed: '', //价格递增规则超出
+        priceAddRuleIncrease: '', //价格递增规则增长
+        priceDiscountsRuleQuantity: '', //价格特惠规则优惠数量
+        priceDiscountsRulePrice: '', //价格特惠规则优惠价格
+        isGiftFranchiser: false, //是否开启封坛经销商：0未开启 1开启
+        giftFranchiserRule: '', //直推或购买达到数量获得经销商身份
+        giftFranchiserEarnings: '' //礼包经销商下线直推收益单位%
       },
-      paymentModes:[],
+      paymentModes: [],
       //会员等级列表
       vipList: [],
       teamList: [],
@@ -1492,7 +1590,12 @@ export default {
       marketingGiftbagData.isAgencyAward = marketingGiftbagData.isAgencyAward == 1 ? true : false
       marketingGiftbagData.isAllianceAward = marketingGiftbagData.isAllianceAward == 1 ? true : false
       marketingGiftbagData.isPreposition = marketingGiftbagData.isPreposition == 1 ? true : false
-      this.paymentModes=marketingGiftbagData.paymentMode.split(',');
+      marketingGiftbagData.isPriceAdd = marketingGiftbagData.isPriceAdd == 1 ? true : false
+      marketingGiftbagData.isGiftFranchiser = marketingGiftbagData.isGiftFranchiser == 1 ? true : false
+
+      marketingGiftbagData.isPriceDiscounts = marketingGiftbagData.isPriceDiscounts == 1 ? true : false
+
+      this.paymentModes = marketingGiftbagData.paymentMode.split(',')
 
       console.log(marketingGiftbagData)
       if (marketingGiftbagData.memberDesignationId) {
@@ -2308,6 +2411,26 @@ export default {
           return
         }
 
+        if (this.AllData.isPriceDiscounts) {
+          if (isEmpty(this.AllData.priceDiscountsRuleQuantity) || isEmpty(this.AllData.priceDiscountsRulePrice)) {
+            this.$message.warn('请设置价格特惠相关')
+            return
+          }
+        }
+        if (this.AllData.isPriceAdd) {
+          if (isEmpty(this.AllData.priceAddRuleExceed) || isEmpty(this.AllData.priceAddRuleIncrease)) {
+            this.$message.warn('请设置价格递增相关')
+            return
+          }
+        }
+
+        if (this.AllData.isGiftFranchiser) {
+          if (isEmpty(this.AllData.giftFranchiserRule) || isEmpty(this.AllData.giftFranchiserEarnings)) {
+            this.$message.warn('请设置经销商身份相关')
+            return
+          }
+        }
+
         if (isEmpty(this.AllData.distributionCommission)) {
           this.$message.warn('请设置分销佣金的分销佣金')
           return
@@ -2353,6 +2476,10 @@ export default {
           formData.isAgencyAward = formData.isAgencyAward ? '1' : '0'
           formData.isAllianceAward = formData.isAllianceAward ? '1' : '0'
           formData.isPreposition = formData.isPreposition ? '1' : '0'
+          formData.isPriceAdd = formData.isPriceAdd ? '1' : '0'
+          formData.isGiftFranchiser = formData.isGiftFranchiser ? '1' : '0'
+
+          formData.isPriceDiscounts = formData.isPriceDiscounts ? '1' : '0'
           if (formData.buyVipMemberGradeId && formData.buyVipMemberGradeId.length > 0) {
             formData.buyVipMemberGradeId = formData.buyVipMemberGradeId.join(',')
           } else {
@@ -2470,8 +2597,8 @@ export default {
         this.storeSelectedRowKeys = []
       }
     },
-    payModelChance(){
-     this.AllData.paymentMode=this.paymentModes.join(",");
+    payModelChance() {
+      this.AllData.paymentMode = this.paymentModes.join(',')
     }
   },
   computed: {
