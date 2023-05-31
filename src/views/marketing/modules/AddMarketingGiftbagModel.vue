@@ -98,7 +98,17 @@
               元
             </a-checkbox>
             <br />
-            <a-checkbox v-model="AllData.isPriceDiscounts">
+            <div style="display: flex;align-items: center;">
+              展示文案:
+              <a-textarea
+                v-model="AllData.giftCopywriting"
+                style="width: 500px;margin-left: 10px;"
+                placeholder="输入展示文案"
+                :rows="4"
+              />
+            </div>
+
+            <!-- <a-checkbox v-model="AllData.isPriceDiscounts">
               价格特惠:特惠数量
               <a-input-number
                 :disabled="!AllData.isPriceDiscounts"
@@ -118,7 +128,7 @@
             <br />
             <span>
               设置特惠活动后，指定数量的礼包，将根据特惠价格售卖，售完后恢复原价。若两个价格活动均设置，则价格递增在特惠礼包数量售完后才开始生效。
-            </span>
+            </span> -->
           </div>
         </a-form-item>
 
@@ -1435,11 +1445,11 @@ export default {
         paymentMode: '',
         payTimes: 1,
         isPriceAdd: false, //是否开启价格递增：0 未开启 1开启
-        isPriceDiscounts: false, //是否开启价格特惠：0 未开启 1开启
+        // isPriceDiscounts: false, //是否开启价格特惠：0 未开启 1开启
         priceAddRuleExceed: '', //价格递增规则超出
         priceAddRuleIncrease: '', //价格递增规则增长
-        priceDiscountsRuleQuantity: '', //价格特惠规则优惠数量
-        priceDiscountsRulePrice: '', //价格特惠规则优惠价格
+        // priceDiscountsRuleQuantity: '', //价格特惠规则优惠数量
+        // priceDiscountsRulePrice: '', //价格特惠规则优惠价格
         isGiftFranchiser: false, //是否开启封坛经销商：0未开启 1开启
         giftFranchiserRule: '', //直推或购买达到数量获得经销商身份
         giftFranchiserEarnings: '' //礼包经销商下线直推收益单位%
@@ -1597,7 +1607,7 @@ export default {
       marketingGiftbagData.isPriceAdd = marketingGiftbagData.isPriceAdd == 1 ? true : false
       marketingGiftbagData.isGiftFranchiser = marketingGiftbagData.isGiftFranchiser == 1 ? true : false
 
-      marketingGiftbagData.isPriceDiscounts = marketingGiftbagData.isPriceDiscounts == 1 ? true : false
+      // marketingGiftbagData.isPriceDiscounts = marketingGiftbagData.isPriceDiscounts == 1 ? true : false
 
       this.paymentModes = marketingGiftbagData.paymentMode.split(',')
 
@@ -2415,12 +2425,12 @@ export default {
           return
         }
 
-        if (this.AllData.isPriceDiscounts) {
-          if (isEmpty(this.AllData.priceDiscountsRuleQuantity) || isEmpty(this.AllData.priceDiscountsRulePrice)) {
-            this.$message.warn('请设置价格特惠相关')
-            return
-          }
-        }
+        // if (this.AllData.isPriceDiscounts) {
+        //   if (isEmpty(this.AllData.priceDiscountsRuleQuantity) || isEmpty(this.AllData.priceDiscountsRulePrice)) {
+        //     this.$message.warn('请设置价格特惠相关')
+        //     return
+        //   }
+        // }
         if (this.AllData.isPriceAdd) {
           if (isEmpty(this.AllData.priceAddRuleExceed) || isEmpty(this.AllData.priceAddRuleIncrease)) {
             this.$message.warn('请设置价格递增相关')
@@ -2483,7 +2493,7 @@ export default {
           formData.isPriceAdd = formData.isPriceAdd ? '1' : '0'
           formData.isGiftFranchiser = formData.isGiftFranchiser ? '1' : '0'
 
-          formData.isPriceDiscounts = formData.isPriceDiscounts ? '1' : '0'
+          // formData.isPriceDiscounts = formData.isPriceDiscounts ? '1' : '0'
           if (formData.buyVipMemberGradeId && formData.buyVipMemberGradeId.length > 0) {
             formData.buyVipMemberGradeId = formData.buyVipMemberGradeId.join(',')
           } else {
