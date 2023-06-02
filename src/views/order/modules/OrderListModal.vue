@@ -643,7 +643,7 @@
         </div>
         <div class="agreeItem">
           <div class="agreeTitle">申请退款商品数量</div>
-          <div class="agreeTitle">1</div>
+          <div class="agreeTitle">{{orderData.goodRecordAmount}}</div>
         </div>
         <div class="agreeItem">
           <div class="agreeTitle">使用优惠券金额</div>
