@@ -92,7 +92,7 @@
               <a-input-number
                 :disabled="!AllData.isPriceAdd"
                 :min="0"
-                :precision="0"
+                :precision="2"
                 v-model="AllData.priceAddRuleIncrease"
               ></a-input-number>
               元
