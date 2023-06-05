@@ -254,6 +254,10 @@
           ></a-input-number>
         </a-form-item>
 
+        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="排序">
+          <a-input-number :min="0" v-decorator="['sort', validatorRules.sort]" style="width: 250px"></a-input-number>
+        </a-form-item>
+
         <div class="button-end"></div>
 
         <div
@@ -371,7 +375,8 @@ export default {
         materialType: { rules: [{ required: true, message: '请选择类型!' }] },
         isPublish: { rules: [{ required: true, message: '请选择是否发布!' }] },
         initialViews: { rules: [{ required: true, message: '请输入初始浏览量!' }] },
-        initialPraise: { rules: [{ required: true, message: '请输入初始点赞数!' }] }
+        initialPraise: { rules: [{ required: true, message: '请输入初始点赞数!' }] },
+        sort: { rules: [{ required: false, message: '请设置排序!' }] }
       },
       //封面图配置
       frontCoverFileList: [],
