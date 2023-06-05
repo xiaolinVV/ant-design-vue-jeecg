@@ -43,8 +43,8 @@ export default {
       currdatetime: '',
       loginType: 0,
       model:{
-        username: 'jeecg',
-        password: 'Gk2023@',
+        username: '',
+        password: '',
         // inputCode: ''
       },
       validatorRules:{
