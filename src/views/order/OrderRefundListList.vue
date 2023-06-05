@@ -482,7 +482,7 @@ export default {
         {
           title: '优惠金额',
           align: 'center',
-          dataIndex: 'goodRecordCoupon'
+          dataIndex: 'goodRecordTotalCoupon'
           // sorter:true,
         },
         {

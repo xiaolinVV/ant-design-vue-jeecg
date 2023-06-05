@@ -91,6 +91,7 @@
     mixins:[JeecgListMixin],
     data(){
       return{
+        disableMixinCreated: true,
         visible:false,
         confirmLoading:false,
         title:"选择称号",

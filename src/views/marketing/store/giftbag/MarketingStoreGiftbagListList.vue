@@ -323,6 +323,7 @@
     },
     data () {
       return {
+        disableMixinCreated: true,
         description: '礼包团-礼包设置管理页面',
         storeList:[],
         storeListFilt:[],

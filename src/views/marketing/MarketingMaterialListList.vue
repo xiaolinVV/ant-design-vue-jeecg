@@ -215,6 +215,11 @@ export default {
           }
         },
         {
+          title: '排序',
+          align: 'center',
+          dataIndex: 'sort'
+        },
+        {
           title: '编号',
           align: 'center',
           dataIndex: 'id'
