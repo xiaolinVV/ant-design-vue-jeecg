@@ -221,7 +221,7 @@ export default {
       let text = ''
       switch (record.franchiserType * 1) {
         case 0:
-          text = '店铺专区进销商'
+          text = '店铺专区经销商'
           break
         case 1:
           text = '封坛经销商'
