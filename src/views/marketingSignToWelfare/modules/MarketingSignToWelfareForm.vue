@@ -25,7 +25,7 @@
           </a-col>
           <a-col :span="24">
             <a-form-model-item label="签到二维码" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="signQrrAddr">
-              <j-image-upload v-model="model.signQrrAddr" disabled ></j-image-upload>
+              <j-image-upload v-model="model.smallCodeId_dictText" disabled ></j-image-upload>
             </a-form-model-item>
           </a-col>
         </a-row>
