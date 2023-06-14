@@ -167,7 +167,7 @@
           {
             title:'签到二维码',
             align:"center",
-            dataIndex: 'signQrrAddr',
+            dataIndex: 'smallCodeId_dictText',
             scopedSlots: {customRender: 'imgSlot'}
           },
           {
