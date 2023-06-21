@@ -288,7 +288,7 @@
         </a-card>
         <a-card title="服务承诺" style="margin-top: 30px">
           <a-form-model-item :labelCol="labelCol" :wrapperCol="wrapperCol" prop="distributionArray" label="配送方式">
-            <a-checkbox-group v-model="model.distributionArray" @change="commitmentCustomersArrayChange">
+            <a-checkbox-group v-model="distributionArray" @change="commitmentCustomersArrayChange">
               <a-checkbox value="0">快递</a-checkbox>
               <a-checkbox value="1">自提</a-checkbox>
             </a-checkbox-group>
@@ -374,7 +374,7 @@ export default {
       sysUserList: [],
       /*运费模板*/
       providerTemplateOption: [],
-
+      distributionArray: [],
       model: {
         goodNo: '',
         goodName: '',
@@ -382,7 +382,7 @@ export default {
         commitmentCustomers: '',
         commitmentCustomersArray: [],
         distribution: '',
-        distributionArray: [],
+
         status: '1',
         frameStatus: '1',
         storeTemplateId: '',
@@ -822,7 +822,7 @@ export default {
           this.model.commitmentCustomersArray = JSON.parse(this.model.commitmentCustomers)
         }
         if (this.model.distribution) {
-          this.model.distributionArray = this.model.distribution.split(',')
+          this.distributionArray = this.model.distribution.split(',')
         }
 
         this.goodTypeByTwoId = this.model.typeThree
@@ -924,8 +924,8 @@ export default {
           this.model.commitmentCustomers = JSON.stringify(this.model.commitmentCustomersArray)
           this.model.storeManageId = this.storeInfo.key
           this.model.shopInfo = JSON.stringify(this.shopInfo)
-          if (this.model.distributionArray && this.model.distributionArray.length > 0) {
-            this.model.distribution = this.model.distributionArray.join(',')
+          if (this.distributionArray && this.distributionArray.length > 0) {
+            this.model.distribution = this.distributionArray.join(',')
           } else {
             this.model.distribution = ''
           }
