@@ -362,12 +362,12 @@
           </a-form-model-item>
         </a-card>
         <a-card title="服务承诺" style="margin-top: 30px">
-          <a-form-model-item :labelCol="labelCol" :wrapperCol="wrapperCol" prop="distributionArray" label="配送方式">
+          <!-- <a-form-model-item :labelCol="labelCol" :wrapperCol="wrapperCol" prop="distributionArray" label="配送方式">
             <a-checkbox-group v-model="model.distributionArray" @change="commitmentCustomersArrayChange">
               <a-checkbox value="0">快递</a-checkbox>
               <a-checkbox value="1">自提</a-checkbox>
             </a-checkbox-group>
-          </a-form-model-item>
+          </a-form-model-item> -->
           <a-form-model-item :labelCol="labelCol" :wrapperCol="wrapperCol" prop="sysUserId" label="供应商">
             <a-select
               showSearch
