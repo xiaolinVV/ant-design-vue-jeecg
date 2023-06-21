@@ -282,7 +282,7 @@ export default {
       default: ''
     },
     //店铺id
-    storeManageId: {
+    sysUserId: {
       type: String,
       default: ''
     },
@@ -441,7 +441,10 @@ export default {
         requestOptions = Object.assign({}, requestOptions, { marketingMaterialListId: this.marketingMaterialListId })
       }
       if (this.apiName == 'selectStoreGoods') {
-        requestOptions = Object.assign({}, requestOptions, { storeManageId: this.storeManageId, ...this.queryParam })
+        requestOptions = Object.assign({}, requestOptions, { storeManageId: this.sysUserId, ...this.queryParam })
+      }
+      if (this.apiName == 'queryGoodStoreStoreList') {
+        requestOptions = Object.assign({}, requestOptions, { sysUserId: this.sysUserId, ...this.queryParam })
       }
       return new Promise((resolve, reject) => {
         getAction(that.url[that.apiName], requestOptions).then(res => {
