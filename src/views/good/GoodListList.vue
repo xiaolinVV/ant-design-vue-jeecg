@@ -31,7 +31,7 @@
               </a-col>
               <a-col :xl="6" :lg="7" :md="8" :sm="24">
                 <a-form-item label="商品名称">
-                  <a-input placeholder="请输入商品名称" v-model="queryParam.goodName"></a-input>
+                  <j-input placeholder="请输入商品名称" v-model="queryParam.goodName"></j-input>
                 </a-form-item>
               </a-col>
               <a-col :xl="6" :lg="7" :md="8" :sm="24">
