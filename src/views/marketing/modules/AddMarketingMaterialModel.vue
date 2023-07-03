@@ -3,7 +3,27 @@
     <a-skeleton :loading="skeletonLoading">
       <a-form :form="form">
         <!--      v-decorator="[ 'remarkExplian', validatorRules.remarkExplian]"-->
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="栏目" v-if="!skeletonLoading">
+        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="类型">
+          <a-radio-group v-decorator="['materialType', validatorRules.materialType]" @change="materialTypeChange">
+            <a-radio value="1">
+              图文素材
+            </a-radio>
+            <a-radio value="2">
+              视频素材
+            </a-radio>
+            <a-radio value="3">
+              活动素材
+            </a-radio>
+          </a-radio-group>
+        </a-form-item>
+
+        <a-form-item
+          help="关联栏目后,报名活动的用户可以在该栏目下发表素材"
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol"
+          label="栏目"
+          v-if="!skeletonLoading"
+        >
           <a-select
             style="width: 120px"
             v-decorator="['marketingMaterialColumnId', validatorRules.marketingMaterialColumnId]"
@@ -11,11 +31,27 @@
             <a-select-option value="">
               请选择
             </a-select-option>
+
             <a-select-option v-for="(item, index) in marketingMaterialColumnData" :key="index" :value="item.id">
               {{ item.name }}
             </a-select-option>
           </a-select>
         </a-form-item>
+
+        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="关联活动" v-if="!skeletonLoading">
+          <a-select
+            style="width: 120px"
+            v-decorator="['marketingActivityListId', validatorRules.marketingActivityListId]"
+          >
+            <a-select-option value="">
+              请选择
+            </a-select-option>
+            <a-select-option v-for="(item, index) in marketingActivityListIdLists" :key="index" :value="item.id">
+              {{ item.activityName }}
+            </a-select-option>
+          </a-select>
+        </a-form-item>
+
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="标题">
           <a-input v-decorator="['title', validatorRules.title]"></a-input>
         </a-form-item>
@@ -141,17 +177,6 @@
           <a-modal :visible="posterPreviewVisible" :footer="null" @cancel="posterCancel">
             <img preview="1" alt="example" style="width: 100%" :src="posterPreviewImage" />
           </a-modal>
-        </a-form-item>
-
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="类型">
-          <a-radio-group v-decorator="['materialType', validatorRules.materialType]" @change="materialTypeChange">
-            <a-radio value="1">
-              图文素材
-            </a-radio>
-            <a-radio value="2">
-              视频素材
-            </a-radio>
-          </a-radio-group>
         </a-form-item>
 
         <a-form-item
@@ -369,6 +394,7 @@ export default {
       },
       validatorRules: {
         marketingMaterialColumnId: { rules: [{ required: true, message: '请选择栏目!' }] },
+        marketingActivityListId: { rules: [{ required: true, message: '请选择关联活动!' }] },
         title: { rules: [{ required: true, message: '请输入标题!' }] },
         keyword: { rules: [{ required: true, message: '请输入关键字以，隔开!' }] },
         abstractDigest: { rules: [{ required: true, message: '请输入摘要说明!' }] },
@@ -401,6 +427,8 @@ export default {
       videoFileList: [],
       //栏目列表数据
       marketingMaterialColumnData: [],
+      //活动列表
+      marketingActivityListIdLists: [],
       //选择商品弹窗回显需要的ids （数组形式）
       selectGoodsPopUpIds: [],
       //所有数据
@@ -409,6 +437,7 @@ export default {
         content: '',
         author: '',
         marketingMaterialColumnId: '',
+        marketingActivityListId: '',
         title: '',
         keyword: '',
         abstractDigest: '',
@@ -425,6 +454,8 @@ export default {
         // 栏目列表 GET
         getMarketingMaterialColumnListMap:
           '/marketingMaterialColumn/marketingMaterialColumn/getMarketingMaterialColumnListMap',
+        // 活动列表 GET
+        getFindMarketingActivityListByName: '/marketing/marketingActivityList/findMarketingActivityListByName',
         // 素材添加修改接口 POST
         addMarketingMaterialList: '/marketingMaterialList/marketingMaterialList/addMarketingMaterialList',
         // 素材选中商品回选 GET
@@ -456,6 +487,7 @@ export default {
       AddMarketingMaterialModelData = ''
     }
     const getMarketingMaterialColumnList = await this.getMarketingMaterialColumnList()
+    await this.getMarketingActivityList()
     if (isEdit == 2 || AddMarketingMaterialModelData) {
       let AddMarketingMaterialModelDataResult = AddMarketingMaterialModelData
       this.editShowHandleImg(AddMarketingMaterialModelDataResult.surfacePlot, 'frontCoverFileList')
@@ -699,6 +731,21 @@ export default {
           if (res.success) {
             console.log(res)
             this.marketingMaterialColumnData = res.result
+            resolve('success')
+          } else {
+            this.$message.warn(res.message || '网络波动，请稍后刷新页面重试！')
+            reject(`栏目列表接口500！具体原因${res.message}`)
+          }
+        })
+      })
+    },
+    //活动列表数据
+    getMarketingActivityList() {
+      return new Promise((resolve, reject) => {
+        getAction(this.url.getFindMarketingActivityListByName, { name: '' }).then(res => {
+          if (res.success) {
+            console.log(res)
+            this.marketingActivityListIdLists = res.result
             resolve('success')
           } else {
             this.$message.warn(res.message || '网络波动，请稍后刷新页面重试！')

@@ -1,6 +1,17 @@
 <template>
   <a-card title="添加活动">
     <a-form :form="form">
+      <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="活动类型">
+        <a-radio-group v-decorator="validatorRules.activityType" @change="activityTypeChange">
+          <a-radio :value="0">
+            线下活动
+          </a-radio>
+          <a-radio :value="1">
+            线上活动
+          </a-radio>
+        </a-radio-group>
+      </a-form-item>
+
       <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="活动标题">
         <a-input placeholder="请输入活动标题" style="width:205px" v-decorator="validatorRules.activityName" />
       </a-form-item>
@@ -13,11 +24,12 @@
       <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="活动结束时间">
         <a-date-picker showTime format="YYYY-MM-DD HH:mm:ss" v-decorator="validatorRules.endTime" />
       </a-form-item>
-      <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="活动名额">
+
+      <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="活动名额" v-if="activityType == 0">
         <a-input-number :precision="0" style="width:205px" v-decorator="validatorRules.places" />
       </a-form-item>
 
-      <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol">
+      <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" v-if="activityType == 0">
         <!-- :defaultValue="defaultCity" -->
         <span slot="label">
           <span class="dataCheckedStar">
@@ -37,11 +49,11 @@
         />
       </a-form-item>
 
-      <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="详细地址">
+      <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="详细地址" v-if="activityType == 0">
         <a-input style="width:450px" placeholder="请输入详细地址" v-decorator="validatorRules.detailedAddress" />
       </a-form-item>
 
-      <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="联系电话">
+      <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="联系电话" v-if="activityType == 0">
         <a-input-number
           :precision="0"
           style="width:205px"
@@ -143,6 +155,42 @@
         </a-modal>
       </a-form-item>
 
+      <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="活动参与条件" v-if="activityType == 1">
+        <div style="display: flex;align-items: center;">
+          <a-checkbox v-model="model.isMemberOpen">
+            普通会员
+          </a-checkbox>
+          <a-input
+            style="width: 200px;"
+            :disabled="!model.isMemberOpen"
+            v-model="model.memberIdentification"
+            placeholder="请输入身份名称"
+          ></a-input>
+        </div>
+        <div style="display: flex;align-items: center;">
+          <a-checkbox v-model="model.isDesignationMemberOpen">
+            称号会员
+          </a-checkbox>
+          <a-input
+            style="width: 200px;"
+            :disabled="!model.isDesignationMemberOpen"
+            v-model="model.designationMemberIdentification"
+            placeholder="请输入身份名称"
+          ></a-input>
+        </div>
+      </a-form-item>
+
+      <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="参与活动报名奖励" v-if="activityType == 1">
+        <a-input-number
+          :min="0"
+          :precision="0"
+          placeholder="请输入参与活动报名奖励"
+          style="width:205px"
+          v-decorator="validatorRules.signUpReward"
+        />
+        福利金(0即为不送)
+      </a-form-item>
+
       <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol">
         <span slot="label">
           <span class="dataCheckedStar">
@@ -199,6 +247,7 @@ export default {
       defaultCity: '',
       //地址转换拼接地址
       areaAddressList: [],
+      activityType: 0,
       labelCol: {
         xs: { span: 24 },
         sm: { span: 5 }
@@ -210,6 +259,9 @@ export default {
       form: this.$form.createForm(this),
       validatorRules: {
         activityName: ['activityName', { rules: [{ required: true, message: '请输入活动标题!' }] }],
+
+        signUpReward: ['signUpReward', { rules: [{ required: true, message: '请输入参与活动报名奖励!' }] }],
+        activityType: ['activityType', { rules: [{ required: true, message: '请选择活动类型!' }] }],
         registrationTime: ['registrationTime', { rules: [{ required: true, message: '请选择报名开始时间!' }] }],
         startTime: ['startTime', { rules: [{ required: true, message: '请选择活动开始时间!' }] }],
         endTime: ['endTime', { rules: [{ required: true, message: '请选择活动结束时间!' }] }],
@@ -247,9 +299,21 @@ export default {
   created() {
     const token = Vue.ls.get('Access-Token')
     this.headers = { 'X-Access-Token': token }
-    this.edit(this.$route.query.record)
+    this.activityType = (this.$route.query.record && this.$route.query.record.activityType) || 0
+  },
+  watch: {
+    activityType: {
+      handler(newVal) {
+        this.edit(this.$route.query.record)
+      },
+      immediate: true,
+      deep: true
+    }
   },
   methods: {
+    activityTypeChange(e) {
+      this.activityType = e.target.value
+    },
     add() {
       this.edit({})
     },
@@ -318,10 +382,15 @@ export default {
             console.error('解析图出错', e)
           }
         }
+        record.isMemberOpen = record.isMemberOpen == 1 ? true : false
+        record.isDesignationMemberOpen = record.isDesignationMemberOpen == 1 ? true : false
         this.model = Object.assign({}, this.model, record)
+
         console.log(this.model, 'this.modelthis.model')
+
         this.$nextTick(() => {
           this.form.setFieldsValue(this.model)
+          this.form.setFieldsValue({ activityType: this.activityType })
           //时间格式化
           this.form.setFieldsValue({ startTime: this.model.startTime ? moment(this.model.startTime) : null })
           this.form.setFieldsValue({ endTime: this.model.endTime ? moment(this.model.endTime) : null })
@@ -369,7 +438,9 @@ export default {
             httpurl += this.url.edit
             method = 'put'
           }
-          let formData = Object.assign(this.model, values)
+          let formData = Object.assign({}, this.model, values)
+          formData.isMemberOpen = formData.isMemberOpen ? 1 : 0
+          formData.isDesignationMemberOpen = formData.isDesignationMemberOpen ? 1 : 0
           //时间格式化
           formData.startTime = formData.startTime ? formData.startTime.format('YYYY-MM-DD HH:mm:ss') : null
           formData.endTime = formData.endTime ? formData.endTime.format('YYYY-MM-DD HH:mm:ss') : null

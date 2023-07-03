@@ -49,6 +49,20 @@
             </div>
             <!--<a-input placeholder="请输入图片地址"  v-decorator="['pictureAddr', {}]" >{{ pictureAddr }}</a-input>-->
           </a-form-item>
+
+          <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="关联活动" v-if="!confirmLoading">
+            <a-select
+              style="width: 120px"
+              v-decorator="['marketingActivityListId', validatorRules.marketingActivityListId]"
+            >
+              <a-select-option value="">
+                请选择
+              </a-select-option>
+              <a-select-option v-for="(item, index) in marketingActivityListIdLists" :key="index" :value="item.id">
+                {{ item.activityName }}
+              </a-select-option>
+            </a-select>
+          </a-form-item>
         </a-form>
       </a-spin>
     </a-modal>
@@ -100,6 +114,8 @@ export default {
       model: {},
       headers: {},
       picUrl: '',
+      //活动列表
+      marketingActivityListIdLists: [],
 
       uploadLoading: false,
       labelCol: {
@@ -116,7 +132,8 @@ export default {
       validatorRules: {
         name: { rules: [{ required: true, message: '请输入栏目名称!' }] },
         englishName: { rules: [{ required: true, message: '请输入英文名称' }] },
-        sort: { rules: [{ required: true, message: '排序不能为空!' }] }
+        sort: { rules: [{ required: true, message: '排序不能为空!' }] },
+        marketingActivityListId: { rules: [{ required: true, message: '请选择关联活动!' }] }
       },
 
       url: {
@@ -124,13 +141,16 @@ export default {
         edit: '/marketingMaterialColumn/marketingMaterialColumn/edit',
         fileUpload: window._CONFIG['domianURL'] + '/sys/common/upload',
         imgerver: window._CONFIG['domianURL'] + '/sys/common/view',
-        updateStatus: '/marketingMaterialColumn/marketingMaterialColumn/updateStatus'
+        updateStatus: '/marketingMaterialColumn/marketingMaterialColumn/updateStatus',
+        // 活动列表 GET
+        getFindMarketingActivityListByName: '/marketing/marketingActivityList/findMarketingActivityListByName'
       }
     }
   },
   created() {
     const token = Vue.ls.get(ACCESS_TOKEN)
     this.headers = { 'X-Access-Token': token }
+    this.getMarketingActivityList()
   },
   computed: {
     uploadAction: function() {
@@ -140,6 +160,20 @@ export default {
   methods: {
     add() {
       this.edit({})
+    },
+    //活动列表数据
+    getMarketingActivityList() {
+      return new Promise((resolve, reject) => {
+        getAction(this.url.getFindMarketingActivityListByName, { name: '' }).then(res => {
+          if (res.success) {
+            this.marketingActivityListIdLists = res.result
+            resolve('success')
+          } else {
+            this.$message.warn(res.message || '网络波动，请稍后刷新页面重试！')
+            reject(`栏目列表接口500！具体原因${res.message}`)
+          }
+        })
+      })
     },
     edit(record) {
       this.form.resetFields()
@@ -160,6 +194,7 @@ export default {
             'delFlag',
             'name',
             'englishName',
+            'marketingActivityListId',
             'logoAddr',
             'sort',
             'status',
