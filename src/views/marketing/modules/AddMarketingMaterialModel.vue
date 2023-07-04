@@ -209,6 +209,7 @@
             @change="videoChange"
             :fileList="videoFileList"
             :beforeUpload="videoBeforeUpload"
+            v-if="AllData.materialType == 2"
           >
             <a-button style="font-size:14px" v-if="videoFileList.length <= 0">
               <a-icon type="upload" />
