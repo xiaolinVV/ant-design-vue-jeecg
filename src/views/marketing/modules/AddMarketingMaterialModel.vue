@@ -25,7 +25,7 @@
           v-if="!skeletonLoading"
         >
           <a-select
-            style="width: 120px"
+            style="width: 200px"
             v-decorator="['marketingMaterialColumnId', validatorRules.marketingMaterialColumnId]"
           >
             <a-select-option value="">
@@ -40,7 +40,13 @@
 
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="关联活动" v-if="!skeletonLoading">
           <a-select
-            style="width: 120px"
+            style="width: 200px"
+            :default-active-first-option="false"
+            :show-arrow="false"
+            :filter-option="false"
+            :not-found-content="null"
+            show-search
+            @search="handleSearch"
             v-decorator="['marketingActivityListId', validatorRules.marketingActivityListId]"
           >
             <a-select-option value="">
@@ -524,6 +530,9 @@ export default {
     frontCoverCancel() {
       this.frontCoverPreviewVisible = false
     },
+    handleSearch(value) {
+      this.getMarketingActivityList(value)
+    },
     async frontCoverPreview(file) {
       if (!file.url && !file.preview) {
         file.preview = await getBase64(file.originFileObj)
@@ -740,9 +749,9 @@ export default {
       })
     },
     //活动列表数据
-    getMarketingActivityList() {
+    getMarketingActivityList(name = '') {
       return new Promise((resolve, reject) => {
-        getAction(this.url.getFindMarketingActivityListByName, { name: '' }).then(res => {
+        getAction(this.url.getFindMarketingActivityListByName, { name }).then(res => {
           if (res.success) {
             console.log(res)
             this.marketingActivityListIdLists = res.result

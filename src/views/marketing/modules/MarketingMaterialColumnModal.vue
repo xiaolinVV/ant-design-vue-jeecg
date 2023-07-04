@@ -52,7 +52,13 @@
 
           <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="关联活动" v-if="!confirmLoading">
             <a-select
-              style="width: 120px"
+              style="width: 200px"
+              :default-active-first-option="false"
+              :show-arrow="false"
+              :filter-option="false"
+              :not-found-content="null"
+              show-search
+              @search="handleSearch"
               v-decorator="['marketingActivityListId', validatorRules.marketingActivityListId]"
             >
               <a-select-option value="">
@@ -158,13 +164,16 @@ export default {
     }
   },
   methods: {
+    handleSearch(value) {
+      this.getMarketingActivityList(value)
+    },
     add() {
       this.edit({})
     },
     //活动列表数据
-    getMarketingActivityList() {
+    getMarketingActivityList(name) {
       return new Promise((resolve, reject) => {
-        getAction(this.url.getFindMarketingActivityListByName, { name: '' }).then(res => {
+        getAction(this.url.getFindMarketingActivityListByName, { name }).then(res => {
           if (res.success) {
             this.marketingActivityListIdLists = res.result
             resolve('success')
