@@ -201,7 +201,7 @@
               内容:
             </span>
           </div>
-          <JEditor v-model="twContent" v-if="AllData.materialType == 1"> </JEditor>
+          <JEditor v-model="twContent"> </JEditor>
           <a-upload
             name="file"
             :headers="headers"
