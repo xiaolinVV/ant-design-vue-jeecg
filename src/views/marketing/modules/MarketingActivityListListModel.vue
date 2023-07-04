@@ -191,6 +191,27 @@
         福利金(0即为不送)
       </a-form-item>
 
+      <a-form-item
+        help="关联栏目后,报名活动的用户可以在该栏目下发表素材"
+        :labelCol="labelCol"
+        :wrapperCol="wrapperCol"
+        label="用户栏目"
+        v-if="activityType == 1"
+      >
+        <a-select
+          style="width: 200px"
+          v-decorator="['marketingMaterialColumnId', validatorRules.marketingMaterialColumnId]"
+        >
+          <a-select-option value="">
+            请选择
+          </a-select-option>
+
+          <a-select-option v-for="(item, index) in marketingMaterialColumnData" :key="index" :value="item.id">
+            {{ item.name }}
+          </a-select-option>
+        </a-select>
+      </a-form-item>
+
       <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol">
         <span slot="label">
           <span class="dataCheckedStar">
@@ -239,6 +260,8 @@ export default {
       surfacePlotPreviewVisible: false,
       surfacePlotPreviewImage: '',
       surfacePlotFilePic: true,
+      //栏目列表数据
+      marketingMaterialColumnData: [],
       //所在城市联想
       cityAllData: [],
       //可以显示回显默认地址
@@ -259,7 +282,7 @@ export default {
       form: this.$form.createForm(this),
       validatorRules: {
         activityName: ['activityName', { rules: [{ required: true, message: '请输入活动标题!' }] }],
-
+        marketingMaterialColumnId: { rules: [{ required: false, message: '请选择栏目!' }] },
         signUpReward: ['signUpReward', { rules: [{ required: true, message: '请输入参与活动报名奖励!' }] }],
         activityType: ['activityType', { rules: [{ required: true, message: '请选择活动类型!' }] }],
         registrationTime: ['registrationTime', { rules: [{ required: true, message: '请选择报名开始时间!' }] }],
@@ -282,6 +305,9 @@ export default {
       },
 
       url: {
+        // 栏目列表 GET
+        getMarketingMaterialColumnListMap:
+          '/marketingMaterialColumn/marketingMaterialColumn/getMarketingMaterialColumnListMap',
         add: '/marketing/marketingActivityList/add',
         edit: '/marketing/marketingActivityList/edit',
         //获取经纬度
@@ -300,6 +326,7 @@ export default {
     const token = Vue.ls.get('Access-Token')
     this.headers = { 'X-Access-Token': token }
     this.activityType = (this.$route.query.record && this.$route.query.record.activityType) || 0
+    this.getMarketingMaterialColumnList()
   },
   watch: {
     activityType: {
@@ -311,6 +338,21 @@ export default {
     }
   },
   methods: {
+    //栏目列表数据
+    getMarketingMaterialColumnList() {
+      return new Promise((resolve, reject) => {
+        getAction(this.url.getMarketingMaterialColumnListMap).then(res => {
+          if (res.success) {
+            console.log(res)
+            this.marketingMaterialColumnData = res.result
+            resolve('success')
+          } else {
+            this.$message.warn(res.message || '网络波动，请稍后刷新页面重试！')
+            reject(`栏目列表接口500！具体原因${res.message}`)
+          }
+        })
+      })
+    },
     activityTypeChange(e) {
       this.activityType = e.target.value
     },
