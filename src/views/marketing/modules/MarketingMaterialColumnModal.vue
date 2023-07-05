@@ -53,7 +53,10 @@
           <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="关联活动" v-if="!confirmLoading">
             <a-select
               style="width: 200px"
-
+              :default-active-first-option="false"
+              :show-arrow="false"
+              :filter-option="false"
+              :not-found-content="null"
               show-search
               @search="handleSearch"
               v-decorator="['marketingActivityListId', validatorRules.marketingActivityListId]"
@@ -136,7 +139,7 @@ export default {
         name: { rules: [{ required: true, message: '请输入栏目名称!' }] },
         englishName: { rules: [{ required: true, message: '请输入英文名称' }] },
         sort: { rules: [{ required: true, message: '排序不能为空!' }] },
-        marketingActivityListId: { rules: [{ required: true, message: '请选择关联活动!' }] }
+        marketingActivityListId: { rules: [{ required: false, message: '请选择关联活动!' }] }
       },
 
       url: {
