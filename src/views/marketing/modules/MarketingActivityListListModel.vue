@@ -439,7 +439,7 @@ export default {
         this.$message.warn('请上传封面图！')
         return false
       }
-      if (!Array.isArray(this.defaultCity) || this.defaultCity.length <= 0) {
+      if ((!Array.isArray(this.defaultCity) || this.defaultCity.length <= 0) && this.activityType == 0) {
         this.$message.warn('请选择活动地址！')
         return false
       }
