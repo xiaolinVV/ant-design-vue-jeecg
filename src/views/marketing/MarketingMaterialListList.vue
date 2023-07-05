@@ -66,7 +66,7 @@
             </a-col>
           </template>
           <a-col :md="6" :sm="8">
-            <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
+            <span style="float: left; overflow: hidden" class="table-page-search-submitButtons">
               <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
               <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
               <a @click="handleToggleSearch" style="margin-left: 8px">
@@ -109,7 +109,7 @@
 
     <!-- table区域-begin -->
     <div>
-      <div class="ant-alert ant-alert-info" style="margin-bottom: 16px;">
+      <div class="ant-alert ant-alert-info" style="margin-bottom: 16px">
         <i class="anticon anticon-info-circle ant-alert-icon"></i> 已选择
         <a style="font-weight: 600">{{ selectedRowKeys.length }}</a
         >项
@@ -164,15 +164,24 @@
         </template>
 
         <span slot="action" slot-scope="text, record">
-          <a @click="routerTo('2', record)">编辑</a>
+          <template v-if="record.auditStatus != 2">
+            <a @click="routerTo('2', record)">编辑</a>
+            <a-divider type="vertical" />
+          </template>
 
-          <a-divider type="vertical" />
           <a v-if="record.isPublish == 1" @click="updateIsPublish(record.id, '0')">取消发布</a>
           <a v-if="record.isPublish == 0" @click="updateIsPublish(record.id, '1')">发布</a>
-          <a-divider type="vertical" />
-          <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.id)">
-            <a>删除</a>
-          </a-popconfirm>
+
+          <template v-if="record.auditStatus == 1">
+            <a-divider type="vertical" />
+            <a @click="showSh(record)">审核</a>
+          </template>
+          <template v-if="record.auditStatus != 1">
+            <a-divider type="vertical" />
+            <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.id)">
+              <a>删除</a>
+            </a-popconfirm>
+          </template>
         </span>
       </a-table>
     </div>
@@ -182,13 +191,35 @@
     <!--    browse-->
     <!--    thumbsUp-->
     <member-info-modal ref="modalForm" :type="infoModalType"></member-info-modal>
+
+    <!-- 审核弹窗 -->
+    <a-modal
+      :width="800"
+      title="素材审核"
+      :visible="scModalVisible"
+      :confirmLoading="confirmLoading"
+      @ok="scModalOk"
+      @cancel="() => (scModalVisible = false)"
+    >
+      <a-radio-group v-model="shSelected">
+        <a-radio :value="3"> 审核通过并发布 </a-radio>
+        <a-radio :value="2"> 审核拒绝 </a-radio>
+      </a-radio-group>
+      <a-textarea
+        v-if="shSelected == 2"
+        style="margin-top: 15px"
+        v-model="shRefusedReason"
+        placeholder="请输入拒绝的原因"
+        :autoSize="{ minRows: 3, maxRows: 5 }"
+      />
+    </a-modal>
   </a-card>
 </template>
 
 <script>
 import memberInfoModal from '@/components/popUp/memberInfoModal'
 import { JeecgListMixin } from '@/mixins/JeecgListMixin'
-import { getAction } from '@/api/manage'
+import { getAction, httpAction } from '@/api/manage'
 import JDate from '@/components/jeecg/JDate'
 import { filterObj } from '@/utils/util'
 
@@ -196,12 +227,17 @@ export default {
   name: 'MarketingMaterialListList',
   mixins: [JeecgListMixin],
   components: {
-    memberInfoModal
+    memberInfoModal,
   },
   data() {
     return {
       description: '素材列表管理页面',
       marketingMaterialColumnList: [],
+      scModalVisible: false,
+      shSelected: 3,
+      shRefusedReason: '',
+      scModalDatas: {},
+      confirmLoading: false,
       // 表头
       columns: [
         {
@@ -210,106 +246,109 @@ export default {
           key: 'rowIndex',
           width: 60,
           align: 'center',
-          customRender: function(t, r, index) {
+          customRender: function (t, r, index) {
             return parseInt(index) + 1
-          }
+          },
         },
         {
           title: '排序',
           align: 'center',
-          dataIndex: 'sort'
+          dataIndex: 'sort',
         },
         {
           title: '编号',
           align: 'center',
-          dataIndex: 'id'
+          dataIndex: 'id',
         },
 
         {
           title: '素材标题',
           align: 'center',
-          dataIndex: 'title'
+          dataIndex: 'title',
         },
         {
           title: '封面图片',
           align: 'center',
           dataIndex: 'surfacePlot',
-          scopedSlots: { customRender: 'surfacePlot' }
+          scopedSlots: { customRender: 'surfacePlot' },
         },
         {
           title: '作者',
           align: 'center',
-          dataIndex: 'author'
+          dataIndex: 'author',
         },
         {
           title: '栏目',
           align: 'center',
-          dataIndex: 'marketingMaterialColumnName'
+          dataIndex: 'marketingMaterialColumnName',
         },
         {
           title: '素材类型', //；1：图文素材；2：视频素材
           align: 'center',
           dataIndex: 'materialType',
-          scopedSlots: { customRender: 'materialType' }
+          scopedSlots: { customRender: 'materialType' },
         },
         {
           title: '关联商品',
           align: 'center',
-          dataIndex: 'goodListCount'
+          dataIndex: 'goodListCount',
         },
         {
           title: '初始浏览量',
           align: 'center',
-          dataIndex: 'initialViews'
+          dataIndex: 'initialViews',
         },
         {
           title: '会员浏览量',
           align: 'center',
           dataIndex: 'browseCount',
-          scopedSlots: { customRender: 'browseCount' }
+          scopedSlots: { customRender: 'browseCount' },
         },
         {
           title: '初始赞数',
           align: 'center',
-          dataIndex: 'initialPraise'
+          dataIndex: 'initialPraise',
         },
         {
           title: '会员点赞数',
           align: 'center',
           dataIndex: 'dianzanCount',
-          scopedSlots: { customRender: 'dianzanCounts' }
+          scopedSlots: { customRender: 'dianzanCounts' },
         },
         {
           title: '评论',
           align: 'center',
-          dataIndex: 'commentCount'
+          dataIndex: 'commentCount',
         },
         {
           title: '排序',
           align: 'center',
-          dataIndex: 'sort'
+          dataIndex: 'sort',
         },
         {
           title: '状态', //；0：否；1：是
           align: 'center',
           dataIndex: 'isPublish',
-          scopedSlots: { customRender: 'isPublish' }
+          scopedSlots: { customRender: 'isPublish' },
         },
 
         {
           title: '创建时间',
           align: 'center',
-          dataIndex: 'createTime'
+          dataIndex: 'createTime',
         },
 
         {
           title: '操作',
           dataIndex: 'action',
           align: 'center',
-          scopedSlots: { customRender: 'action' }
-        }
+          fixed: 'right',
+          width: 250,
+          scopedSlots: { customRender: 'action' },
+        },
       ],
       url: {
+        edit: '/marketingMaterialList/marketingMaterialList/edit',
         list: '/marketingMaterialList/marketingMaterialList/list',
         delete: '/marketingMaterialList/marketingMaterialList/delete',
         deleteBatch: '/marketingMaterialList/marketingMaterialList/deleteBatch',
@@ -318,22 +357,42 @@ export default {
         updateIsPublish: '/marketingMaterialList/marketingMaterialList/updateIsPublish',
         imgerver: window._CONFIG['domianURL'] + '/sys/common/view',
         getMarketingMaterialColumnListMap:
-          '/marketingMaterialColumn/marketingMaterialColumn/getMarketingMaterialColumnListMap'
+          '/marketingMaterialColumn/marketingMaterialColumn/getMarketingMaterialColumnListMap',
       },
-      infoModalType: 'browse'
+      infoModalType: 'browse',
     }
   },
   computed: {
-    importExcelUrl: function() {
+    importExcelUrl: function () {
       return `${window._CONFIG['domianURL']}/${this.url.importExcelUrl}`
-    }
+    },
   },
   mounted() {
     //获取素材栏目列表
     this.getMarketingMaterialColumnListMap()
   },
   methods: {
-    getAvatarView: function(mainPicture) {
+    showSh(item) {
+      this.scModalDatas = item
+      this.scModalVisible = true
+    },
+    async scModalOk() {
+      this.confirmLoading = true
+      await httpAction(
+        this.url.edit,
+        {
+          auditStatus: this.shSelected,
+          auditStatusExplain: this.shRefusedReason || '',
+          id: this.scModalDatas.id,
+        },
+        'put'
+      )
+      this.confirmLoading = false
+      this.$message.success('修改成功')
+      this.scModalVisible = false
+      this.searchReset()
+    },
+    getAvatarView: function (mainPicture) {
       if (mainPicture) {
         return this.url.imgerver + '/' + Object.values(JSON.parse(mainPicture))[0]
       } else {
@@ -352,7 +411,7 @@ export default {
     },
     //发布修改
     updateIsPublish(id, isPublish) {
-      getAction(this.url.updateIsPublish, { ids: id, isPublish: isPublish }).then(res => {
+      getAction(this.url.updateIsPublish, { ids: id, isPublish: isPublish }).then((res) => {
         if (res.success) {
           this.$message.success(res.message)
           this.loadData()
@@ -372,7 +431,7 @@ export default {
       delete param.createTime // 时间参数不传递后台
       return filterObj(param)
     },
-    onDateChange: function(value, dateString) {
+    onDateChange: function (value, dateString) {
       console.log('*****************************************************', dateString[0], dateString[1])
       this.queryParam.createTime_begin = dateString[0]
       this.queryParam.createTime_end = dateString[1]
@@ -381,15 +440,15 @@ export default {
       console.log(value)
     },
     getMarketingMaterialColumnListMap() {
-      getAction(this.url.getMarketingMaterialColumnListMap).then(res => {
+      getAction(this.url.getMarketingMaterialColumnListMap).then((res) => {
         if (res.success) {
           this.marketingMaterialColumnList = res.result
         } else {
           this.$message.warning(res.message)
         }
       })
-    }
-  }
+    },
+  },
 }
 </script>
 <style scoped lang="less"></style>
