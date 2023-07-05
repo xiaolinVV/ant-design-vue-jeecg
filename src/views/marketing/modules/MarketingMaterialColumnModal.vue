@@ -53,10 +53,7 @@
           <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="关联活动" v-if="!confirmLoading">
             <a-select
               style="width: 200px"
-              :default-active-first-option="false"
-              :show-arrow="false"
-              :filter-option="false"
-              :not-found-content="null"
+
               show-search
               @search="handleSearch"
               v-decorator="['marketingActivityListId', validatorRules.marketingActivityListId]"

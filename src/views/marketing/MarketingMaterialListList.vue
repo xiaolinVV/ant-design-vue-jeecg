@@ -162,7 +162,14 @@
         <template slot="browseCount" slot-scope="text, record, index">
           <a @click="modalOpen(record, 'browse')">{{ text }}</a>
         </template>
-
+        <template slot="auditStatus" slot-scope="text, record, index">
+          <div class="anty-img-wrap">
+            <span shape="square" v-if="record.auditStatus == 0">免审核</span>
+            <span shape="square" v-if="record.auditStatus == 1">未审核</span>
+            <span shape="square" v-if="record.auditStatus == 2">审核拒绝</span>
+            <span shape="square" v-if="record.auditStatus == 3">审核通过</span>
+          </div>
+        </template>
         <span slot="action" slot-scope="text, record">
           <template v-if="record.auditStatus != 2">
             <a @click="routerTo('2', record)">编辑</a>
@@ -326,12 +333,17 @@ export default {
           dataIndex: 'sort',
         },
         {
-          title: '状态', //；0：否；1：是
+          title: '发布状态', //；0：否；1：是
           align: 'center',
           dataIndex: 'isPublish',
           scopedSlots: { customRender: 'isPublish' },
         },
-
+        {
+          title: '审核状态',
+          align: 'center',
+          dataIndex: 'auditStatus',
+          scopedSlots: { customRender: 'auditStatus' },
+        },
         {
           title: '创建时间',
           align: 'center',
