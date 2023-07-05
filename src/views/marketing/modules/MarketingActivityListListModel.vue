@@ -3,17 +3,13 @@
     <a-form :form="form">
       <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="活动类型">
         <a-radio-group v-decorator="validatorRules.activityType" @change="activityTypeChange">
-          <a-radio :value="0">
-            线下活动
-          </a-radio>
-          <a-radio :value="1">
-            线上活动
-          </a-radio>
+          <a-radio :value="0"> 线下活动 </a-radio>
+          <a-radio :value="1"> 线上活动 </a-radio>
         </a-radio-group>
       </a-form-item>
 
       <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="活动标题">
-        <a-input placeholder="请输入活动标题" style="width:205px" v-decorator="validatorRules.activityName" />
+        <a-input placeholder="请输入活动标题" style="width: 205px" v-decorator="validatorRules.activityName" />
       </a-form-item>
       <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="报名开始时间">
         <a-date-picker showTime format="YYYY-MM-DD HH:mm:ss" v-decorator="validatorRules.registrationTime" />
@@ -26,15 +22,13 @@
       </a-form-item>
 
       <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="活动名额" v-if="activityType == 0">
-        <a-input-number :precision="0" style="width:205px" v-decorator="validatorRules.places" />
+        <a-input-number :precision="0" style="width: 205px" v-decorator="validatorRules.places" />
       </a-form-item>
 
       <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" v-if="activityType == 0">
         <!-- :defaultValue="defaultCity" -->
         <span slot="label">
-          <span class="dataCheckedStar">
-            *
-          </span>
+          <span class="dataCheckedStar"> * </span>
           活动地址
         </span>
         <a-cascader
@@ -45,18 +39,18 @@
           v-model="defaultCity"
           v-if="canShowDefaultCity"
           placeholder="请选择区域"
-          style="width:205px"
+          style="width: 205px"
         />
       </a-form-item>
 
       <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="详细地址" v-if="activityType == 0">
-        <a-input style="width:450px" placeholder="请输入详细地址" v-decorator="validatorRules.detailedAddress" />
+        <a-input style="width: 450px" placeholder="请输入详细地址" v-decorator="validatorRules.detailedAddress" />
       </a-form-item>
 
       <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="联系电话" v-if="activityType == 0">
         <a-input-number
           :precision="0"
-          style="width:205px"
+          style="width: 205px"
           placeholder="请输入联系电话"
           v-decorator="validatorRules.phone"
         />
@@ -69,9 +63,7 @@
         validate-status="error"
       >
         <span slot="label">
-          <span class="dataCheckedStar">
-            *
-          </span>
+          <span class="dataCheckedStar"> * </span>
           分享图
         </span>
         <a-upload
@@ -100,9 +92,7 @@
         validate-status="error"
       >
         <span slot="label">
-          <span class="dataCheckedStar">
-            *
-          </span>
+          <span class="dataCheckedStar"> * </span>
           海报图
         </span>
         <a-upload
@@ -131,9 +121,7 @@
         validate-status="error"
       >
         <span slot="label">
-          <span class="dataCheckedStar">
-            *
-          </span>
+          <span class="dataCheckedStar"> * </span>
           活动封面
         </span>
         <a-upload
@@ -156,23 +144,19 @@
       </a-form-item>
 
       <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="活动参与条件" v-if="activityType == 1">
-        <div style="display: flex;align-items: center;">
-          <a-checkbox v-model="model.isMemberOpen">
-            普通会员
-          </a-checkbox>
+        <div style="display: flex; align-items: center">
+          <a-checkbox v-model="model.isMemberOpen"> 普通会员 </a-checkbox>
           <a-input
-            style="width: 200px;"
+            style="width: 200px"
             :disabled="!model.isMemberOpen"
             v-model="model.memberIdentification"
             placeholder="请输入身份名称"
           ></a-input>
         </div>
-        <div style="display: flex;align-items: center;">
-          <a-checkbox v-model="model.isDesignationMemberOpen">
-            称号会员
-          </a-checkbox>
+        <div style="display: flex; align-items: center">
+          <a-checkbox v-model="model.isDesignationMemberOpen"> 称号会员 </a-checkbox>
           <a-input
-            style="width: 200px;"
+            style="width: 200px"
             :disabled="!model.isDesignationMemberOpen"
             v-model="model.designationMemberIdentification"
             placeholder="请输入身份名称"
@@ -183,9 +167,9 @@
       <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="参与活动报名奖励" v-if="activityType == 1">
         <a-input-number
           :min="0"
-          :precision="0"
+          :precision="2"
           placeholder="请输入参与活动报名奖励"
-          style="width:205px"
+          style="width: 205px"
           v-decorator="validatorRules.signUpReward"
         />
         福利金(0即为不送)
@@ -202,9 +186,7 @@
           style="width: 200px"
           v-decorator="['marketingMaterialColumnId', validatorRules.marketingMaterialColumnId]"
         >
-          <a-select-option value="">
-            请选择
-          </a-select-option>
+          <a-select-option value=""> 请选择 </a-select-option>
 
           <a-select-option v-for="(item, index) in marketingMaterialColumnData" :key="index" :value="item.id">
             {{ item.name }}
@@ -214,18 +196,14 @@
 
       <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol">
         <span slot="label">
-          <span class="dataCheckedStar">
-            *
-          </span>
+          <span class="dataCheckedStar"> * </span>
           活动内容
         </span>
         <JEditor v-model="model.content"> </JEditor>
       </a-form-item>
     </a-form>
     <div class="button-operation">
-      <a-button @click="handleOk" type="primary">
-        确认
-      </a-button>
+      <a-button @click="handleOk" type="primary"> 确认 </a-button>
     </div>
   </a-card>
 </template>
@@ -238,7 +216,7 @@ import moment from 'moment'
 export default {
   name: 'MarketingActivityListListModel',
   components: {
-    JEditor
+    JEditor,
   },
   data() {
     return {
@@ -273,11 +251,11 @@ export default {
       activityType: 0,
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 5 }
+        sm: { span: 5 },
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 16 }
+        sm: { span: 16 },
       },
       form: this.$form.createForm(this),
       validatorRules: {
@@ -297,11 +275,11 @@ export default {
             rules: [
               {
                 required: true,
-                message: '请选择所在城市!'
-              }
-            ]
-          }
-        ]
+                message: '请选择所在城市!',
+              },
+            ],
+          },
+        ],
       },
 
       url: {
@@ -313,13 +291,13 @@ export default {
         //获取经纬度
         getLngAndLat: '/storeManage/storeManage/getLngAndLat',
         getList: '/sysArea/sysArea/getList',
-        findByParentId: '/sysArea/sysArea/findByParentId'
+        findByParentId: '/sysArea/sysArea/findByParentId',
       },
       //配置
       configure: Object.freeze({
         imgErver: window._CONFIG['domianURL'] + '/sys/common/view',
-        fileUpload: window._CONFIG['domianURL'] + '/sys/common/upload'
-      })
+        fileUpload: window._CONFIG['domianURL'] + '/sys/common/upload',
+      }),
     }
   },
   created() {
@@ -334,14 +312,14 @@ export default {
         this.edit(this.$route.query.record)
       },
       immediate: true,
-      deep: true
-    }
+      deep: true,
+    },
   },
   methods: {
     //栏目列表数据
     getMarketingMaterialColumnList() {
       return new Promise((resolve, reject) => {
-        getAction(this.url.getMarketingMaterialColumnListMap).then(res => {
+        getAction(this.url.getMarketingMaterialColumnListMap).then((res) => {
           if (res.success) {
             console.log(res)
             this.marketingMaterialColumnData = res.result
@@ -381,8 +359,8 @@ export default {
                   uid: a,
                   url: this.configure.imgErver + '/' + coverPlans[a],
                   response: {
-                    message: coverPlans[a]
-                  }
+                    message: coverPlans[a],
+                  },
                 }
                 coverPlansSz.push(obj)
               }
@@ -397,8 +375,8 @@ export default {
                   uid: a,
                   url: this.configure.imgErver + '/' + posters[a],
                   response: {
-                    message: posters[a]
-                  }
+                    message: posters[a],
+                  },
                 }
                 postersSz.push(obj)
               }
@@ -413,8 +391,8 @@ export default {
                   uid: a,
                   url: this.configure.imgErver + '/' + surfacePlot[a],
                   response: {
-                    message: surfacePlot[a]
-                  }
+                    message: surfacePlot[a],
+                  },
                 }
                 surfacePlotSz.push(obj)
               }
@@ -438,7 +416,7 @@ export default {
           this.form.setFieldsValue({ endTime: this.model.endTime ? moment(this.model.endTime) : null })
 
           this.form.setFieldsValue({
-            registrationTime: this.model.registrationTime ? moment(this.model.registrationTime) : null
+            registrationTime: this.model.registrationTime ? moment(this.model.registrationTime) : null,
           })
         })
       })
@@ -506,7 +484,7 @@ export default {
           formData.posters = this.postersFileList.length > 0 ? JSON.stringify(postersCK) : ''
           formData.surfacePlot = this.surfacePlotFileList.length > 0 ? JSON.stringify(surfacePlot) : ''
           httpAction(httpurl, formData, method)
-            .then(res => {
+            .then((res) => {
               if (res.success) {
                 that.$message.success(res.message)
                 that.$router.push({ path: '/marketing/MarketingActivityListList' })
@@ -586,7 +564,7 @@ export default {
     cityAllDataLoad(selectedOptions) {
       const targetOption = selectedOptions[selectedOptions.length - 1]
       targetOption.loading = true
-      getAction(this.url.findByParentId, { id: targetOption.value }).then(res => {
+      getAction(this.url.findByParentId, { id: targetOption.value }).then((res) => {
         targetOption.loading = false
         if (res.success && res.result.length > 0) {
           let sz = []
@@ -594,7 +572,7 @@ export default {
             sz.push({
               label: item.name,
               value: item.id,
-              isLeaf: false
+              isLeaf: false,
             })
           }
           targetOption.children = sz
@@ -603,14 +581,14 @@ export default {
       })
     },
     getList(callback) {
-      getAction(this.url.getList).then(res => {
+      getAction(this.url.getList).then((res) => {
         if (res.success) {
           let sz3 = []
           for (let item of res.result) {
             sz3.push({
               label: item.name,
               value: item.id,
-              isLeaf: false
+              isLeaf: false,
             })
           }
           //所在城市
@@ -627,7 +605,7 @@ export default {
     async cityEchoDisplay(info) {
       let sz = info.sysAreaIds.split(',')
       let cityAllData = this.cityAllData
-      this.defaultCity = info.sysAreaIds.split(',').map(item => {
+      this.defaultCity = info.sysAreaIds.split(',').map((item) => {
         return item * 1
       })
       // this.$nextTick(()=>{
@@ -640,28 +618,28 @@ export default {
         this.canShowDefaultCity = true
       } else {
         //第一个id请求其对应的子地址
-        getAction(this.url.findByParentId, { id: sz[0] }).then(res => {
+        getAction(this.url.findByParentId, { id: sz[0] }).then((res) => {
           if (res.success && res.result.length > 0) {
             let sz2 = [] //子地址
             for (let item of res.result) {
               sz2.push({
                 label: item.name,
                 value: item.id,
-                isLeaf: false
+                isLeaf: false,
               })
             }
             for (let item of cityAllData) {
               //找到对应的label添加children
               if (this.areaAddressList[0] == item.label) {
                 item.children = sz2
-                getAction(this.url.findByParentId, { id: sz[1] }).then(res2 => {
+                getAction(this.url.findByParentId, { id: sz[1] }).then((res2) => {
                   if (res2.success && res2.result.length > 0) {
                     let sz3 = []
                     for (let item of res2.result) {
                       sz3.push({
                         label: item.name,
                         value: item.id,
-                        isLeaf: false
+                        isLeaf: false,
                       })
                     }
                     for (let item2 of sz2) {
@@ -696,8 +674,8 @@ export default {
       }
       this.model.sysAreaIds = value.join(',')
       this.areaAddressList = sz
-    }
-  }
+    },
+  },
 }
 </script>
 <style lang="scss">
