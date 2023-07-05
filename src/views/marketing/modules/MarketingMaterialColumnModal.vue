@@ -139,7 +139,6 @@ export default {
         name: { rules: [{ required: true, message: '请输入栏目名称!' }] },
         englishName: { rules: [{ required: true, message: '请输入英文名称' }] },
         sort: { rules: [{ required: true, message: '排序不能为空!' }] },
-        marketingActivityListId: { rules: [{ required: false, message: '请选择关联活动!' }] }
       },
 
       url: {
