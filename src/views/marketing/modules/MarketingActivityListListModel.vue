@@ -194,6 +194,18 @@
         </a-select>
       </a-form-item>
 
+      <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="活动报名按钮文案" v-if="activityType == 1">
+        <a-input
+          placeholder="请输入活动报名按钮文案"
+          style="width: 205px"
+          v-decorator="validatorRules.buttonIdentification"
+        />
+      </a-form-item>
+
+      <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="默认口号" v-if="activityType == 1">
+        <a-input placeholder="请输入默认口号" style="width: 205px" v-decorator="validatorRules.defaultActivitySlogan" />
+      </a-form-item>
+
       <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol">
         <span slot="label">
           <span class="dataCheckedStar"> * </span>
@@ -259,6 +271,12 @@ export default {
       },
       form: this.$form.createForm(this),
       validatorRules: {
+        buttonIdentification: [
+          'buttonIdentification',
+          { rules: [{ required: true, message: '请输入活动报名按钮文案!' }] },
+        ],
+        defaultActivitySlogan: ['defaultActivitySlogan', { rules: [{ required: false, message: '请输入默认口号!' }] }],
+
         activityName: ['activityName', { rules: [{ required: true, message: '请输入活动标题!' }] }],
         marketingMaterialColumnId: { rules: [{ required: false, message: '请选择栏目!' }] },
         signUpReward: ['signUpReward', { rules: [{ required: true, message: '请输入参与活动报名奖励!' }] }],
