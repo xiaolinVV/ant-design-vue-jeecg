@@ -5,15 +5,9 @@
         <!--      v-decorator="[ 'remarkExplian', validatorRules.remarkExplian]"-->
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="类型">
           <a-radio-group v-decorator="['materialType', validatorRules.materialType]" @change="materialTypeChange">
-            <a-radio value="1">
-              图文素材
-            </a-radio>
-            <a-radio value="2">
-              视频素材
-            </a-radio>
-            <a-radio value="3">
-              活动素材
-            </a-radio>
+            <a-radio value="1"> 图文素材 </a-radio>
+            <a-radio value="2"> 视频素材 </a-radio>
+            <a-radio value="3"> 活动素材 </a-radio>
           </a-radio-group>
         </a-form-item>
 
@@ -28,9 +22,7 @@
             style="width: 200px"
             v-decorator="['marketingMaterialColumnId', validatorRules.marketingMaterialColumnId]"
           >
-            <a-select-option value="">
-              请选择
-            </a-select-option>
+            <a-select-option value=""> 请选择 </a-select-option>
 
             <a-select-option v-for="(item, index) in marketingMaterialColumnData" :key="index" :value="item.id">
               {{ item.name }}
@@ -38,7 +30,12 @@
           </a-select>
         </a-form-item>
 
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="关联活动" v-if="!skeletonLoading">
+        <a-form-item
+          :labelCol="labelCol"
+          :wrapperCol="wrapperCol"
+          label="关联活动"
+          v-if="!skeletonLoading && AllData.materialType == 3"
+        >
           <a-select
             style="width: 200px"
             :default-active-first-option="false"
@@ -49,9 +46,7 @@
             @search="handleSearch"
             v-decorator="['marketingActivityListId', validatorRules.marketingActivityListId]"
           >
-            <a-select-option value="">
-              请选择
-            </a-select-option>
+            <a-select-option value=""> 请选择 </a-select-option>
             <a-select-option v-for="(item, index) in marketingActivityListIdLists" :key="index" :value="item.id">
               {{ item.activityName }}
             </a-select-option>
@@ -85,12 +80,8 @@
           :colon="false"
         >
           <div slot="label">
-            <span class="dataCheckedStar">
-              *
-            </span>
-            <span style="margin-right: 10px">
-              封面图:
-            </span>
+            <span class="dataCheckedStar"> * </span>
+            <span style="margin-right: 10px"> 封面图: </span>
           </div>
           <a-upload
             :action="uploadAction"
@@ -103,9 +94,7 @@
           >
             <div v-if="frontCoverFileList.length < 1">
               <a-icon type="plus" />
-              <div class="ant-upload-text">
-                上传
-              </div>
+              <div class="ant-upload-text">上传</div>
             </div>
           </a-upload>
           <a-modal :visible="frontCoverPreviewVisible" :footer="null" @cancel="frontCoverCancel">
@@ -121,12 +110,8 @@
           :colon="false"
         >
           <div slot="label">
-            <span class="dataCheckedStar">
-              *
-            </span>
-            <span style="color:red;margin-right: 10px">
-              分享图:
-            </span>
+            <span class="dataCheckedStar"> * </span>
+            <span style="color: red; margin-right: 10px"> 分享图: </span>
           </div>
           <a-upload
             :action="uploadAction"
@@ -139,9 +124,7 @@
           >
             <div v-if="shareFileList.length < 1">
               <a-icon type="plus" />
-              <div class="ant-upload-text">
-                上传
-              </div>
+              <div class="ant-upload-text">上传</div>
             </div>
           </a-upload>
           <a-modal :visible="sharePreviewVisible" :footer="null" @cancel="shareCancel">
@@ -157,12 +140,8 @@
           :colon="false"
         >
           <div slot="label">
-            <span class="dataCheckedStar">
-              *
-            </span>
-            <span style="margin-right: 10px">
-              海报图:
-            </span>
+            <span class="dataCheckedStar"> * </span>
+            <span style="margin-right: 10px"> 海报图: </span>
           </div>
           <a-upload
             :action="uploadAction"
@@ -175,9 +154,7 @@
           >
             <div v-if="posterFileList.length < 1">
               <a-icon type="plus" />
-              <div class="ant-upload-text">
-                上传
-              </div>
+              <div class="ant-upload-text">上传</div>
             </div>
           </a-upload>
           <a-modal :visible="posterPreviewVisible" :footer="null" @cancel="posterCancel">
@@ -189,17 +166,13 @@
           :labelCol="labelCol"
           :wrapperCol="{
             xs: { span: 24 },
-            sm: { span: 20 }
+            sm: { span: 20 },
           }"
           :colon="false"
         >
           <div slot="label">
-            <span class="dataCheckedStar">
-              *
-            </span>
-            <span style="margin-right: 10px">
-              内容:
-            </span>
+            <span class="dataCheckedStar"> * </span>
+            <span style="margin-right: 10px"> 内容: </span>
           </div>
           <JEditor v-model="twContent"> </JEditor>
           <a-upload
@@ -211,7 +184,7 @@
             :beforeUpload="videoBeforeUpload"
             v-if="AllData.materialType == 2"
           >
-            <a-button style="font-size:14px" v-if="videoFileList.length <= 0">
+            <a-button style="font-size: 14px" v-if="videoFileList.length <= 0">
               <a-icon type="upload" />
               点击上传视频
             </a-button>
@@ -222,7 +195,7 @@
           :labelCol="labelCol"
           :wrapperCol="{
             xs: { span: 24 },
-            sm: { span: 20 }
+            sm: { span: 20 },
           }"
           :colon="false"
         >
@@ -230,13 +203,9 @@
             <!--            <span class="dataCheckedStar">-->
             <!--               *-->
             <!--             </span>-->
-            <span style="margin-right: 10px">
-              关联商品:
-            </span>
+            <span style="margin-right: 10px"> 关联商品: </span>
           </div>
-          <a-button type="primary" @click="showSelectGoodsPopUp">
-            选择商品
-          </a-button>
+          <a-button type="primary" @click="showSelectGoodsPopUp"> 选择商品 </a-button>
           <a-alert
             message="重要提示：设定商品优惠券时请先核算好商品的利润，避免优惠后可能造成的利润亏损"
             type="info"
@@ -248,7 +217,7 @@
                 preview="1"
                 :src="getImgView(text)"
                 alt=""
-                style="width: 50px;height: 50px;display: block;margin: 0 auto;"
+                style="width: 50px; height: 50px; display: block; margin: 0 auto"
               />
             </template>
             <template slot="action" slot-scope="text, record">
@@ -260,12 +229,8 @@
         </a-form-item>
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="是否发布">
           <a-radio-group v-decorator="['isPublish', validatorRules.isPublish]">
-            <a-radio value="1">
-              是
-            </a-radio>
-            <a-radio value="0">
-              否
-            </a-radio>
+            <a-radio value="1"> 是 </a-radio>
+            <a-radio value="0"> 否 </a-radio>
           </a-radio-group>
         </a-form-item>
 
@@ -292,14 +257,17 @@
         <div class="button-end"></div>
 
         <div
-          style="display: flex;align-items: center;justify-content: space-between;width: 150px;height: 100px;margin:0 auto"
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 150px;
+            height: 100px;
+            margin: 0 auto;
+          "
         >
-          <a-button type="white">
-            取消
-          </a-button>
-          <a-button type="primary" @click="submit">
-            确定
-          </a-button>
+          <a-button type="white"> 取消 </a-button>
+          <a-button type="primary" @click="submit"> 确定 </a-button>
         </div>
       </a-form>
     </a-skeleton>
@@ -322,7 +290,7 @@ function getBase64(file) {
     const reader = new FileReader()
     reader.readAsDataURL(file)
     reader.onload = () => resolve(reader.result)
-    reader.onerror = error => reject(error)
+    reader.onerror = (error) => reject(error)
   })
 }
 import ATextarea from 'ant-design-vue/es/input/TextArea'
@@ -336,49 +304,49 @@ const columns = [
     dataIndex: 'mainPicture',
     width: 150,
     align: 'center',
-    scopedSlots: { customRender: 'mainPicture' }
+    scopedSlots: { customRender: 'mainPicture' },
   },
   {
     title: '商品名称',
     dataIndex: 'goodName',
-    align: 'center'
+    align: 'center',
   },
   {
     title: '商品分类',
     dataIndex: 'goodTypeNames',
-    align: 'center'
+    align: 'center',
   },
   {
     title: '市场价',
     dataIndex: 'marketPrice',
-    align: 'center'
+    align: 'center',
   },
   {
     title: '销售价',
     dataIndex: 'price',
-    align: 'center'
+    align: 'center',
   },
   {
     title: '会员价',
     dataIndex: 'vipPrice',
-    align: 'center'
+    align: 'center',
   },
   {
     title: '库存',
     dataIndex: 'repertory',
-    align: 'center'
+    align: 'center',
   },
   {
     title: '供应商',
     dataIndex: 'realname',
-    align: 'center'
+    align: 'center',
   },
   {
     title: '操作',
     dataIndex: 'action',
     align: 'center',
-    scopedSlots: { customRender: 'action' }
-  }
+    scopedSlots: { customRender: 'action' },
+  },
 ]
 export default {
   name: 'AddMarketingMaterialModel',
@@ -392,11 +360,11 @@ export default {
       headers: '',
       labelCol: {
         xs: { span: 24 },
-        sm: { span: 2 }
+        sm: { span: 2 },
       },
       wrapperCol: {
         xs: { span: 24 },
-        sm: { span: 10 }
+        sm: { span: 10 },
       },
       validatorRules: {
         marketingMaterialColumnId: { rules: [{ required: true, message: '请选择栏目!' }] },
@@ -408,7 +376,7 @@ export default {
         isPublish: { rules: [{ required: true, message: '请选择是否发布!' }] },
         initialViews: { rules: [{ required: true, message: '请输入初始浏览量!' }] },
         initialPraise: { rules: [{ required: true, message: '请输入初始点赞数!' }] },
-        sort: { rules: [{ required: false, message: '请设置排序!' }] }
+        sort: { rules: [{ required: false, message: '请设置排序!' }] },
       },
       //封面图配置
       frontCoverFileList: [],
@@ -453,7 +421,7 @@ export default {
         materialVideo: '', //视频地址
         materialType: '1',
         isPublish: '1',
-        marketingMaterialGoodDTOList: []
+        marketingMaterialGoodDTOList: [],
         // marketingMaterialGoodDTOListStr:''
       },
       url: {
@@ -467,14 +435,14 @@ export default {
         // 素材选中商品回选 GET
         postGoodListList: 'marketingMaterialGood/marketingMaterialGood/postGoodListList',
         //获取作者
-        queryById: '/sys/user/queryById'
+        queryById: '/sys/user/queryById',
       },
       //配置
       configure: {
-        imgerver: window._CONFIG['domianURL'] + '/sys/common/view'
+        imgerver: window._CONFIG['domianURL'] + '/sys/common/view',
       },
       //反显的关联商品
-      editResultDataSource: []
+      editResultDataSource: [],
     }
   },
   async created() {
@@ -621,7 +589,7 @@ export default {
         //    Only to show two recent uploaded files, and old ones will be replaced by the new
         fileList = fileList.slice(-2)
         // 2. read from response and show file link
-        fileList = fileList.map(file => {
+        fileList = fileList.map((file) => {
           if (file.response) {
             // Component will show file.url as link
             file.url = file.response.url
@@ -665,7 +633,7 @@ export default {
       // }
       // ids = Array.from(new Set(duplicationArray)).join(',')
       this.selectGoodsPopUpIds = ids.split(',')
-      postAction(this.url.postGoodListList, { ids, marketingMaterialListId: this.AllData.id || '' }).then(res => {
+      postAction(this.url.postGoodListList, { ids, marketingMaterialListId: this.AllData.id || '' }).then((res) => {
         if (res.success) {
           this.dataSource = [...this.editResultDataSource, ...res.result]
         } else {
@@ -721,7 +689,7 @@ export default {
           console.log(JSON.stringify(this.dataSource))
           this.allHandleImg(() => {
             values = Object.assign({}, this.AllData, values)
-            postAction(this.url.addMarketingMaterialList, values).then(res => {
+            postAction(this.url.addMarketingMaterialList, values).then((res) => {
               if (res.success) {
                 this.$message.success(res.message || '操作成功！')
                 this.$router.push({ path: '/marketing/MarketingMaterialListList' })
@@ -736,7 +704,7 @@ export default {
     //栏目列表数据
     getMarketingMaterialColumnList() {
       return new Promise((resolve, reject) => {
-        getAction(this.url.getMarketingMaterialColumnListMap).then(res => {
+        getAction(this.url.getMarketingMaterialColumnListMap).then((res) => {
           if (res.success) {
             console.log(res)
             this.marketingMaterialColumnData = res.result
@@ -751,7 +719,7 @@ export default {
     //活动列表数据
     getMarketingActivityList(name = '') {
       return new Promise((resolve, reject) => {
-        getAction(this.url.getFindMarketingActivityListByName, { name }).then(res => {
+        getAction(this.url.getFindMarketingActivityListByName, { name }).then((res) => {
           if (res.success) {
             console.log(res)
             this.marketingActivityListIdLists = res.result
@@ -798,8 +766,8 @@ export default {
             uid: index,
             url: this.configure.imgerver + '/' + result[index],
             response: {
-              message: result[index]
-            }
+              message: result[index],
+            },
           })
         }
       }
@@ -808,7 +776,7 @@ export default {
     //获取作者
     getRealname() {
       return new Promise((resolve, reject) => {
-        getAction(this.url.queryById, { id: this.userInfo().id }).then(res => {
+        getAction(this.url.queryById, { id: this.userInfo().id }).then((res) => {
           if (res.success) {
             this.AllData.author = res.result.realname
             resolve()
@@ -822,10 +790,10 @@ export default {
     onDelete(goodListId) {
       const dataSource = [...this.dataSource]
       const editResultDataSource = [...this.editResultDataSource]
-      this.dataSource = dataSource.filter(item => item.goodListId !== goodListId)
-      this.editResultDataSource = editResultDataSource.filter(item => item.goodListId !== goodListId)
-    }
-  }
+      this.dataSource = dataSource.filter((item) => item.goodListId !== goodListId)
+      this.editResultDataSource = editResultDataSource.filter((item) => item.goodListId !== goodListId)
+    },
+  },
 }
 </script>
 
