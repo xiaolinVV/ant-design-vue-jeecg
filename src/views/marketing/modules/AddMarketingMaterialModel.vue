@@ -583,21 +583,22 @@ export default {
     },
     //上传视频
     videoChange(info) {
-      if (this.canUploadVideo) {
-        let fileList = [...info.fileList]
-        // 1. Limit the number of uploaded files
-        //    Only to show two recent uploaded files, and old ones will be replaced by the new
-        fileList = fileList.slice(-2)
-        // 2. read from response and show file link
-        fileList = fileList.map((file) => {
-          if (file.response) {
-            // Component will show file.url as link
-            file.url = file.response.url
-          }
-          return file
-        })
-        this.videoFileList = fileList
-      }
+      console.log(info)
+      // if (this.canUploadVideo) {
+      let fileList = [...info.fileList]
+      // 1. Limit the number of uploaded files
+      //    Only to show two recent uploaded files, and old ones will be replaced by the new
+      fileList = fileList.slice(-2)
+      // 2. read from response and show file link
+      fileList = fileList.map((file) => {
+        if (file.response) {
+          // Component will show file.url as link
+          file.url = file.response.url
+        }
+        return file
+      })
+      this.videoFileList = fileList
+      // }
     },
     //视频校验
     videoBeforeUpload(file) {
@@ -613,9 +614,9 @@ export default {
       if (!isVideo) {
         this.$message.error('需上传支持mp4,rmvb,3gp,avi,mov,wmv,flv,mkv的视频格式!')
       }
-      const isLt2M = file.size / 1024 / 1024 < 50
+      const isLt2M = file.size / 1024 / 1024 < 10
       if (!isLt2M) {
-        this.$message.error('视频大小必须在50M以内!')
+        this.$message.error('视频大小必须在10M以内!')
       }
       this.canUploadVideo = isVideo && isLt2M
       return isVideo && isLt2M
@@ -765,9 +766,12 @@ export default {
           sz.push({
             uid: index,
             url: this.configure.imgerver + '/' + result[index],
-            response: {
-              message: result[index],
-            },
+            // response: {
+            //   message: result[index],
+            // },
+            name: this.configure.imgerver + '/' + result[index],
+            response: result[index],
+            status: 'done',
           })
         }
       }

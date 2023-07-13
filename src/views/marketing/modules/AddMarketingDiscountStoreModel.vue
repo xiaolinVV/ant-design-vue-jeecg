@@ -11,23 +11,33 @@
           placeholder="请输入优惠券名称,字数不超过50个字"
           v-decorator="[
             'name',
-            { rules: [{ required: true, message: '请输入优惠券名称' }, { max: 50, message: '字数不能超过50个字' }] }
+            {
+              rules: [
+                { required: true, message: '请输入优惠券名称' },
+                { max: 50, message: '字数不能超过50个字' },
+              ],
+            },
           ]"
         />
       </a-form-item>
       <a-form-item label="选择店铺" :label-col="labelCol" :wrapper-col="wrapperCol" v-if="isMerchant">
-            <a-select show-search style="width: 300px" placeholder="请输入对应手机号并选择店铺"
-              @focus="filterOptionStore" @search="filterOptionStore"
-              :filter-option="false" :not-found-content="fetchingStore ? undefined : null"
-              v-decorator="['storeManageId', verificationRules.storeManageId]"
-            >
-              <a-spin v-if="fetchingStore" slot="notFoundContent" size="small"/>
-              <a-select-option value="" disabled  v-else>请输入对应手机号并选择店铺</a-select-option>
-              <a-select-option v-for="item in dianpulist" :value="item.sys_user_id">{{item.NAME}}({{item.boss_phone}})</a-select-option>
-            </a-select>
-          </a-form-item>
-
-
+        <a-select
+          show-search
+          style="width: 300px"
+          placeholder="请输入对应手机号并选择店铺"
+          @focus="filterOptionStore"
+          @search="filterOptionStore"
+          :filter-option="false"
+          :not-found-content="fetchingStore ? undefined : null"
+          v-decorator="['storeManageId', verificationRules.storeManageId]"
+        >
+          <a-spin v-if="fetchingStore" slot="notFoundContent" size="small" />
+          <a-select-option value="" disabled v-else>请输入对应手机号并选择店铺</a-select-option>
+          <a-select-option v-for="item in dianpulist" :value="item.sys_user_id"
+            >{{ item.NAME }}({{ item.boss_phone }})</a-select-option
+          >
+        </a-select>
+      </a-form-item>
 
       <a-form-item
         :label-col="labelCol"
@@ -106,23 +116,30 @@
         </a-modal>
       </a-form-item>
 
-      
       <a-form-item label="券类型" :label-col="labelCol" :wrapper-col="{ span: 12 }" class="line-special">
         <a-radio-group
           v-decorator="['isNomal', { rules: [{ required: true, message: '请选择券类型' }] }]"
           @change="couponClassification"
         >
-          <a-radio :style="radioStyle" :value="0">
-            普通券
-          </a-radio>
-          <a-radio :style="radioStyle" :value="1">
-            活动券
-          </a-radio>
-          <a-radio :style="radioStyle" :value="2">
-            折扣券
-          </a-radio>
+          <a-radio :style="radioStyle" :value="0"> 普通券 </a-radio>
+          <a-radio :style="radioStyle" :value="1"> 活动券 </a-radio>
+          <a-radio :style="radioStyle" :value="2"> 折扣券 </a-radio>
         </a-radio-group>
       </a-form-item>
+
+      <a-form-item
+        v-if="AllData.isNomal == 2"
+        label="是否支持叠加使用"
+        :label-col="labelCol"
+        :wrapper-col="{ span: 12 }"
+        class="line-special"
+      >
+        <a-radio-group v-decorator="['overlayUse', { rules: [{ required: true, message: '请选择是否支持叠加使用' }] }]">
+          <a-radio :style="radioStyle" value="0"> 否 </a-radio>
+          <a-radio :style="radioStyle" value="1"> 是 </a-radio>
+        </a-radio-group>
+      </a-form-item>
+
       <a-form-item
         label="领取人限制"
         :label-col="labelCol"
@@ -135,7 +152,7 @@
           :options="plainOptions1"
           v-decorator="[
             'getRestrict',
-            { rules: [{ required: AllData.isNomal == 0 ? true : false, message: '请选择领取人限制' }] }
+            { rules: [{ required: AllData.isNomal == 0 ? true : false, message: '请选择领取人限制' }] },
           ]"
         />
       </a-form-item>
@@ -150,16 +167,12 @@
         <a-radio-group
           v-decorator="[
             'isGetThe',
-            { rules: [{ required: AllData.isNomal == 0 ? true : false, message: '请设置再次领取' }] }
+            { rules: [{ required: AllData.isNomal == 0 ? true : false, message: '请设置再次领取' }] },
           ]"
           @change="noCouponGet"
         >
-          <a-radio :style="radioStyle" :value="0">
-            不支持
-          </a-radio>
-          <a-radio :style="radioStyle" :value="1">
-            支持
-          </a-radio>
+          <a-radio :style="radioStyle" :value="0"> 不支持 </a-radio>
+          <a-radio :style="radioStyle" :value="1"> 支持 </a-radio>
         </a-radio-group>
       </a-form-item>
       <a-form-item
@@ -178,14 +191,19 @@
               rules: [
                 {
                   required: AllData.isGetThe == 1 && AllData.isNomal == 0 ? true : false,
-                  message: '请选择再次领取条件'
-                }
-              ]
-            }
+                  message: '请选择再次领取条件',
+                },
+              ],
+            },
           ]"
         />
       </a-form-item>
-      <a-form-item label="使用门槛" :label-col="labelCol" :wrapper-col="{ span: 12 }"  v-if="AllData.isNomal == 0 || AllData.isNomal == 1">
+      <a-form-item
+        label="使用门槛"
+        :label-col="labelCol"
+        :wrapper-col="{ span: 12 }"
+        v-if="AllData.isNomal == 0 || AllData.isNomal == 1"
+      >
         <!--          v-model="AllData.isThreshold"-->
         <a-radio-group
           v-decorator="['isThreshold', { rules: [{ required: true, message: '请选择使用门槛' }] }]"
@@ -199,32 +217,79 @@
           </a-radio>
         </a-radio-group>
       </a-form-item>
-      <a-form-item label="优惠内容" :label-col="labelCol" :wrapper-col="{ span: 12 }" class="Discount" v-if="AllData.isNomal == 0 || AllData.isNomal == 1">
+      <a-form-item
+        label="优惠内容"
+        :label-col="labelCol"
+        :wrapper-col="{ span: 12 }"
+        class="Discount"
+        v-if="AllData.isNomal == 0 || AllData.isNomal == 1"
+      >
         减
-        <a-input v-decorator="['subtract',{rules: [{ required: true, message: '请输入优惠内容' },
-                {pattern: /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/,
-                  message: '请填写正确的金额'}]}]"/>
+        <a-input
+          v-decorator="[
+            'subtract',
+            {
+              rules: [
+                { required: true, message: '请输入优惠内容' },
+                {
+                  pattern: /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/,
+                  message: '请填写正确的金额',
+                },
+              ],
+            },
+          ]"
+        />
         元
       </a-form-item>
-      <a-form-item label="上限金额" :label-col="labelCol" :wrapper-col="{ span: 12 }" class="Discount" v-if="AllData.isNomal == 2">
-        <a-input v-decorator="['discountLimitAmount',{rules: [{ required: true, message: '请输入上限金额容' },
-          {pattern: /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/,message: '请填写正确的金额'}]}]" />
-          元
+      <a-form-item
+        label="上限金额"
+        :label-col="labelCol"
+        :wrapper-col="{ span: 12 }"
+        class="Discount"
+        v-if="AllData.isNomal == 2"
+      >
+        <a-input
+          v-decorator="[
+            'discountLimitAmount',
+            {
+              rules: [
+                { required: true, message: '请输入上限金额容' },
+                {
+                  pattern: /(^[1-9]([0-9]+)?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/,
+                  message: '请填写正确的金额',
+                },
+              ],
+            },
+          ]"
+        />
+        元
       </a-form-item>
-      <a-form-item label="优惠折扣" :label-col="labelCol" :wrapper-col="{ span: 12 }" class="Discount" v-if="AllData.isNomal == 2">
-        <a-input v-decorator="['discountPercent',{rules: [{ required: true, message: '请输入优惠折扣' },
-          {pattern: /^(\d|10)(\.\d)?$/,message: '请填写正确的金额'}]}]" />
-          折（请填写0-10之间的数字）
+      <a-form-item
+        label="优惠折扣"
+        :label-col="labelCol"
+        :wrapper-col="{ span: 12 }"
+        class="Discount"
+        v-if="AllData.isNomal == 2"
+      >
+        <a-input
+          v-decorator="[
+            'discountPercent',
+            {
+              rules: [
+                { required: true, message: '请输入优惠折扣' },
+                { pattern: /^(\d|10)(\.\d)?$/, message: '请填写正确的金额' },
+              ],
+            },
+          ]"
+        />
+        折（请填写0-10之间的数字）
       </a-form-item>
-
-
-
 
       <a-form-item :label-col="labelCol" :wrapper-col="{ span: 18 }" label="用券时间">
         <!--        v-model="AllData.vouchersWay"-->
         <a-radio-group
           @change="useCouponTime"
-          style="display: flex;align-items: center;flex-wrap: wrap;"
+          style="display: flex; align-items: center; flex-wrap: wrap"
           v-decorator="['vouchersWay', { rules: [{ required: true, message: '请选择用券时间' }] }]"
         >
           <div>
@@ -235,17 +300,11 @@
           <div>
             <a-radio :value="1">
               领券当日起
-              <a-input :disabled="AllData.vouchersWay != 1" style="width: 75px;" v-model="AllData.today" />
-              <a-select defaultValue="天" style="width: 120px;margin-left: 10px;" v-model="AllData.monad">
-                <a-select-option value="天">
-                  天
-                </a-select-option>
-                <a-select-option value="周">
-                  周
-                </a-select-option>
-                <a-select-option value="月">
-                  月
-                </a-select-option>
+              <a-input :disabled="AllData.vouchersWay != 1" style="width: 75px" v-model="AllData.today" />
+              <a-select defaultValue="天" style="width: 120px; margin-left: 10px" v-model="AllData.monad">
+                <a-select-option value="天"> 天 </a-select-option>
+                <a-select-option value="周"> 周 </a-select-option>
+                <a-select-option value="月"> 月 </a-select-option>
               </a-select>
               内可用
             </a-radio>
@@ -253,17 +312,11 @@
           <div>
             <a-radio :value="2">
               领券次日起
-              <a-input :disabled="AllData.vouchersWay != 2" style="width: 75px;" v-model="AllData.tomorow" />
-              <a-select defaultValue="天" style="width: 120px;margin-left: 10px;" v-model="AllData.monad">
-                <a-select-option value="天">
-                  天
-                </a-select-option>
-                <a-select-option value="周">
-                  周
-                </a-select-option>
-                <a-select-option value="月">
-                  月
-                </a-select-option>
+              <a-input :disabled="AllData.vouchersWay != 2" style="width: 75px" v-model="AllData.tomorow" />
+              <a-select defaultValue="天" style="width: 120px; margin-left: 10px" v-model="AllData.monad">
+                <a-select-option value="天"> 天 </a-select-option>
+                <a-select-option value="周"> 周 </a-select-option>
+                <a-select-option value="月"> 月 </a-select-option>
               </a-select>
               内可用
             </a-radio>
@@ -278,9 +331,7 @@
         <!--          </span>-->
         <!--          适用商品-->
         <!--        </span>-->
-        <a-button @click="PopUp">
-          选择商品
-        </a-button>
+        <a-button @click="PopUp"> 选择商品 </a-button>
         <a-alert
           :closable="true"
           class="attention"
@@ -291,10 +342,10 @@
           :dataSource="isSelectData"
           :pagination="{ pageSize: 5 }"
           bordered
-          style="margin-top: 20px;"
+          style="margin-top: 20px"
         >
           <template slot="mainPicture" slot-scope="text">
-            <img :src="text" alt=" " style="width: 40px;height: 40px;" />
+            <img :src="text" alt=" " style="width: 40px; height: 40px" />
           </template>
           <template slot="operation" slot-scope="text, record">
             <a-popconfirm @confirm="() => onDelete(record.id)" title="确定要删除吗?" v-if="isSelectData.length">
@@ -306,9 +357,7 @@
       </a-form-item>
 
       <a-form-item label="使用方式" :label-col="labelCol" :wrapper-col="{ span: 12 }" class="line-special">
-        <a-checkbox :checked="AllData.isUniqueness" @change="isUniquenessHandleChange">
-          唯一选项
-        </a-checkbox>
+        <a-checkbox :checked="AllData.isUniqueness" @change="isUniquenessHandleChange"> 唯一选项 </a-checkbox>
         <div>
           说明：默认为不勾选，即该优惠券可以多选适用商品加入购物车下单。勾选，即该优惠券仅可选择一个商品进行立即购买下单。
         </div>
@@ -330,9 +379,9 @@
             {
               rules: [
                 { required: true, message: '请输入发放总量' },
-                { pattern: /^[+]{0,1}(\d+)$/, message: '发放总量为正整数！' }
-              ]
-            }
+                { pattern: /^[+]{0,1}(\d+)$/, message: '发放总量为正整数！' },
+              ],
+            },
           ]"
         />
         <!--        ,{validator: totalDetermine,}-->
@@ -361,18 +410,14 @@
           @change="expiredReminder"
           v-decorator="['isWarn', { rules: [{ required: true, message: '请选择过期提醒' }] }]"
         >
-          <a-radio :style="radioStyle" :value="0">
-            不提醒
-          </a-radio>
+          <a-radio :style="radioStyle" :value="0"> 不提醒 </a-radio>
           <a-radio :style="radioStyle" :value="1">
             过期前
-            <a-input :disabled="AllData.isWarn == 0" style="width: 75px;margin: 0 10px;" v-model="AllData.warnDays" />
+            <a-input :disabled="AllData.isWarn == 0" style="width: 75px; margin: 0 10px" v-model="AllData.warnDays" />
             天
           </a-radio>
         </a-radio-group>
       </a-form-item>
-
-      
 
       <!-- <a-form-item :label-col="labelCol" :wrapper-col="{ span: 12 }" label="投放渠道" v-show="AllData.isNomal == 0">
         <a-checkbox-group
@@ -391,12 +436,8 @@
     </a-form>
     <div class="button-end"></div>
     <div class="button-operation">
-      <a-button>
-        取消
-      </a-button>
-      <a-button @click="sure" type="primary">
-        确认
-      </a-button>
+      <a-button> 取消 </a-button>
+      <a-button @click="sure" type="primary"> 确认 </a-button>
     </div>
 
     <select-goods-to-add-pop-up
@@ -423,45 +464,45 @@ const selectStoreColumns = [
     title: '商品图片',
     dataIndex: 'mainPicture',
     scopedSlots: { customRender: 'mainPicture' },
-    width: 150
+    width: 150,
   },
   {
     title: '商品名称',
     className: 'column-money',
     dataIndex: 'goodName',
-    width: 150
+    width: 150,
   },
   {
     title: '商品分类',
     dataIndex: 'typeName',
-    width: 150
+    width: 150,
   },
   {
     title: '市场价',
     dataIndex: 'marketPrice',
-    width: 150
+    width: 150,
   },
 
   {
     title: '销售价',
     dataIndex: 'price',
-    width: 150
+    width: 150,
   },
   {
     title: '成本价',
     dataIndex: 'costPrice',
-    width: 150
+    width: 150,
   },
   {
     title: '会员价',
     dataIndex: 'vipPrice',
-    width: 150
+    width: 150,
   },
   {
     title: '库存',
     dataIndex: 'repertory',
-    width: 150
-  }
+    width: 150,
+  },
 ]
 
 export default {
@@ -472,7 +513,7 @@ export default {
       form: this.$form.createForm(this),
       radioStyle: {
         height: '30px',
-        lineHeight: '15px'
+        lineHeight: '15px',
       },
       headers: '',
       labelCol: { span: 2 },
@@ -497,50 +538,50 @@ export default {
         {
           title: '商品图片',
           dataIndex: 'mainPicture',
-          scopedSlots: { customRender: 'mainPicture' }
+          scopedSlots: { customRender: 'mainPicture' },
         },
         {
           title: '商品名称',
           className: 'column-money',
-          dataIndex: 'goodName'
+          dataIndex: 'goodName',
         },
         {
           title: '商品分类',
-          dataIndex: 'typeName'
+          dataIndex: 'typeName',
         },
         {
           title: '市场价',
-          dataIndex: 'marketPrice'
+          dataIndex: 'marketPrice',
         },
 
         {
           title: '销售价',
-          dataIndex: 'price'
+          dataIndex: 'price',
         },
         {
           title: '成本价',
-          dataIndex: 'costPrice'
+          dataIndex: 'costPrice',
         },
         {
           title: '会员价',
-          dataIndex: 'vipPrice'
+          dataIndex: 'vipPrice',
         },
         {
           title: '库存',
-          dataIndex: 'repertory'
+          dataIndex: 'repertory',
         },
         {
           title: '操作',
           dataIndex: 'operation',
           // className: 'operation',
-          scopedSlots: { customRender: 'operation' }
-        }
+          scopedSlots: { customRender: 'operation' },
+        },
       ],
       //已经选择的选择商品数据
       isSelectData: [],
       //配置
       configure: {
-        imgErver: window._CONFIG['domianURL'] + '/sys/common/view'
+        imgErver: window._CONFIG['domianURL'] + '/sys/common/view',
       },
       //总共页码
       totalPage: 5,
@@ -628,22 +669,21 @@ export default {
         coverPlan: '',
         mainPictures: '',
         coverPlans: '',
-        storeManageId:'',
+        storeManageId: '',
       },
       goodStoreListIds: '',
       wrapperCol: { span: 17 },
       fetchingStore: false,
       verificationRules: {
-          storeManageId: { rules: [{ required: true, message: '请选择店铺' }] },
+        storeManageId: { rules: [{ required: true, message: '请选择店铺' }] },
       },
       dianpulist: [],
       isMerchant: false,
-
     }
   },
   components: {
     selectGoodsToAddPopUp,
-    JEditor
+    JEditor,
   },
   methods: {
     moment,
@@ -732,8 +772,8 @@ export default {
     onDelete(id) {
       const dataSource = [...this.isSelectData]
       const selectedRowKeys = [...this.selectedRowKeys]
-      this.selectedRowKeys = selectedRowKeys.filter(item => item !== id)
-      this.isSelectData = dataSource.filter(item => item.id !== id)
+      this.selectedRowKeys = selectedRowKeys.filter((item) => item !== id)
+      this.isSelectData = dataSource.filter((item) => item.id !== id)
     },
     //投放渠道选择
     deliveryChannelChange(checkedValues) {
@@ -838,16 +878,15 @@ export default {
             }
             this.AllData.marketingChannelId = sz2.join(',')
             this.AllData.channelIds = sz2.join(',')
-            
-            if(this.isMerchant) {
+
+            if (this.isMerchant) {
               this.AllData.sysUserId = this.AllData.storeManageId
             }
-
 
             console.log(this.AllData)
             debugger
             postAction(url, this.AllData)
-              .then(res => {
+              .then((res) => {
                 if (res.success) {
                   this.$message.success('成功！')
                   this.$router.push('/marketing/MarketingDiscountList')
@@ -855,7 +894,7 @@ export default {
                   this.$message.warn('失败')
                 }
               })
-              .catch(err => {
+              .catch((err) => {
                 this.$message.warn('失败')
               })
           })
@@ -906,23 +945,22 @@ export default {
     loadingPage() {},
 
     filterOptionStore(value) {
-        let bossPhone = value
-        this.lastFetchIdStore += 1
-        const fetchId = this.lastFetchIdStore
-        //this.dianpulist = [];
-        this.fetchingStore = true
-        if (fetchId !== this.lastFetchIdStore) {
-          return
+      let bossPhone = value
+      this.lastFetchIdStore += 1
+      const fetchId = this.lastFetchIdStore
+      //this.dianpulist = [];
+      this.fetchingStore = true
+      if (fetchId !== this.lastFetchIdStore) {
+        return
+      }
+      getAction(this.url.findStoreList, { bossPhone: bossPhone }).then((res) => {
+        this.fetchingStore = false
+        if (res.success === false) return
+        if (res) {
+          this.dianpulist = res
         }
-        getAction(this.url.findStoreList, { bossPhone: bossPhone }).then((res) => {
-          this.fetchingStore = false
-          if (res.success === false) return
-          if (res) {
-            this.dianpulist = res
-          }
-        })
-      },
-
+      })
+    },
   },
   created() {
     // 获取当前用户习惯信息
@@ -931,11 +969,10 @@ export default {
       userInfo = JSON.parse(userInfo)
       if (userInfo.value.userRole && userInfo.value.userRole.indexOf('Merchant') == -1) {
         this.isMerchant = true
-      }else{
+      } else {
         this.isMerchant = false
       }
     }
-
 
     const token = Vue.ls.get('Access-Token')
     this.headers = { 'X-Access-Token': token }
@@ -945,7 +982,7 @@ export default {
     this.part = part
     let that = this
     //请求投放渠道列表接口
-    getAction(that.url.queryChannelList).then(res => {
+    getAction(that.url.queryChannelList).then((res) => {
       if (res) {
         let sz = []
         let sz2 = []
@@ -953,7 +990,7 @@ export default {
           sz.push(item.name)
           sz2.push({
             id: item.id,
-            name: item.name
+            name: item.name,
           })
         }
         this.deliveryChannel = sz
@@ -971,7 +1008,7 @@ export default {
               isThreshold: marketingDiscountData.isThreshold * 1, //有无门槛
               // subtract: marketingDiscountData.subtract,//减多少钱  优惠内容
               // total: marketingDiscountData.total,//发放总量
-              storeManageId: marketingDiscountData.sysUserId, 
+              storeManageId: marketingDiscountData.sysUserId,
               userRestrict: marketingDiscountData.userRestrict.split(','), //使用人限制
               getRestrict: marketingDiscountData.getRestrict.split(','), //领取人限制
               isGive: marketingDiscountData.isGive * 1, //赠送设置
@@ -989,14 +1026,14 @@ export default {
               // goodStoreListIds: marketingDiscountData.goodStoreListIds,//商品ids
               marketingChannelId: [], //投放渠道选择值 marketingDiscountData.marketingChannelId.split(',')
               // discountExplain: marketingDiscountData.discountExplain,//券说明
-              againGet: marketingDiscountData.againGet.split(',') //再次领取条件
+              againGet: marketingDiscountData.againGet.split(','), //再次领取条件
             }
             allData = Object.assign({}, marketingDiscountData, allData)
             this.selectDateToTime =
               marketingDiscountData.startTime && marketingDiscountData.endTime
                 ? [
                     moment(marketingDiscountData.startTime, this.dateFormat),
-                    moment(marketingDiscountData.endTime, this.dateFormat)
+                    moment(marketingDiscountData.endTime, this.dateFormat),
                   ]
                 : ''
             for (let a = 0; a < allData.userRestrict.length; a++) {
@@ -1018,8 +1055,8 @@ export default {
                   uid: a,
                   url: this.configure.imgErver + '/' + mainPictures[a],
                   response: {
-                    message: mainPictures[a]
-                  }
+                    message: mainPictures[a],
+                  },
                 }
                 mainPicturesSz.push(obj)
               }
@@ -1029,8 +1066,8 @@ export default {
                   uid: a,
                   url: this.configure.imgErver + '/' + coverPlans[a],
                   response: {
-                    message: coverPlans[a]
-                  }
+                    message: coverPlans[a],
+                  },
                 }
                 coverPlansSz.push(obj)
               }
@@ -1040,8 +1077,8 @@ export default {
                   uid: a,
                   url: this.configure.imgErver + '/' + posters[a],
                   response: {
-                    message: posters[a]
-                  }
+                    message: posters[a],
+                  },
                 }
                 postersSz.push(obj)
               }
@@ -1060,9 +1097,9 @@ export default {
             let info = {
               pageNo: this.pageNo,
               marketingDiscountId: allData.id,
-              id: allData.id
+              id: allData.id,
             }
-            getAction(that.url.findChannelByDiscountId, info).then(res => {
+            getAction(that.url.findChannelByDiscountId, info).then((res) => {
               let sz = []
               for (let item of res) {
                 sz.push(item.marketingChannelId)
@@ -1077,7 +1114,7 @@ export default {
               if (allData.startTime && allData.endTime) {
                 this.selectDateToTime = [
                   moment(allData.startTime, this.dateFormat),
-                  moment(allData.endTime, this.dateFormat)
+                  moment(allData.endTime, this.dateFormat),
                 ]
               }
               this.AllData = allData
@@ -1087,7 +1124,7 @@ export default {
             })
             //使用商品列表请求接口返先
             //参数  marketingDiscountId
-            getAction(that.url.findByMarketingDiscount, info).then(res => {
+            getAction(that.url.findByMarketingDiscount, info).then((res) => {
               if (res.success) {
                 this.isSelectData = res.result.records
                 this.selectAllStoreData = [...this.selectAllStoreData, ...res.result.records]
@@ -1107,11 +1144,10 @@ export default {
         })
         if (this.part == 1) {
           this.AllData.marketingChannelId.push(res[0].name)
-          console.log("this.AllData1", this.AllData)
+          console.log('this.AllData1', this.AllData)
           this.$nextTick(() => {
             this.form.setFieldsValue(this.AllData)
           })
-          
         }
       }
     })
@@ -1119,8 +1155,8 @@ export default {
   computed: {
     selectGoodsPopUpIds() {
       return this.goodStoreListIds ? this.goodStoreListIds.split(',') || [] : []
-    }
-  }
+    },
+  },
 }
 </script>
 <style lang="less">
