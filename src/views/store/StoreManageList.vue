@@ -37,7 +37,7 @@
                 <selectAddress
                   ref="selectAddress"
                   @cityAllDataLoad="cityAllDataLoad"
-                  style="margin: 0 10px;width: 100%;"
+                  style="margin: 0 10px; width: 100%"
                 >
                 </selectAddress>
               </a-form-item>
@@ -94,7 +94,7 @@
             </a-col>
           </template>
           <a-col :md="6" :sm="8">
-            <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
+            <span style="float: left; overflow: hidden" class="table-page-search-submitButtons">
               <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
               <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
               <a @click="handleToggleSearch" style="margin-left: 8px">
@@ -110,7 +110,7 @@
     <!-- 操作按钮区域 -->
     <div class="table-operator">
       <!--<a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>-->
-      <a-upload
+      <!-- <a-upload
         name="file"
         :showUploadList="false"
         :multiple="false"
@@ -118,8 +118,9 @@
         :action="importExcelUrl"
         @change="handleImportExcel"
       >
-        <!--<a-button type="primary" icon="import">导入</a-button>-->
-      </a-upload>
+        <a-button type="primary" icon="import">导入</a-button>
+      </a-upload> -->
+      <a-button type="primary" icon="download" @click="handleExportXls('店铺-店铺管理-店铺列表')">导出</a-button>
       <a-dropdown v-if="selectedRowKeys.length > 0">
         <a-menu slot="overlay">
           <a-menu-item key="1" @click="batchDel">
@@ -165,7 +166,7 @@
             :preview="'avatarslot1' + index"
             :src="getAvatarView1(record.storePicture)"
             alt=""
-            style="width: 32px;height: 32px;display:block"
+            style="width: 32px; height: 32px; display: block"
           />
         </template>
         <template slot="avatarslot2" slot-scope="text, record, index">
@@ -174,7 +175,7 @@
             :preview="'avatarslot2' + index"
             :src="getAvatarView2(record.accordingStore)"
             alt=""
-            style="width: 32px;height: 32px;display:block"
+            style="width: 32px; height: 32px; display: block"
           />
         </template>
         <template slot="avatarslot3" slot-scope="text, record, index">
@@ -183,7 +184,7 @@
             :preview="'avatarslot3' + index"
             :src="getAvatarView3(record.licenseForEnterprise)"
             alt=""
-            style="width: 32px;height: 32px;display:block"
+            style="width: 32px; height: 32px; display: block"
             v-if="record.licenseForEnterprise != null"
           />
           <span v-if="record.licenseForEnterprise == null">~</span>
@@ -194,7 +195,7 @@
             :preview="'avatarslot4' + index"
             :src="getAvatarView4(record.idPictureZ)"
             alt=""
-            style="width: 32px;height: 32px;display:block"
+            style="width: 32px; height: 32px; display: block"
           />
         </template>
         <template slot="avatarslot5" slot-scope="text, record, index">
@@ -203,7 +204,7 @@
             :preview="'avatarslot5' + index"
             :src="getAvatarView5(record.idPictureF)"
             alt=""
-            style="width: 32px;height: 32px;display:block"
+            style="width: 32px; height: 32px; display: block"
           />
         </template>
         <template slot="avatarslot6" slot-scope="text, record, index">
@@ -212,7 +213,7 @@
             :preview="'avatarslot6' + index"
             :src="getAvatarView6(record.idHand)"
             alt=""
-            style="width: 32px;height: 32px;display:block"
+            style="width: 32px; height: 32px; display: block"
           />
         </template>
         <template slot="avatarslot7" slot-scope="text, record, index">
@@ -221,7 +222,7 @@
             :preview="'avatarslot7' + index"
             :src="getAvatarView7(record.agentAuthorization)"
             alt=""
-            style="width: 32px;height: 32px;display:block"
+            style="width: 32px; height: 32px; display: block"
             v-if="record.agentAuthorization != null"
           />
           <span v-if="record.agentAuthorization == null">~</span>
@@ -232,7 +233,7 @@
             :preview="'ssAddress' + index"
             :src="ssAddressView(record.ssAddress)"
             alt=""
-            style="width: 32px;height: 32px;display:block"
+            style="width: 32px; height: 32px; display: block"
           />
         </template>
         <template slot="goodAudit" slot-scope="text, record, index">
@@ -301,29 +302,19 @@
           <a @click="showModal(record)">审核</a>
           <a-divider type="vertical" />
           <a-dropdown>
-            <a class="ant-dropdown-link">
-              更多 <a-icon type="down"/>
-            </a>
+            <a class="ant-dropdown-link"> 更多 <a-icon type="down" /> </a>
             <a-menu slot="overlay">
               <a-menu-item>
-                <a @click="showPromoter(record, '修改推广人')">
-                  修改推广人
-                </a>
+                <a @click="showPromoter(record, '修改推广人')"> 修改推广人 </a>
               </a-menu-item>
               <a-menu-item>
-                <a @click="showFranchisee(record, '修改归属加盟商')">
-                  修改归属加盟商
-                </a>
+                <a @click="showFranchisee(record, '修改归属加盟商')"> 修改归属加盟商 </a>
               </a-menu-item>
               <a-menu-item>
-                <a @click="handleEdit(record, '基础信息')">
-                  编辑基础信息
-                </a>
+                <a @click="handleEdit(record, '基础信息')"> 编辑基础信息 </a>
               </a-menu-item>
               <a-menu-item>
-                <a @click="handleEdit(record, '证件信息')">
-                  编辑证件信息
-                </a>
+                <a @click="handleEdit(record, '证件信息')"> 编辑证件信息 </a>
               </a-menu-item>
               <a-menu-item v-if="floorState == 1">
                 <a @click="showSpecialLabel(record, '特色标签')">特色标签</a>
@@ -338,13 +329,13 @@
                 <a @click="storeCashierSettingModalClick(record)">收银设置</a>
               </a-menu-item>
               <a-menu-item>
-                <a @click="storeCashierRoutingListClick(record,'0')">收银分账设置</a>
+                <a @click="storeCashierRoutingListClick(record, '0')">收银分账设置</a>
               </a-menu-item>
               <a-menu-item>
                 <a @click="storeOrderSettingModalClick(record)">订单设置</a>
               </a-menu-item>
               <a-menu-item>
-                <a @click="storeCashierRoutingListClick(record,'1')">订单分账设置</a>
+                <a @click="storeCashierRoutingListClick(record, '1')">订单分账设置</a>
               </a-menu-item>
               <a-menu-item>
                 <a @click="storeFunctionSetModalClick(record)">功能设置</a>
@@ -371,7 +362,6 @@
     <!--分账设置-->
     <store-cashier-routing-list ref="storeCashierRoutingList"></store-cashier-routing-list>
 
-
     <!--功能设置-->
     <store-function-set-modal ref="storeFunctionSetModal"></store-function-set-modal>
   </a-card>
@@ -391,10 +381,10 @@ import StoreManageModal from './modules/StoreManageModal'
 import { colAuthFilter } from '@/utils/authFilter'
 import selectAddress from '@/components/selectAddress/selectAddress'
 import StoreManageReceivingCode from './modules/StoreManageReceivingCode'
-import StoreCashierSettingModal from'./modules/StoreCashierSettingModal'
-import StoreOrderSettingModal from'./modules/StoreOrderSettingModal'
+import StoreCashierSettingModal from './modules/StoreCashierSettingModal'
+import StoreOrderSettingModal from './modules/StoreOrderSettingModal'
 import StoreFunctionSetModal from './modules/StoreFunctionSetModal'
-import StoreCashierRoutingList from'./StoreCashierRoutingList'
+import StoreCashierRoutingList from './StoreCashierRoutingList'
 
 export default {
   name: 'StoreManageList',
@@ -407,7 +397,7 @@ export default {
     StoreCashierSettingModal,
     StoreFunctionSetModal,
     StoreCashierRoutingList,
-    StoreOrderSettingModal
+    StoreOrderSettingModal,
   },
   inject: ['rush'],
   data() {
@@ -422,219 +412,219 @@ export default {
           width: 60,
           align: 'center',
           fixed: 'left',
-          customRender: function(t, r, index) {
+          customRender: function (t, r, index) {
             return parseInt(index) + 1
-          }
+          },
         },
         {
           title: '店铺编号',
           align: 'center',
-          dataIndex: 'id'
+          dataIndex: 'id',
         },
         {
           title: '店铺账号',
           align: 'center',
-          dataIndex: 'userName'
+          dataIndex: 'userName',
         },
         {
           title: '联系人',
           align: 'center',
-          dataIndex: 'bossName'
+          dataIndex: 'bossName',
         },
         {
           title: '联系人手机号',
           align: 'center',
-          dataIndex: 'bossPhone'
+          dataIndex: 'bossPhone',
         },
         {
           title: '门店名称',
           align: 'center',
-          dataIndex: 'storeName'
+          dataIndex: 'storeName',
         },
         {
           title: '分店名称',
           align: 'center',
-          dataIndex: 'subStoreName'
+          dataIndex: 'subStoreName',
         },
         {
           title: 'logo',
           align: 'center',
           dataIndex: 'logoAddr',
-          scopedSlots: { customRender: 'logoAddr' }
+          scopedSlots: { customRender: 'logoAddr' },
         },
         {
           title: '门面照',
           align: 'center',
           dataIndex: 'storePicture',
-          scopedSlots: { customRender: 'avatarslot1' }
+          scopedSlots: { customRender: 'avatarslot1' },
         },
         {
           title: '店内照',
           align: 'center',
           dataIndex: 'accordingStore',
-          scopedSlots: { customRender: 'avatarslot2' }
+          scopedSlots: { customRender: 'avatarslot2' },
         },
         {
           title: '城市',
           align: 'center',
-          dataIndex: 'areaAddress'
+          dataIndex: 'areaAddress',
         },
         {
           title: '门店地址',
           align: 'center',
-          dataIndex: 'storeAddress'
+          dataIndex: 'storeAddress',
         },
         {
           title: '主体类型',
           align: 'center',
-          dataIndex: 'straight_dictText'
+          dataIndex: 'straight_dictText',
         },
         {
           title: '主营分类',
           align: 'center',
-          dataIndex: 'mainType_dictText'
+          dataIndex: 'mainType_dictText',
         },
 
         {
           title: '客服电话',
           align: 'center',
-          dataIndex: 'takeOutPhone'
+          dataIndex: 'takeOutPhone',
         },
 
         {
           title: '统一社会信用代码',
           align: 'center',
-          dataIndex: 'socialCreditCode'
+          dataIndex: 'socialCreditCode',
         },
         {
           title: '统一社会信用代码证',
           align: 'center',
           dataIndex: 'licenseForEnterprise',
-          scopedSlots: { customRender: 'avatarslot3' }
+          scopedSlots: { customRender: 'avatarslot3' },
         },
         {
           title: '经办人类型',
           align: 'center',
-          dataIndex: 'agentType_dictText'
+          dataIndex: 'agentType_dictText',
         },
         {
           title: '姓名',
           align: 'center',
-          dataIndex: 'agentName'
+          dataIndex: 'agentName',
         },
         {
           title: '身份证号码',
           align: 'center',
-          dataIndex: 'idCode'
+          dataIndex: 'idCode',
         },
         {
           title: '身份证正面照片',
           align: 'center',
           dataIndex: 'idPictureZ',
-          scopedSlots: { customRender: 'avatarslot4' }
+          scopedSlots: { customRender: 'avatarslot4' },
         },
         {
           title: '身份证反面照片',
           align: 'center',
           dataIndex: 'idPictureF',
-          scopedSlots: { customRender: 'avatarslot5' }
+          scopedSlots: { customRender: 'avatarslot5' },
         },
 
         {
           title: '手持身份证照片',
           align: 'center',
           dataIndex: 'idHand',
-          scopedSlots: { customRender: 'avatarslot6' }
+          scopedSlots: { customRender: 'avatarslot6' },
         },
         {
           title: '授权书图片',
           align: 'center',
           dataIndex: 'agentAuthorization',
-          scopedSlots: { customRender: 'avatarslot7' }
+          scopedSlots: { customRender: 'avatarslot7' },
         },
         {
           title: '推广人类型',
           align: 'center',
           dataIndex: 'promoterType',
-          scopedSlots: { customRender: 'promoterType' }
+          scopedSlots: { customRender: 'promoterType' },
         },
         {
           title: '推广人',
           align: 'center',
-          dataIndex: 'promoterName'
+          dataIndex: 'promoterName',
         },
         {
           title: '归属加盟商',
           align: 'center',
-          dataIndex: 'allianceName'
+          dataIndex: 'allianceName',
         },
         {
           title: '店铺二维码',
           align: 'center',
           dataIndex: 'ssAddress',
-          scopedSlots: { customRender: 'ssAddress' }
+          scopedSlots: { customRender: 'ssAddress' },
         },
         {
           title: '商品审核',
           align: 'center',
           dataIndex: 'goodAudit',
           width: 100,
-          scopedSlots: { customRender: 'goodAudit' }
+          scopedSlots: { customRender: 'goodAudit' },
         },
         {
           title: '认证状态',
           align: 'center',
-          dataIndex: 'attestationStatus_dictText'
+          dataIndex: 'attestationStatus_dictText',
         },
         {
           title: '备注',
           align: 'center',
-          dataIndex: 'remark'
+          dataIndex: 'remark',
         },
         {
           title: '楼层',
           align: 'center',
-          dataIndex: 'floorName'
+          dataIndex: 'floorName',
         },
         {
           title: '特色标签',
           align: 'center',
           dataIndex: 'labelCount',
-          scopedSlots: { customRender: 'labelCount' }
+          scopedSlots: { customRender: 'labelCount' },
         },
         {
           title: '排序',
           align: 'center',
-          dataIndex: 'sort'
+          dataIndex: 'sort',
         },
         {
           title: '是否推荐',
           align: 'center',
           dataIndex: 'isRecommend',
-          scopedSlots: { customRender: 'isRecommend' }
+          scopedSlots: { customRender: 'isRecommend' },
         },
         {
           title: '状态',
           align: 'center',
           dataIndex: 'status',
-          scopedSlots: { customRender: 'status' }
+          scopedSlots: { customRender: 'status' },
         },
         {
           title: '停用原因',
           align: 'center',
-          dataIndex: 'closeExplain'
+          dataIndex: 'closeExplain',
         },
         {
           title: '店铺类型',
           align: 'center',
           dataIndex: 'storeType',
-          scopedSlots: { customRender: 'storeType' }
+          scopedSlots: { customRender: 'storeType' },
         },
         {
           title: '是否连锁',
           align: 'center',
           dataIndex: 'isChain',
-          scopedSlots: { customRender: 'isChain' }
+          scopedSlots: { customRender: 'isChain' },
         },
         {
           title: '操作',
@@ -642,8 +632,8 @@ export default {
           align: 'center',
           fixed: 'right',
           width: 250,
-          scopedSlots: { customRender: 'action' }
-        }
+          scopedSlots: { customRender: 'action' },
+        },
       ],
       url: {
         list: '/storeManage/storeManage/list',
@@ -657,7 +647,7 @@ export default {
         updateAttestationStatusById: '/storeManage/storeManage/updateAttestationStatusById',
         findByParentId: '/sysArea/sysArea/findByParentId',
         getList: '/sysArea/sysArea/getList',
-        edit: 'storeManage/storeManage/edit'
+        edit: 'storeManage/storeManage/edit',
       },
       id: '',
       //地址一级options
@@ -674,16 +664,16 @@ export default {
       showAddress: true,
       //
       disableSubmit: false,
-      floorState: 1
+      floorState: 1,
     }
   },
   created() {
     this.initIndex()
   },
   computed: {
-    importExcelUrl: function() {
+    importExcelUrl: function () {
       return `${window._CONFIG['domianURL']}/${this.url.importExcelUrl}`
-    }
+    },
   },
 
   methods: {
@@ -691,20 +681,20 @@ export default {
       let modelInfo = {
         title: '点击确定将该店铺设为推荐',
         content: '您确定要这么设定吗',
-        isRecommend: 0
+        isRecommend: 0,
       }
 
       if (record.isRecommend == 1) {
         modelInfo = {
           title: '点击确定将取消该店铺推荐',
           content: '您确定要这么设定吗',
-          isRecommend: 0
+          isRecommend: 0,
         }
       } else {
         modelInfo = {
           title: '点击确定将该店铺设为推荐',
           content: '您确定要这么设定吗',
-          isRecommend: 1
+          isRecommend: 1,
         }
       }
       this.$confirm({
@@ -714,8 +704,8 @@ export default {
           putAction(this.url.edit, {
             // ...record,
             id: record.id,
-            isRecommend: modelInfo.isRecommend
-          }).then(res => {
+            isRecommend: modelInfo.isRecommend,
+          }).then((res) => {
             if (res.success) {
               this.$message.success(res.message)
               this.loadData()
@@ -724,7 +714,7 @@ export default {
             }
           })
         },
-        onCancel() {}
+        onCancel() {},
       })
     },
     cityAllDataLoad(defaultCity) {
@@ -740,7 +730,7 @@ export default {
       console.log(item)
       let info = {
         goodAudit: item.goodAudit ? true : false,
-        id: item.id
+        id: item.id,
       }
       putAction(this.url.edit, info)
     },
@@ -749,20 +739,20 @@ export default {
       console.log(item, index)
       let info = {
         id: item.id,
-        storeType: item.storeType
+        storeType: item.storeType,
       }
       putAction(this.url.edit, info)
     },
     isChainChange(item) {
       let info = {
         isChain: item.isChain ? true : false,
-        id: item.id
+        id: item.id,
       }
       putAction(this.url.edit, info)
     },
     //获取地址一级options
     getList() {
-      getAction(this.url.getList).then(res => {
+      getAction(this.url.getList).then((res) => {
         if (res.success) {
           this.showAddress = false
           this.addressFirstList = res.result
@@ -777,7 +767,7 @@ export default {
     },
     //点击一级options展示二级
     firstOptions(item) {
-      getAction(this.url.findByParentId, { id: item.id }).then(res => {
+      getAction(this.url.findByParentId, { id: item.id }).then((res) => {
         if (res.success) {
           this.showAddress = false
           this.firstDefaultAddress = item.name
@@ -795,7 +785,7 @@ export default {
     },
     //点击二级展示三级
     secondOptions(item) {
-      getAction(this.url.findByParentId, { id: item.id }).then(res => {
+      getAction(this.url.findByParentId, { id: item.id }).then((res) => {
         if (res.success) {
           this.addressThirdList = res.result
           this.AllData.areaAddress += `-${item.name}`
@@ -813,7 +803,7 @@ export default {
 
     initIndex() {
       // 楼层开关，开启楼层后，店铺位置距用户的距离，替换为楼层。0：关闭；1：开启；
-      initDictOptions('floor_state').then(res => {
+      initDictOptions('floor_state').then((res) => {
         if (res.success && res.result.length > 0) {
           let floorState = res.result[0].value
           // this.straight = res.result
@@ -862,8 +852,8 @@ export default {
           getAction(that.url.updateStatusById, {
             id: item.id,
             status: item.status == '0' ? '1' : '0',
-            closeExplain: ''
-          }).then(res => {
+            closeExplain: '',
+          }).then((res) => {
             if (res.success) {
               that.$message.success(res.message)
               that.loadData()
@@ -872,7 +862,7 @@ export default {
               that.$message.warning(res.message)
             }
           })
-        }
+        },
       })
     },
     //弹窗
@@ -884,37 +874,37 @@ export default {
     onChangeDate(date, dateString) {
       console.log(date, dateString)
     },
-    getAvatarView: function(logoAddr) {
+    getAvatarView: function (logoAddr) {
       return this.url.imgerver + '/' + logoAddr
     },
-    getAvatarView1: function(storePicture) {
+    getAvatarView1: function (storePicture) {
       return this.url.imgerver + '/' + storePicture
     },
-    getAvatarView2: function(accordingStore) {
+    getAvatarView2: function (accordingStore) {
       return this.url.imgerver + '/' + accordingStore
     },
-    getAvatarView3: function(licenseForEnterprise) {
+    getAvatarView3: function (licenseForEnterprise) {
       return this.url.imgerver + '/' + licenseForEnterprise
     },
-    getAvatarView4: function(idPictureZ) {
+    getAvatarView4: function (idPictureZ) {
       return this.url.imgerver + '/' + idPictureZ
     },
-    getAvatarView5: function(idPictureF) {
+    getAvatarView5: function (idPictureF) {
       return this.url.imgerver + '/' + idPictureF
     },
-    getAvatarView6: function(idHand) {
+    getAvatarView6: function (idHand) {
       return this.url.imgerver + '/' + idHand
     },
-    getAvatarView7: function(agentAuthorization) {
+    getAvatarView7: function (agentAuthorization) {
       return this.url.imgerver + '/' + agentAuthorization
     },
-    ssAddressView: function(ssAddress) {
+    ssAddressView: function (ssAddress) {
       return this.url.imgerver + '/' + ssAddress
     },
     modalFormOk(info) {
       let obj = info
       //        obj.id = this.id
-      postAction(this.url.updateAttestationStatusById, obj).then(res => {
+      postAction(this.url.updateAttestationStatusById, obj).then((res) => {
         if (res.success) {
           this.$message.success(res.message)
           this.$refs.modalForm1.clearAll()
@@ -929,23 +919,23 @@ export default {
       this.$refs.modalForm1.title = '价格'
       this.$refs.modalForm1.disableSubmit = false
     },
-    storeManageReceivingCodeClick(record){
-      this.$refs.storeManageReceivingCodeModal.showModal(record);
+    storeManageReceivingCodeClick(record) {
+      this.$refs.storeManageReceivingCodeModal.showModal(record)
     },
-    storeCashierSettingModalClick(record){
-      this.$refs.storeCashierSettingModal.showSettting(record);
+    storeCashierSettingModalClick(record) {
+      this.$refs.storeCashierSettingModal.showSettting(record)
     },
-    storeOrderSettingModalClick(record){
-      this.$refs.storeOrderSettingModal.showSettting(record);
+    storeOrderSettingModalClick(record) {
+      this.$refs.storeOrderSettingModal.showSettting(record)
     },
-    storeFunctionSetModalClick(record){
-      this.$refs.storeFunctionSetModal.showSettting(record);
+    storeFunctionSetModalClick(record) {
+      this.$refs.storeFunctionSetModal.showSettting(record)
     },
-    storeCashierRoutingListClick(record,fashionableType){
-      record.fashionableType=fashionableType;
-      this.$refs.storeCashierRoutingList.show(record);
-    }
-  }
+    storeCashierRoutingListClick(record, fashionableType) {
+      record.fashionableType = fashionableType
+      this.$refs.storeCashierRoutingList.show(record)
+    },
+  },
 }
 </script>
 <style scoped lang="less">

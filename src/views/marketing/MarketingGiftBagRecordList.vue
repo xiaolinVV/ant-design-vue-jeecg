@@ -63,7 +63,7 @@
                 <a-input placeholder="" v-model="queryParam.channelName"></a-input>
               </a-form-item>
             </a-col>
-           <!-- <a-col :md="8" :sm="8">
+            <!-- <a-col :md="8" :sm="8">
               <a-form-item label="省代">
                 <a-input placeholder="" v-model="queryParam.giftName"></a-input>
               </a-form-item>
@@ -80,7 +80,7 @@
             </a-col>-->
           </template>
           <a-col :md="6" :sm="8">
-            <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
+            <span style="float: left; overflow: hidden" class="table-page-search-submitButtons">
               <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
               <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
               <a @click="handleToggleSearch" style="margin-left: 8px">
@@ -94,10 +94,12 @@
     </div>
 
     <!-- 操作按钮区域 -->
-    <!--<div class="table-operator">
-      <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
-      <a-button type="primary" icon="download" @click="handleExportXls('礼包记录')">导出</a-button>
-      <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl"
+    <div class="table-operator">
+      <!-- <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button> -->
+      <a-button type="primary" icon="download" @click="handleExportXls('平台营销-礼包管理-礼包购买记录')"
+        >导出</a-button
+      >
+      <!-- <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl"
                 @change="handleImportExcel">
         <a-button type="primary" icon="import">导入</a-button>
       </a-upload>
@@ -111,8 +113,8 @@
         <a-button style="margin-left: 8px"> 批量操作
           <a-icon type="down"/>
         </a-button>
-      </a-dropdown>
-    </div>-->
+      </a-dropdown> -->
+    </div>
 
     <!-- table区域-begin -->
     <div>
@@ -135,7 +137,7 @@
         @change="handleTableChange"
       >
         <template slot="headPortrait" slot-scope="text, record, index">
-          <img class="clickShowImage " :preview="'headPortrait' + index" :src="record.headPortrait" alt="" />
+          <img class="clickShowImage" :preview="'headPortrait' + index" :src="record.headPortrait" alt="" />
         </template>
         <template slot="giftContent" slot-scope="text, record, index">
           <a href="javascript:;" @click="showContentModal(record)">{{ record.giftName }}</a>
@@ -154,8 +156,12 @@
         </template>
         <template slot="channelName" slot-scope="text, record, index">
           <div class="anty-img-wrap">
-            <span v-if="record.channelName == null"><a @click="marketingGiftBagRecordChannelModelClick(record)">-</a></span>
-            <span v-if="record.channelName != null"><a @click="marketingGiftBagRecordChannelModelClick(record)">{{ record.channelName }}</a></span>
+            <span v-if="record.channelName == null"
+              ><a @click="marketingGiftBagRecordChannelModelClick(record)">-</a></span
+            >
+            <span v-if="record.channelName != null"
+              ><a @click="marketingGiftBagRecordChannelModelClick(record)">{{ record.channelName }}</a></span
+            >
           </div>
         </template>
         <span slot="action" slot-scope="text, record">
@@ -182,14 +188,17 @@
     <MarketingGiftPackageModal ref="MarketingGiftPackageModal"></MarketingGiftPackageModal>
     <marketing-gift-record-qrcode ref="marketingGiftRecordQrcodeModal" @ok="modalFormOk"></marketing-gift-record-qrcode>
     <!--销售渠道的修改-->
-    <marketing-gift-bag-record-channel-model ref="marketingGiftBagRecordChannelModel"  @ok="modalFormOk"></marketing-gift-bag-record-channel-model>
+    <marketing-gift-bag-record-channel-model
+      ref="marketingGiftBagRecordChannelModel"
+      @ok="modalFormOk"
+    ></marketing-gift-bag-record-channel-model>
   </a-card>
 </template>
 
 <script>
 import MarketingGiftBagRecordModal from './modules/MarketingGiftBagRecordModal'
 import MarketingGiftPackageModal from './modules/MarketingGiftPackageModal'
-import MarketingGiftRecordQrcode from'./modules/MarketingGiftRecordQrcode'
+import MarketingGiftRecordQrcode from './modules/MarketingGiftRecordQrcode'
 import MarketingGiftBagRecordChannelModel from './modules/MarketingGiftBagRecordChannelModel'
 import { JeecgListMixin } from '@/mixins/JeecgListMixin'
 import { filterObj } from '@/utils/util'
@@ -200,7 +209,7 @@ export default {
     MarketingGiftBagRecordModal,
     MarketingGiftPackageModal,
     MarketingGiftRecordQrcode,
-    MarketingGiftBagRecordChannelModel
+    MarketingGiftBagRecordChannelModel,
   },
   data() {
     return {
@@ -213,116 +222,116 @@ export default {
           key: 'rowIndex',
           width: 60,
           align: 'center',
-          customRender: function(t, r, index) {
+          customRender: function (t, r, index) {
             return parseInt(index) + 1
-          }
+          },
         },
         {
           title: '流水号',
           align: 'center',
-          dataIndex: 'id'
+          dataIndex: 'id',
         },
         {
           title: '头像',
           align: 'center',
           dataIndex: 'headPortrait',
-          scopedSlots: { customRender: 'headPortrait' }
+          scopedSlots: { customRender: 'headPortrait' },
         },
         {
           title: '手机号',
           align: 'center',
-          dataIndex: 'phone'
+          dataIndex: 'phone',
         },
         {
           title: '昵称',
           align: 'center',
-          dataIndex: 'nickName'
+          dataIndex: 'nickName',
         },
         {
           title: '礼包编号',
           align: 'center',
-          dataIndex: 'giftNo'
+          dataIndex: 'giftNo',
         },
         {
           title: '礼包名称',
           align: 'center',
-          dataIndex: 'giftName'
+          dataIndex: 'giftName',
         },
         {
           title: '礼包价格',
           align: 'center',
-          dataIndex: 'price'
+          dataIndex: 'price',
         },
         {
           title: '礼包内容',
           align: 'center',
           dataIndex: 'giftContent',
-          scopedSlots: { customRender: 'giftContent' }
+          scopedSlots: { customRender: 'giftContent' },
         },
         {
           title: '礼包发行时间',
           align: 'center',
-          dataIndex: 'bagTime'
+          dataIndex: 'bagTime',
         },
         {
           title: '购买时间',
           align: 'center',
-          dataIndex: 'createTime'
+          dataIndex: 'createTime',
         },
         {
           title: '推广人',
           align: 'center',
           dataIndex: 'promoterName',
-          scopedSlots: { customRender: 'promoterName' }
+          scopedSlots: { customRender: 'promoterName' },
         },
         {
           title: '二级推广人',
           align: 'center',
           dataIndex: 'promoterTwoName',
-          scopedSlots: { customRender: 'promoterTwoName' }
+          scopedSlots: { customRender: 'promoterTwoName' },
         },
         {
           title: '归属店铺',
           align: 'center',
           dataIndex: 'storeName',
-          scopedSlots: { customRender: 'storeName' }
+          scopedSlots: { customRender: 'storeName' },
         },
         {
           title: '销售渠道',
           align: 'center',
           dataIndex: 'channelName',
-          scopedSlots: { customRender: 'channelName' }
+          scopedSlots: { customRender: 'channelName' },
         },
         {
           title: '分享人',
           align: 'center',
-          dataIndex: 'shareName'
+          dataIndex: 'shareName',
         },
         {
           title: '操作',
           dataIndex: 'action',
           align: 'center',
           scopedSlots: { customRender: 'action' },
-          fixed: 'right'
-        }
+          fixed: 'right',
+        },
       ],
       url: {
         list: '/marketingGiftBagRecord/marketingGiftBagRecord/findGiftBagRecord',
         delete: '/marketingGiftBagRecord/marketingGiftBagRecord/delete',
         deleteBatch: '/marketingGiftBagRecord/marketingGiftBagRecord/deleteBatch',
         exportXlsUrl: 'marketingGiftBagRecord/marketingGiftBagRecord/exportXls',
-        importExcelUrl: 'marketingGiftBagRecord/marketingGiftBagRecord/importExcel'
-      }
+        importExcelUrl: 'marketingGiftBagRecord/marketingGiftBagRecord/importExcel',
+      },
     }
   },
   computed: {
-    importExcelUrl: function() {
+    importExcelUrl: function () {
       return `${window._CONFIG['domianURL']}/${this.url.importExcelUrl}`
-    }
+    },
   },
   methods: {
-    marketingGiftBagRecordChannelModelClick(record){
-      this.$refs.marketingGiftBagRecordChannelModel.showModal(record);
+    marketingGiftBagRecordChannelModelClick(record) {
+      this.$refs.marketingGiftBagRecordChannelModel.showModal(record)
     },
     showContentModal(record) {
       this.$refs.MarketingGiftPackageModal.totalModal(record)
@@ -337,21 +346,21 @@ export default {
       delete param.bagTime // 时间参数不传递后台
       return filterObj(param)
     },
-    onDateChange: function(value, dateString) {
+    onDateChange: function (value, dateString) {
       this.queryParam.payTime_begin = dateString[0]
       this.queryParam.payTime_end = dateString[1]
     },
-    onDateChange1: function(value, dateString) {
+    onDateChange1: function (value, dateString) {
       this.queryParam.startTime_begin = dateString[0]
       this.queryParam.endTime_end = dateString[1]
     },
-    getAvatarView: function(headPortrait) {
+    getAvatarView: function (headPortrait) {
       return this.url.imgerver + '/' + headPortrait
     },
-    marketingGiftRecordQrcodeClick(record){
-      this.$refs.marketingGiftRecordQrcodeModal.showMarketingGiftRecordQrcodeModal(record);
-    }
-  }
+    marketingGiftRecordQrcodeClick(record) {
+      this.$refs.marketingGiftRecordQrcodeModal.showMarketingGiftRecordQrcodeModal(record)
+    },
+  },
 }
 </script>
 <style scoped></style>
