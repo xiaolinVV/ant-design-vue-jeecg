@@ -314,7 +314,7 @@
                 <a @click="handleEdit(record, '基础信息')"> 编辑基础信息 </a>
               </a-menu-item>
               <a-menu-item>
-                <a @click="handleEdit(record, '证件信息')"> 编辑证件信息 </a>
+                <a @click="handleEdit({ ...record, title: '证件信息' }, '证件信息')"> 编辑证件信息 </a>
               </a-menu-item>
               <a-menu-item v-if="floorState == 1">
                 <a @click="showSpecialLabel(record, '特色标签')">特色标签</a>

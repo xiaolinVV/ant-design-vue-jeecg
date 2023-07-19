@@ -443,7 +443,6 @@
           <a-form-item
             :labelCol="labelCol"
             :wrapperCol="wrapperCol"
-            v-if="model.straight == 1"
             label="企业营业执照图片"
           >
             <a-upload
@@ -653,7 +652,6 @@
           </a-form-item>
 
           <a-form-item
-            v-if="model.agentType == 0"
             :labelCol="labelCol"
             :wrapperCol="wrapperCol"
             label="代办人授权书照片"
