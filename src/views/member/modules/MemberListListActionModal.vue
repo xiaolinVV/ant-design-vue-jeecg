@@ -210,7 +210,7 @@
             }
             methods(this.url[apiName], values).then((res) => {
               if (res.success) {
-                this.rush()
+                // this.rush()
                 this.$message.success(res.message || '修改成功！')
               } else {
                 this.$message.warn(res.message || '修改失败！')

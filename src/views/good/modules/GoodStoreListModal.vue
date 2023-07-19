@@ -32,7 +32,7 @@
             <span>{{ goodTypes['1'].name }}>{{ goodTypes['2'].name }}</span
             ><a
               style="margin-left: 30px"
-              @click="
+              @click.stop="
                 () => {
                   drawerVisible = true
                   getStoreGoodTypeByTree()
@@ -45,7 +45,7 @@
             <span>请选择分类</span
             ><a
               style="margin-left: 30px"
-              @click="
+              @click.stop="
                 () => {
                   drawerVisible = true
                   getStoreGoodTypeByTree()
@@ -341,7 +341,13 @@
       placement="right"
       @close="afterVisibleChange"
     >
-      <a-tree v-if="goodTypeTree.length > 1" :tree-data="goodTypeTree">
+     <a-tree :tree-data="goodTypeTree2">
+      <template #title="{name,id,level}">
+        <div @click="getByGoodType(id, level)">{{ name }}</div>
+      </template>
+    </a-tree>
+    <!-- <template v-if="goodTypeTree.length > 1" >
+      <a-tree :tree-data="goodTypeTree" :key="new Date().getTime()">
         <template #title="{name,id,level}">
           <span v-if="id === ''" style="color: #1890ff"
             ><div @click="getByGoodType(id, level)">{{ name }}</div></span
@@ -351,6 +357,7 @@
           >
         </template>
       </a-tree>
+    </template> -->
     </a-drawer>
   </j-modal>
 </template>
@@ -366,6 +373,7 @@ export default {
   components: { ATextarea, KqUpload },
   data() {
     return {
+      goodTypeTree2:[],
       title: '商品添加',
       visible: false,
       drawerVisible: false,
@@ -562,13 +570,18 @@ export default {
         this.drawerVisible = false
       }
     },
-    getStoreGoodTypeByTree() {
+       getStoreGoodTypeByTree() {
       getAction(this.url.getStoreGoodTypeByTree, {
         storeManageId: this.storeInfo.key
       }).then(res => {
+        
         if (res.success) {
-          this.goodTypeTree = []
-          this.goodTypeTree = this.goodTypeTree.concat(res.result)
+          
+          this.goodTypeTree2 = []
+          this.$nextTick(() => {
+            this.goodTypeTree2 = res.result
+          })
+          
           console.log(this.goodTypeTree)
         } else {
           this.$message.warning(res.message)
