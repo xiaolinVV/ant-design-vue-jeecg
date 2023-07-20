@@ -1,6 +1,7 @@
 <template>
 <div>
   <a-upload
+    ref="myUploadRef"
     :action="getUplosdUrl"
     :headers="headers"
     accept="image/*"
@@ -27,6 +28,7 @@
 <script>
   import Vue from 'vue'
   import {ACCESS_TOKEN} from "@/store/mutation-types"
+  import Sortable from 'sortablejs';
   export default {
     name: 'KqUpload',
     props:{
@@ -51,7 +53,32 @@
       const token = Vue.ls.get(ACCESS_TOKEN);
       this.headers = {"X-Access-Token": token};
     },
+    mounted() {
+      this.$nextTick(() => {
+        this.sortDrag()
+      })
+    },
     methods:{
+      sortDrag() {
+        let self = this
+        this.$nextTick(() => {
+          let el = this.$refs.myUploadRef.$el.querySelector('.ant-upload-list')
+          console.log(el)
+          new Sortable(el, {
+            animation: 100,
+            filter: '.sort-none',
+            onStart() {},
+            onEnd(evt) {
+              self.fileList.splice(evt.newIndex, 0, self.fileList.splice(evt.oldIndex, 1)[0])
+              let newArray = self.fileList.slice(0)
+              self.fileList= []
+              self.$nextTick(() => {
+                self.fileList= newArray
+              })
+            }
+          })
+        })
+      },
       init(imgs){
         this.fileList=[];
         let index = 0;
