@@ -113,7 +113,7 @@
           </a-col> -->
 
           <a-col :md="24" :sm="8">
-            <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
+            <span style="float: left; overflow: hidden" class="table-page-search-submitButtons">
               <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
               <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
               <!-- <a @click="handleToggleSearch" style="margin-left: 8px">
@@ -128,7 +128,7 @@
 
     <!-- 操作按钮区域 -->
     <div class="table-operator">
-      <a-button type="primary" icon="download" @click="orderListExport()">导出预览</a-button>
+      <a-button type="primary" icon="download" @click="handleExportXls('订单-供应商订单-待发货订单')">导出</a-button>
       <a-button type="primary" v-if="is1688GYS" @click="showDownOrder">批量下单</a-button>
     </div>
     <!--<div class="table-operator">
@@ -147,7 +147,7 @@
 
     <!-- table区域-begin -->
     <div>
-      <div class="ant-alert ant-alert-info" style="margin-bottom: 16px;">
+      <div class="ant-alert ant-alert-info" style="margin-bottom: 16px">
         <i class="anticon anticon-info-circle ant-alert-icon"></i> 已选择
         <a style="font-weight: 600">{{ selectedRowKeys.length }}</a
         >项
@@ -338,7 +338,7 @@ export default {
   name: 'OrderListList',
   mixins: [JeecgListMixin],
   components: {
-    OrderProviderListModal
+    OrderProviderListModal,
   },
   data() {
     return {
@@ -351,7 +351,7 @@ export default {
 
       queryParam: {
         //初始查询条件
-        status: 1 //订单状态；0：待付款；1：待发货（已付款、部分发货）；2：待收货（已发货）；3：交易成功；4：交易失败；5：交易完成；
+        status: 1, //订单状态；0：待付款；1：待发货（已付款、部分发货）；2：待收货（已发货）；3：交易成功；4：交易失败；5：交易完成；
       },
       is1688GYS: false,
       // 表头
@@ -362,89 +362,89 @@ export default {
           key: 'rowIndex',
           width: 60,
           align: 'center',
-          customRender: function(t, r, index) {
+          customRender: function (t, r, index) {
             return parseInt(index) + 1
-          }
+          },
         },
         {
           title: '订单编号',
           align: 'center',
-          dataIndex: 'orderNo'
+          dataIndex: 'orderNo',
         },
 
         {
           title: '商品',
           align: 'center',
           dataIndex: 'goods',
-          scopedSlots: { customRender: 'goods' }
+          scopedSlots: { customRender: 'goods' },
         },
         {
           title: '买家',
           align: 'center',
           dataIndex: 'memberPhone',
-          scopedSlots: { customRender: 'memberPhone' }
+          scopedSlots: { customRender: 'memberPhone' },
         },
         {
           title: '留言',
           align: 'center',
           dataIndex: 'message',
-          scopedSlots: { customRender: 'message' }
+          scopedSlots: { customRender: 'message' },
         },
         {
           title: '订单状态',
           align: 'center',
           dataIndex: 'status',
-          scopedSlots: { customRender: 'status' }
+          scopedSlots: { customRender: 'status' },
         },
 
         {
           title: '商品总价',
           align: 'center',
-          dataIndex: 'goodsTotal'
+          dataIndex: 'goodsTotal',
         },
         {
           title: '配送方式', //；对应数据字典
           align: 'center',
           dataIndex: 'oder_distribution',
-          scopedSlots: { customRender: 'distribution' }
+          scopedSlots: { customRender: 'distribution' },
         },
         {
           title: '配送费用',
           align: 'center',
-          dataIndex: 'shipFee'
+          dataIndex: 'shipFee',
         },
         {
           title: '实付款',
           align: 'center',
-          dataIndex: 'actualPayment'
+          dataIndex: 'actualPayment',
         },
         {
           title: '创建时间',
           align: 'center',
-          dataIndex: 'createTime'
+          dataIndex: 'createTime',
         },
         {
           title: '修改时间',
           align: 'center',
-          dataIndex: 'updateTime'
+          dataIndex: 'updateTime',
         },
         {
           title: '有无修改地址',
           align: 'center',
           dataIndex: 'isUpdateAddr',
-          scopedSlots: { customRender: 'isUpdateAddr' }
+          scopedSlots: { customRender: 'isUpdateAddr' },
         },
         {
           title: '下单状态',
           align: 'center',
           dataIndex: 'orderStatus',
-          scopedSlots: { customRender: 'orderStatus' }
+          scopedSlots: { customRender: 'orderStatus' },
         },
         {
           title: '部分发货',
           align: 'center',
           dataIndex: 'isSender',
-          scopedSlots: { customRender: 'isSender' }
+          scopedSlots: { customRender: 'isSender' },
         },
         {
           title: '操作',
@@ -452,40 +452,40 @@ export default {
           align: 'center',
           fixed: 'right',
           width: 200,
-          scopedSlots: { customRender: 'action' }
-        }
+          scopedSlots: { customRender: 'action' },
+        },
       ],
       url: {
         list: '/orderProviderList/orderProviderList/list',
         //list: '/orderList/orderList/list',
         delete: '/orderList/orderList/delete',
         deleteBatch: '/orderList/orderList/deleteBatch',
-        exportXlsUrl: 'orderList/orderList/exportXls',
+        exportXlsUrl: 'orderProviderList/orderProviderList/exportXls',
         importExcelUrl: 'orderList/orderList/importExcel',
         getUserRoleCodeAndGoodAudit: '/sys/user/getUserRoleCodeAndGoodAudit',
         //1688下单接口
         placeOrder: 'orderProviderList/orderProviderList/placeOrder',
         //获取供应商类型（1）
-        getSupplierType: 'orderProviderList/orderProviderList/getSupplierType'
-      }
+        getSupplierType: 'orderProviderList/orderProviderList/getSupplierType',
+      },
     }
   },
   computed: {
-    importExcelUrl: function() {
+    importExcelUrl: function () {
       return `${window._CONFIG['domianURL']}/${this.url.importExcelUrl}`
     },
     rowSelection() {
       return {
         selectedRowKeys: this.selectedRowKeys,
         onChange: this.onSelectChange,
-        getCheckboxProps: record => ({
+        getCheckboxProps: (record) => ({
           props: {
             disabled: record.orderStatus != 0, // Column configuration not to be checked
-            name: record.name
-          }
-        })
+            name: record.name,
+          },
+        }),
       }
-    }
+    },
   },
   mounted() {
     this.init()
@@ -499,38 +499,34 @@ export default {
       const that = this
       // goodsTotal
       let totalPrice = 0
-      this.selectionRows.forEach(item => {
+      this.selectionRows.forEach((item) => {
         totalPrice += item.goodsTotal * 1
       })
-      let title = `总共要下单数量为${
-        this.selectedRowKeys.length
-      }，合计 ￥${totalPrice}（含运费） 。为避免下单失败，请确保代扣账户金额大于此数值`
+      let title = `总共要下单数量为${this.selectedRowKeys.length}，合计 ￥${totalPrice}（含运费） 。为避免下单失败，请确保代扣账户金额大于此数值`
       this.$confirm({
         title,
         content: '您确定要提交吗？',
-        onOk: function() {
+        onOk: function () {
           that.downOrder()
-        }
+        },
       })
     },
     downOrder() {
       const that = this
       this.loading = true
       getAction(this.url.placeOrder, {
-        orderProviderListIds: this.selectedRowKeys.join(',')
-      }).then(res => {
+        orderProviderListIds: this.selectedRowKeys.join(','),
+      }).then((res) => {
         this.loading = false
         if (res.success) {
           this.$success({
-            title: `本次下单的数量为${this.selectedRowKeys.length}，${res.result.successCount}个下单成功，${
-              res.result.errorCount
-            }个下单失败`,
+            title: `本次下单的数量为${this.selectedRowKeys.length}，${res.result.successCount}个下单成功，${res.result.errorCount}个下单失败`,
             content: `具体原因请查看列表下单结果进行处理。`,
             onOk() {
               that.selectedRowKeys = []
               that.selectionRows = []
               that.loadData()
-            }
+            },
           })
         } else {
           this.$message.error(res.message)
@@ -552,27 +548,27 @@ export default {
       param.status = 1
       return filterObj(param)
     },
-    onDateChange: function(value, dateString) {
+    onDateChange: function (value, dateString) {
       console.log('*****************************************************', dateString[0], dateString[1])
       this.queryParam.createTime_begin = dateString[0]
       this.queryParam.createTime_end = dateString[1]
     },
-    onDateChange1: function(value, dateString) {
+    onDateChange1: function (value, dateString) {
       console.log('*****************************************************', dateString[0], dateString[1])
       this.queryParam.closeTime_begin = dateString[0]
       this.queryParam.closeTime_end = dateString[1]
     },
-    onDateChange2: function(value, dateString) {
+    onDateChange2: function (value, dateString) {
       console.log('*****************************************************', dateString[0], dateString[1])
       this.queryParam.payTime_begin = dateString[0]
       this.queryParam.payTime_end = dateString[1]
     },
-    onDateChange3: function(value, dateString) {
+    onDateChange3: function (value, dateString) {
       console.log('*****************************************************', dateString[0], dateString[1])
       this.queryParam.shipmentsTime_begin = dateString[0]
       this.queryParam.shipmentsTime_end = dateString[1]
     },
-    onDateChange4: function(value, dateString) {
+    onDateChange4: function (value, dateString) {
       console.log('*****************************************************', dateString[0], dateString[1])
       this.queryParam.deliveryTime_begin = dateString[0]
       this.queryParam.deliveryTime_end = dateString[1]
@@ -599,12 +595,12 @@ export default {
     //商品信息
     showModalGoodsInformation(orderProviderListDTOs) {
       let goodList = []
-      orderProviderListDTOs.orderProviderGoodRecordDTOList.forEach(v => {
+      orderProviderListDTOs.orderProviderGoodRecordDTOList.forEach((v) => {
         goodList.push(v)
       })
 
-      orderProviderListDTOs.orderProviderListDTOs.forEach(v => {
-        v.orderProviderGoodRecordDTOList.forEach(i => {
+      orderProviderListDTOs.orderProviderListDTOs.forEach((v) => {
+        v.orderProviderGoodRecordDTOList.forEach((i) => {
           goodList.push(i)
         })
       })
@@ -662,7 +658,7 @@ export default {
       this.$refs.modalForm.disableSubmit = false
     },
     //删除
-    showModalDeletess: function(id) {
+    showModalDeletess: function (id) {
       if (!this.url.delete) {
         this.$message.error('请设置url.delete属性!')
 
@@ -672,8 +668,8 @@ export default {
       this.$confirm({
         title: '确定要删除订单吗，删除后不可恢复。',
         content: '确定要删除吗？',
-        onOk: function() {
-          deleteAction(that.url.delete, { id: id }).then(res => {
+        onOk: function () {
+          deleteAction(that.url.delete, { id: id }).then((res) => {
             console.log(res)
             if (res.success) {
               that.$message.success(res.message)
@@ -682,7 +678,7 @@ export default {
               that.$message.warning(res.message)
             }
           })
-        }
+        },
       })
     },
     //跳转详情
@@ -693,7 +689,7 @@ export default {
     },
 
     init() {
-      getAction(this.url.getSupplierType).then(async res => {
+      getAction(this.url.getSupplierType).then(async (res) => {
         if (res.success && res.result.providerType == 1) {
           this.is1688GYS = true
         } else {
@@ -708,7 +704,7 @@ export default {
       this.initIndex()
     },
     initIndex() {
-      initDictOptions('oder_distribution').then(res => {
+      initDictOptions('oder_distribution').then((res) => {
         if (res.success) {
           /*for(let item of res.result){
               if(item.value == this.distribution  ){
@@ -736,7 +732,7 @@ export default {
       localStorage.setItem('deliverGoods', JSON.stringify(record))
       this.$router.push({
         path: '/order/OrderSupplierLogisticsGoods',
-        query: { record: record, reusePage: reusePage }
+        query: { record: record, reusePage: reusePage },
       }) //reusePage=5
     },
 
@@ -764,7 +760,7 @@ export default {
       for (var key in data) {
         var value = data[key]
         if (value.constructor == Array) {
-          value.forEach(function(_value) {
+          value.forEach(function (_value) {
             _result.push(key + '=' + _value)
           })
         } else {
@@ -775,7 +771,7 @@ export default {
     },
     //登录人角色判断,是否审核判断
     getUserRoleCodeAndGoodAudit() {
-      getAction(this.url.getUserRoleCodeAndGoodAudit, { sysUserId: this.userInfo().id }).then(res => {
+      getAction(this.url.getUserRoleCodeAndGoodAudit, { sysUserId: this.userInfo().id }).then((res) => {
         if (res.success) {
           let userRoleCodeAndGoodAudit = res.result
           if (userRoleCodeAndGoodAudit) {
@@ -786,8 +782,8 @@ export default {
           this.$message.warning(res.message)
         }
       })
-    }
-  }
+    },
+  },
 }
 </script>
 <style scoped>

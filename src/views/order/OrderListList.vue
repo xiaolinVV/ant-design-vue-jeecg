@@ -101,7 +101,7 @@
             </a-col>
           </template>
           <a-col :md="6" :sm="8">
-            <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
+            <span style="float: left; overflow: hidden" class="table-page-search-submitButtons">
               <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
               <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
               <a @click="handleToggleSearch" style="margin-left: 8px">
@@ -124,7 +124,7 @@
     <!--</div>-->
     <!-- 操作按钮区域 -->
     <div class="table-operator">
-      <a-button type="primary" icon="download" @click="handleExportXls('订单列表')">导出</a-button>
+      <a-button type="primary" icon="download" @click="handleExportXls('订单-平台订单-全部订单')">导出</a-button>
     </div>
 
     <!--<div class="table-operator">
@@ -145,7 +145,7 @@
 
     <!-- table区域-begin -->
     <div>
-      <div class="ant-alert ant-alert-info" style="margin-bottom: 16px;">
+      <div class="ant-alert ant-alert-info" style="margin-bottom: 16px">
         <i class="anticon anticon-info-circle ant-alert-icon"></i> 已选择
         <a style="font-weight: 600">{{ selectedRowKeys.length }}</a
         >项
@@ -318,7 +318,10 @@
     <orderList-modal ref="modalForm" @ok="modalFormOk"></orderList-modal>
 
     <!--取消并退款-->
-    <refund-and-abrogate-order-modal ref="refundAndAbrogateOrderModal" @ok="modalFormOk"></refund-and-abrogate-order-modal>
+    <refund-and-abrogate-order-modal
+      ref="refundAndAbrogateOrderModal"
+      @ok="modalFormOk"
+    ></refund-and-abrogate-order-modal>
   </a-card>
 </template>
 
@@ -326,7 +329,7 @@
 import OrderListModal from './modules/OrderListModal'
 import { JeecgListMixin } from '@/mixins/JeecgListMixin'
 import { filterObj } from '@/utils/util'
-import RefundAndAbrogateOrderModal from'./modules/RefundAndAbrogateOrderModal'
+import RefundAndAbrogateOrderModal from './modules/RefundAndAbrogateOrderModal'
 import { deleteAction, getAction } from '@/api/manage'
 //字典
 import { initDictOptions } from '@/components/dict/JDictSelectUtil'
@@ -335,7 +338,7 @@ export default {
   mixins: [JeecgListMixin],
   components: {
     OrderListModal,
-    RefundAndAbrogateOrderModal
+    RefundAndAbrogateOrderModal,
   },
   data() {
     return {
@@ -349,19 +352,19 @@ export default {
           key: 'rowIndex',
           width: 60,
           align: 'center',
-          customRender: function(t, r, index) {
+          customRender: function (t, r, index) {
             return parseInt(index) + 1
-          }
+          },
         },
         {
           title: '订单编号',
           align: 'center',
-          dataIndex: 'orderNo'
+          dataIndex: 'orderNo',
         },
         {
           title: '订单类型',
           align: 'center',
-          dataIndex: 'orderType_dictText'
+          dataIndex: 'orderType_dictText',
           // sorter:true,
         },
 
@@ -369,32 +372,32 @@ export default {
           title: '买家',
           align: 'center',
           dataIndex: 'memberPhone',
-          scopedSlots: { customRender: 'memberPhone' }
+          scopedSlots: { customRender: 'memberPhone' },
         },
 
         {
           title: '留言',
           align: 'center',
           dataIndex: 'message',
-          scopedSlots: { customRender: 'message' }
+          scopedSlots: { customRender: 'message' },
         },
         {
           title: '商品',
           align: 'center',
           dataIndex: 'goods',
-          scopedSlots: { customRender: 'goods' }
+          scopedSlots: { customRender: 'goods' },
         },
         {
           title: '订单状态',
           align: 'center',
           dataIndex: 'status',
-          scopedSlots: { customRender: 'status' }
+          scopedSlots: { customRender: 'status' },
         },
 
         {
           title: '商品总价',
           align: 'center',
-          dataIndex: 'goodsTotal'
+          dataIndex: 'goodsTotal',
         },
         /* {
             title: '福利金',
@@ -405,19 +408,19 @@ export default {
           title: '赠送',
           align: 'center',
           dataIndex: 'giveWelfarePayments',
-          scopedSlots: { customRender: 'giveWelfarePayments' }
+          scopedSlots: { customRender: 'giveWelfarePayments' },
         },
         {
           title: '优惠',
           align: 'center',
           dataIndex: 'coupon',
-          scopedSlots: { customRender: 'coupon' }
+          scopedSlots: { customRender: 'coupon' },
         },
         {
           title: '配送方式', //；对应数据字典
           align: 'center',
           dataIndex: 'oder_distribution',
-          scopedSlots: { customRender: 'distribution' }
+          scopedSlots: { customRender: 'distribution' },
           /* sorter:true,
              customRender: (text) => {
                  //字典值替换通用方法
@@ -427,45 +430,45 @@ export default {
         {
           title: '配送费用',
           align: 'center',
-          dataIndex: 'shipFee'
+          dataIndex: 'shipFee',
         },
         {
           title: '应付款',
           align: 'center',
           dataIndex: 'customaryDues',
-          scopedSlots: { customRender: 'customaryDues' }
+          scopedSlots: { customRender: 'customaryDues' },
         },
         {
           title: '实付款',
           align: 'center',
-          dataIndex: 'actualPayment'
+          dataIndex: 'actualPayment',
         },
         {
           title: '关闭类型',
           align: 'center',
-          dataIndex: 'closeType_dictText'
+          dataIndex: 'closeType_dictText',
           // sorter:true,
         },
         {
           title: '关闭时间',
           align: 'center',
-          dataIndex: 'closeTime'
+          dataIndex: 'closeTime',
         },
         {
           title: '创建时间',
           align: 'center',
-          dataIndex: 'createTime'
+          dataIndex: 'createTime',
         },
         {
           title: '有无修改地址',
           align: 'center',
           dataIndex: 'isUpdateAddr',
-          scopedSlots: { customRender: 'isUpdateAddr' }
+          scopedSlots: { customRender: 'isUpdateAddr' },
         },
         {
           title: '修改时间',
           align: 'center',
-          dataIndex: 'updateTime'
+          dataIndex: 'updateTime',
         },
         {
           title: '操作',
@@ -473,30 +476,30 @@ export default {
           align: 'center',
           fixed: 'right',
           width: 300,
-          scopedSlots: { customRender: 'action' }
-        }
+          scopedSlots: { customRender: 'action' },
+        },
       ],
       url: {
         list: '/orderList/orderList/list',
         delete: '/orderList/orderList/delete',
         deleteBatch: '/orderList/orderList/deleteBatch',
-        exportXlsUrl: 'orderList/orderList/exportXls',
-        importExcelUrl: 'orderList/orderList/importExcel'
+        exportXlsUrl: '/orderList/orderList/exportList',
+        // importExcelUrl: '/orderList/orderList/importExcel',
         //checkGoodsRepertory:"/orderList/orderList/checkGoodsRepertory"
-      }
+      },
     }
   },
   computed: {
-    importExcelUrl: function() {
+    importExcelUrl: function () {
       return `${window._CONFIG['domianURL']}/${this.url.importExcelUrl}`
-    }
+    },
   },
   mounted() {
     this.init()
   },
   methods: {
-    refundAndAbrogateOrderModalClick(param){
-      this.$refs.refundAndAbrogateOrderModal.open(param);
+    refundAndAbrogateOrderModalClick(param) {
+      this.$refs.refundAndAbrogateOrderModal.open(param)
     },
     /**查询栏时间区间查询*/
     getQueryParams() {
@@ -512,27 +515,27 @@ export default {
       delete param.deliveryTime
       return filterObj(param)
     },
-    onDateChange: function(value, dateString) {
+    onDateChange: function (value, dateString) {
       console.log('*****************************************************', dateString[0], dateString[1])
       this.queryParam.createTime_begin = dateString[0]
       this.queryParam.createTime_end = dateString[1]
     },
-    onDateChange1: function(value, dateString) {
+    onDateChange1: function (value, dateString) {
       console.log('*****************************************************', dateString[0], dateString[1])
       this.queryParam.closeTime_begin = dateString[0]
       this.queryParam.closeTime_end = dateString[1]
     },
-    onDateChange2: function(value, dateString) {
+    onDateChange2: function (value, dateString) {
       console.log('*****************************************************', dateString[0], dateString[1])
       this.queryParam.payTime_begin = dateString[0]
       this.queryParam.payTime_end = dateString[1]
     },
-    onDateChange3: function(value, dateString) {
+    onDateChange3: function (value, dateString) {
       console.log('*****************************************************', dateString[0], dateString[1])
       this.queryParam.shipmentsTime_begin = dateString[0]
       this.queryParam.shipmentsTime_end = dateString[1]
     },
-    onDateChange4: function(value, dateString) {
+    onDateChange4: function (value, dateString) {
       console.log('*****************************************************', dateString[0], dateString[1])
       this.queryParam.deliveryTime_begin = dateString[0]
       this.queryParam.deliveryTime_end = dateString[1]
@@ -606,7 +609,7 @@ export default {
       this.$refs.modalForm.disableSubmit = false
     },
     //删除
-    showModalDeletess: function(id) {
+    showModalDeletess: function (id) {
       if (!this.url.delete) {
         this.$message.error('请设置url.delete属性!')
 
@@ -616,8 +619,8 @@ export default {
       this.$confirm({
         title: '确定要删除订单吗，删除后不可恢复。',
         content: '确定要删除吗？',
-        onOk: function() {
-          deleteAction(that.url.delete, { id: id }).then(res => {
+        onOk: function () {
+          deleteAction(that.url.delete, { id: id }).then((res) => {
             console.log(res)
             if (res.success) {
               that.$message.success(res.message)
@@ -626,7 +629,7 @@ export default {
               that.$message.warning(res.message)
             }
           })
-        }
+        },
       })
     },
     //跳转详情
@@ -662,7 +665,7 @@ export default {
       this.initIndex()
     },
     initIndex() {
-      initDictOptions('oder_distribution').then(res => {
+      initDictOptions('oder_distribution').then((res) => {
         if (res.success) {
           /*for(let item of res.result){
               if(item.value == this.distribution  ){
@@ -675,7 +678,7 @@ export default {
     },
 
     checkGoodsRepertory() {
-      getAction(this.url.checkGoodsRepertory).then(res => {
+      getAction(this.url.checkGoodsRepertory).then((res) => {
         console.log(res)
       })
     },
@@ -700,7 +703,7 @@ export default {
       for (var key in data) {
         var value = data[key]
         if (value.constructor == Array) {
-          value.forEach(function(_value) {
+          value.forEach(function (_value) {
             _result.push(key + '=' + _value)
           })
         } else {
@@ -708,8 +711,8 @@ export default {
         }
       }
       return _result.join('&')
-    }
-  }
+    },
+  },
 }
 </script>
 <style scoped>
