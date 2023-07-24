@@ -336,7 +336,7 @@ export default {
         list: '/orderList/orderList/queryPageListDealsAreDone',
         delete: '/orderList/orderList/delete',
         deleteBatch: '/orderList/orderList/deleteBatch',
-        exportXlsUrl: 'orderList/orderList/exportXls',
+        exportXlsUrl: 'orderList/orderList/exportPageListDealsAreDone',
         importExcelUrl: 'orderList/orderList/importExcel',
         reviewInformation: '/orderEvaluate/orderEvaluate/reviewInformation'
       }
