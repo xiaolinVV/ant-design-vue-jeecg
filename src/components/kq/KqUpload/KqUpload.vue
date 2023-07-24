@@ -73,7 +73,10 @@
               let newArray = self.fileList.slice(0)
               self.fileList= []
               self.$nextTick(() => {
-                self.fileList= newArray
+                // self.fileList= newArray
+                self.handleChange({
+                  fileList: newArray
+                })
               })
             }
           })
