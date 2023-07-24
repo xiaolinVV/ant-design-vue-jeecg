@@ -2699,7 +2699,6 @@ export default {
                 }
                 // let formData = Object.assign(this.model, values)
                 console.log(values, 'valuesvaluesvaluesvalues')
-                debugger
                 if (this.reusePage == 1) {
                   if (e == 0) {
                     //保存草稿箱
