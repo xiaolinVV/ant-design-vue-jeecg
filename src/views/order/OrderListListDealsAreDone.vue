@@ -73,17 +73,17 @@
 
     <!--&lt;!&ndash; 操作按钮区域 &ndash;&gt;-->
     <!--<div class="table-operator">-->
-    <!--<a-button type="primary" icon="download" @click="orderListExport(3)">导出预览</a-button>-->
+    <!--<a-button type="primary" icon="download" :loading="exportLoading" @click="orderListExport(3)">导出预览</a-button>-->
     <!--</div>-->
 
     <!-- 操作按钮区域 -->
     <div class="table-operator">
-      <a-button type="primary" icon="download" @click="handleExportXls('订单列表')">导出</a-button>
+      <a-button type="primary" icon="download" :loading="exportLoading" @click="handleExportXls('订单列表')">导出</a-button>
     </div>
 
     <!--<div class="table-operator">
       <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
-      <a-button type="primary" icon="download" @click="handleExportXls('订单列表')">导出</a-button>
+      <a-button type="primary" icon="download" :loading="exportLoading" @click="handleExportXls('订单列表')">导出</a-button>
       <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">
         <a-button type="primary" icon="import">导入</a-button>
       </a-upload>

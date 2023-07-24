@@ -79,7 +79,7 @@
         <!-- 操作按钮区域 -->
         <div class="table-operator">
           <a-button @click="handleAdd(marketingPrefectureId)" type="primary" icon="plus">新增</a-button>
-          <!-- <a-button type="primary" icon="download" @click="handleExportXls('平台专区分类')">导出</a-button>
+          <!-- <a-button type="primary" icon="download" :loading="exportLoading" @click="handleExportXls('平台专区分类')">导出</a-button>
           <a-upload
             name="file"
             :showUploadList="false"

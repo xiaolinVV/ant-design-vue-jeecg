@@ -35,7 +35,7 @@
     <!-- 操作按钮区域 -->
     <div class="table-operator">
     <a-button @click="marketingLeagueMemberSuperAddModelClick('')" type="primary" icon="plus">添加</a-button>
-      <!--  <a-button type="primary" icon="download" @click="handleExportXls('加盟专区-加盟用户')">导出</a-button>
+      <!--  <a-button type="primary" icon="download" :loading="exportLoading" @click="handleExportXls('加盟专区-加盟用户')">导出</a-button>
       <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">
         <a-button type="primary" icon="import">导入</a-button>
       </a-upload>

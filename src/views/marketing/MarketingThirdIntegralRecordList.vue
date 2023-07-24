@@ -61,7 +61,7 @@
     <!-- 操作按钮区域 -->
     <div class="table-operator">
       <!-- <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
-      <a-button type="primary" icon="download" @click="handleExportXls('积分记录')">导出</a-button> -->
+      <a-button type="primary" icon="download" :loading="exportLoading" @click="handleExportXls('积分记录')">导出</a-button> -->
       <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
       <a-button type="primary" @click="searchReset2" icon="reload" style="margin-left: 8px">重置</a-button>
       <!-- <a-upload

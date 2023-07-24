@@ -58,7 +58,7 @@
       <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
       <a-button type="primary" icon="plus" @click="jump">创建单据</a-button>
       <a-button type="primary" icon="plus" @click="onetomany">一对多</a-button>
-      <a-button type="primary" icon="download" @click="handleExportXls('单表示例')">导出</a-button>
+      <a-button type="primary" icon="download" :loading="exportLoading" @click="handleExportXls('单表示例')">导出</a-button>
       <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">
         <a-button type="primary" icon="import">导入</a-button>
       </a-upload>
