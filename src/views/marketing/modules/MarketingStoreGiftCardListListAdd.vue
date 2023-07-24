@@ -122,6 +122,7 @@
       @handleOk="selectGoodsHandleOk"
       :selectGoodsPopUpIds="selectGoodsPopUpIds"
       :storeManageId="model.storeManageId"
+      :sysUserId="model.storeManageId"
       apiName="selectStoreGoods"
     >
     </select-goods-to-add-pop-up>
