@@ -420,6 +420,7 @@ export default {
     handleCancel() {
       this.visible = false
       this.searchName = ''
+      this.selectPagination.current = 1
       this.$emit('handleCancel')
     },
     async reset() {
