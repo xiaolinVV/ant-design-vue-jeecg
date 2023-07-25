@@ -118,7 +118,7 @@
       <a-button @click="toAdd" type="primary" icon="plus">新增</a-button>
       <a-button @click="allOperation(2)" type="primary" icon="check">批量启用</a-button>
       <a-button @click="allOperation(1)" type="primary" icon="pause">批量停用</a-button>
-      <!-- <a-button type="primary" icon="download" @click="handleExportXls('拼团商品')">导出</a-button>
+      <!-- <a-button type="primary" icon="download" :loading="exportLoading" @click="handleExportXls('拼团商品')">导出</a-button>
       <a-upload
         name="file"
         :showUploadList="false"

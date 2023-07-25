@@ -71,7 +71,7 @@
 
     <!-- 操作按钮区域 -->
     <div class="table-operator">
-      <!--<a-button type="primary" icon="download" @click="handleExportXls('创业分红-出账资金明细')">导出</a-button>-->
+      <!--<a-button type="primary" icon="download" :loading="exportLoading" @click="handleExportXls('创业分红-出账资金明细')">导出</a-button>-->
       <a-button type="primary" @click = "sendCouponModel">手动出账</a-button>
 
     </div>

@@ -55,7 +55,7 @@
             <span class="table-operator">
               <a-button type="primary" @click="searchQuery" icon="search" style="margin-bottom:10px">查询</a-button>
               <a-button type="primary" @click="searchReset" icon="reload">重置</a-button>
-              <a-button type="primary" icon="download" @click="handleExportXls('订单列表')">导出</a-button>
+              <a-button type="primary" icon="download" :loading="exportLoading" @click="handleExportXls('订单列表')">导出</a-button>
               <a-button type="primary" @click="forFree()">批量免单</a-button>
             </span>
           </a-col>

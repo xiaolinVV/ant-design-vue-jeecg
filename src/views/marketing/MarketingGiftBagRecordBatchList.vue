@@ -110,7 +110,7 @@
 <!--      add-->
 <!--      toDistributionInformation-->
       <a-button @click="add" type="primary" icon="plus">新增</a-button>
-      <a-button type="primary" icon="download" @click="handleExportXls('采购礼包记录')">导出</a-button>
+      <a-button type="primary" icon="download" :loading="exportLoading" @click="handleExportXls('采购礼包记录')">导出</a-button>
       <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl"
                 @change="handleImportExcel">
         <a-button type="primary" icon="import">导入</a-button>

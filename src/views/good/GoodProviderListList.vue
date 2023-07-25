@@ -90,7 +90,7 @@
       <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
       <a-button @click="BatchShelves('1')" type="primary" icon="plus">批量上架</a-button>
       <a-button @click="showModalFrameStatus1()" type="primary" icon="plus">批量下架</a-button>
-     <!-- <a-button type="primary" icon="download" @click="handleExportXls('商品列表')">导出</a-button>
+     <!-- <a-button type="primary" icon="download" :loading="exportLoading" @click="handleExportXls('商品列表')">导出</a-button>
       <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">
         <a-button type="primary" icon="import">导入</a-button>
       </a-upload>-->

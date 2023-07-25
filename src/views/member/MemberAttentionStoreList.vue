@@ -50,7 +50,7 @@
     <!-- 操作按钮区域 -->
     <!--<div class="table-operator">
       <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
-      <a-button type="primary" icon="download" @click="handleExportXls('关注店铺')">导出</a-button>
+      <a-button type="primary" icon="download" :loading="exportLoading" @click="handleExportXls('关注店铺')">导出</a-button>
     </div>-->
     <!-- table区域-begin -->
     <a-table
