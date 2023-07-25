@@ -465,7 +465,7 @@ export default {
         {
           title: '售后数量',
           align: 'center',
-          dataIndex: 'goodRecordAmount',
+          dataIndex: 'refundAmount',
           // sorter:true,
         },
         {
