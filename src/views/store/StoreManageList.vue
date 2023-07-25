@@ -422,6 +422,11 @@ export default {
           dataIndex: 'id',
         },
         {
+          title: '大屏店铺id',
+          align: 'center',
+          dataIndex: 'sysUserId',
+        },
+        {
           title: '店铺账号',
           align: 'center',
           dataIndex: 'userName',

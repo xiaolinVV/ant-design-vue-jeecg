@@ -415,6 +415,7 @@ export default {
         this.$emit('handleOk', ids.join(','), sz)
         this.visible = false
         this.searchName = ''
+        this.selectPagination.current = 1
       })
     },
     handleCancel() {
