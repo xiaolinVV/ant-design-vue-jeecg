@@ -78,7 +78,7 @@
 
     <!-- 操作按钮区域 -->
     <div class="table-operator">
-      <a-button type="primary" icon="download" @click="handleExportXls('订单-店铺订单-已取消订单')">导出</a-button>
+      <a-button type="primary" icon="download"  :loading="exportLoading"  @click="handleExportXls('订单-店铺订单-已取消订单')">导出</a-button>
     </div>
 
     <!-- table区域-begin -->

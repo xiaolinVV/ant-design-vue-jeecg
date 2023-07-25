@@ -73,17 +73,17 @@
 
     <!--&lt;!&ndash; 操作按钮区域 &ndash;&gt;-->
     <!--<div class="table-operator">-->
-    <!--<a-button type="primary" icon="download" @click="orderListExport(3)">导出预览</a-button>-->
+    <!--<a-button type="primary" icon="download"  :loading="exportLoading"  @click="orderListExport(3)">导出预览</a-button>-->
     <!--</div>-->
 
     <!-- 操作按钮区域 -->
     <div class="table-operator">
-      <a-button type="primary" icon="download" @click="handleExportXls('订单-平台订单-交易成功订单')">导出</a-button>
+      <a-button type="primary" icon="download"  :loading="exportLoading"  @click="handleExportXls('订单-平台订单-交易成功订单')">导出</a-button>
     </div>
 
     <!--<div class="table-operator">
       <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
-      <a-button type="primary" icon="download" @click="handleExportXls('订单列表')">导出</a-button>
+      <a-button type="primary" icon="download"  :loading="exportLoading"  @click="handleExportXls('订单列表')">导出</a-button>
       <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">
         <a-button type="primary" icon="import">导入</a-button>
       </a-upload>
@@ -336,7 +336,7 @@ export default {
         list: '/orderList/orderList/queryPageListDealsAreDone',
         delete: '/orderList/orderList/delete',
         deleteBatch: '/orderList/orderList/deleteBatch',
-        exportXlsUrl: 'orderList/orderList/exportXls',
+        exportXlsUrl: 'orderList/orderList/exportPageListDealsAreDone',
         importExcelUrl: 'orderList/orderList/exportPageListDealsAreDone',
         reviewInformation: '/orderEvaluate/orderEvaluate/reviewInformation',
       },

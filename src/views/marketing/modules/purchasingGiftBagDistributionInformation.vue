@@ -26,7 +26,7 @@
           </a-menu-item>
         </a-menu>
         <div class="table-operator">
-          <a-button type="primary" icon="download" @click="handleExportXls">下载模板</a-button>
+          <a-button type="primary" icon="download"  :loading="exportLoading"  @click="handleExportXls">下载模板</a-button>
           <a-upload name="file" :data="{id:selectmenuId}" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">
               <a-button type="primary" icon="import">导入配送信息</a-button>
           </a-upload>

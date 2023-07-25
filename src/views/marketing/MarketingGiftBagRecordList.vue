@@ -96,7 +96,7 @@
     <!-- 操作按钮区域 -->
     <div class="table-operator">
       <!-- <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button> -->
-      <a-button type="primary" icon="download" @click="handleExportXls('平台营销-礼包管理-礼包购买记录')"
+      <a-button type="primary" icon="download"  :loading="exportLoading"  @click="handleExportXls('平台营销-礼包管理-礼包购买记录')"
         >导出</a-button
       >
       <!-- <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl"

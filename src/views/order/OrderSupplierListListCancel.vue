@@ -114,11 +114,11 @@
 
     <!-- 操作按钮区域 -->
     <div class="table-operator">
-      <a-button type="primary" icon="download" @click="handleExportXls('订单-供应商订单-已取消订单')">导出</a-button>
+      <a-button type="primary" icon="download"  :loading="exportLoading"  @click="handleExportXls('订单-供应商订单-已取消订单')">导出</a-button>
     </div>
     <!--<div class="table-operator">
       <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
-      <a-button type="primary" icon="download" @click="handleExportXls('订单-供应商订单-全部')">导出</a-button>
+      <a-button type="primary" icon="download"  :loading="exportLoading"  @click="handleExportXls('订单-供应商订单-全部')">导出</a-button>
       <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">
         <a-button type="primary" icon="import">导入</a-button>
       </a-upload>
