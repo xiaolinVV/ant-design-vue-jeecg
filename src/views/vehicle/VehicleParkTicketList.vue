@@ -53,7 +53,7 @@
       <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
       <a-button type="primary" @click="searchReset" icon="reload">重置</a-button>
 
-      <!-- <a-button type="primary" icon="download" @click="handleExportXls('停车券')">导出</a-button>
+      <!-- <a-button type="primary" icon="download"  :loading="exportLoading"  @click="handleExportXls('停车券')">导出</a-button>
       <a-upload
         name="file"
         :showUploadList="false"

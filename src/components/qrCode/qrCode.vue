@@ -7,7 +7,7 @@
     <div style="margin-bottom: 10px;" v-if="qrCodeNumber">
       {{qrCodeNumber}}
     </div>
-    <a-button type="primary" icon="download" @click="downLoad" v-if="buttonText">
+    <a-button type="primary" icon="download"  :loading="exportLoading"  @click="downLoad" v-if="buttonText">
       {{buttonText}}
     </a-button>
   </div>
