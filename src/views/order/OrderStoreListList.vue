@@ -548,7 +548,11 @@ export default {
     },
     //商品信息
     showModalGoodsInformation(orderProviderListDTOs) {
-      this.$refs.modalForm.showModalGoodsInformation(orderProviderListDTOs)
+      if (!Array.isArray(orderProviderListDTOs) || orderProviderListDTOs.length === 0) {
+        this.$message.warning('该订单商品信息异常联系管理员')
+        return
+      }
+      this.$refs.modalForm.showModalGoodsInformation(orderProviderListDTOs || [])
       this.$refs.modalForm.title = '商品信息'
       this.$refs.modalForm.disableSubmit = false
     },
