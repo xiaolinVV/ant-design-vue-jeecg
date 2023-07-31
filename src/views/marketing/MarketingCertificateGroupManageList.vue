@@ -63,7 +63,7 @@
     <!-- 操作按钮区域 -->
     <!-- <div class="table-operator">
       <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
-      <a-button type="primary" icon="download" :loading="exportLoading" @click="handleExportXls('拼好券管理')">导出</a-button>
+      <a-button type="primary" icon="download"  :loading="exportLoading"  @click="handleExportXls('拼好券管理')">导出</a-button>
       <a-upload
         name="file"
         :showUploadList="false"

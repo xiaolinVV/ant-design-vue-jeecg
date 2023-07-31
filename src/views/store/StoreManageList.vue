@@ -120,7 +120,7 @@
       >
         <a-button type="primary" icon="import">导入</a-button>
       </a-upload> -->
-      <a-button type="primary" icon="download" :loading="exportLoading" @click="handleExportXls('店铺-店铺管理-店铺列表')">导出</a-button>
+      <a-button type="primary" icon="download"  :loading="exportLoading"  @click="handleExportXls('店铺-店铺管理-店铺列表')">导出</a-button>
       <a-dropdown v-if="selectedRowKeys.length > 0">
         <a-menu slot="overlay">
           <a-menu-item key="1" @click="batchDel">
@@ -420,6 +420,11 @@ export default {
           title: '店铺编号',
           align: 'center',
           dataIndex: 'id',
+        },
+        {
+          title: '大屏店铺id',
+          align: 'center',
+          dataIndex: 'sysUserId',
         },
         {
           title: '店铺账号',

@@ -11,12 +11,10 @@
             </a-form-item>
           </a-col>
 
-
           <a-col :md="6" :sm="8">
-            <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
+            <span style="float: left; overflow: hidden" class="table-page-search-submitButtons">
               <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
               <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
-
             </span>
           </a-col>
         </a-row>
@@ -29,17 +27,17 @@
 
     <!--&lt;!&ndash; 操作按钮区域 &ndash;&gt;-->
     <!--<div class="table-operator">-->
-    <!--<a-button type="primary" icon="download" :loading="exportLoading" @click="orderListExport()">导出预览</a-button>-->
+    <!--<a-button type="primary" icon="download"  :loading="exportLoading"  @click="orderListExport()">导出预览</a-button>-->
     <!--</div>-->
     <!-- 操作按钮区域 -->
     <div class="table-operator">
-      <a-button type="primary" icon="download" :loading="exportLoading" @click="handleExportXls('订单列表')">导出</a-button>
+      <a-button type="primary" icon="download"  :loading="exportLoading"  @click="handleExportXls('订单-平台订单-售后订单')">导出</a-button>
     </div>
 
     <!--<div class="table-operator">
     &lt;!&ndash;  <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>&ndash;&gt;
-      &lt;!&ndash;<a-button type="primary" icon="download" :loading="exportLoading" @click="handleExportXls('订单列表')">导出</a-button>&ndash;&gt;
-      <a-button type="primary" icon="download" :loading="exportLoading" @click="orderListExport()">导出预览</a-button>
+      &lt;!&ndash;<a-button type="primary" icon="download"  :loading="exportLoading"  @click="handleExportXls('订单列表')">导出</a-button>&ndash;&gt;
+      <a-button type="primary" icon="download"  :loading="exportLoading"  @click="orderListExport()">导出预览</a-button>
 
       &lt;!&ndash;<a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">
         <a-button type="primary" icon="import">导入</a-button>
@@ -54,7 +52,7 @@
 
     <!-- table区域-begin -->
     <div>
-      <div class="ant-alert ant-alert-info" style="margin-bottom: 16px;">
+      <div class="ant-alert ant-alert-info" style="margin-bottom: 16px">
         <i class="anticon anticon-info-circle ant-alert-icon"></i> 已选择
         <a style="font-weight: 600">{{ selectedRowKeys.length }}</a
         >项
@@ -86,7 +84,7 @@
                   record.houseNumber
                 )
               "
-            >{{ record. memberId_dictText }}</a
+              >{{ record.memberId_dictText }}</a
             >
           </div>
         </template>
@@ -97,20 +95,18 @@
         </template>
         <template slot="application" slot-scope="text, record, index">
           <div>
-            <a @click="showModalRemark(record)">查看说明</a
-            >
+            <a @click="showModalRemark(record)">查看说明</a>
           </div>
         </template>
         <template slot="voucher" slot-scope="text, record, index">
           <div>
-            <a @click="showImagePrew(record)">查看图片</a
-            >
+            <a @click="showImagePrew(record)">查看图片</a>
           </div>
         </template>
         <template slot="refundType" slot-scope="text, record, index">
-          <div v-if="record.refundType==0">仅退款</div>
-          <div v-if="record.refundType==1">退货退款</div>
-          <div v-if="record.refundType==2">换货</div>
+          <div v-if="record.refundType == 0">仅退款</div>
+          <div v-if="record.refundType == 1">退货退款</div>
+          <div v-if="record.refundType == 2">换货</div>
         </template>
 
         <template slot="distribution" slot-scope="text, record, index">
@@ -124,7 +120,7 @@
         <template slot="giveWelfarePayments" slot-scope="text, record, index">
           <div>
             <a v-if="record.giveWelfarePayments != 0" @click="showModalGivingInformation(record.giveWelfarePayments)"
-            >福利金</a
+              >福利金</a
             >
             <a v-else>-</a>
           </div>
@@ -144,7 +140,6 @@
         </template>
         <template slot="orderType" slot-scope="text, record, index">
           <div class="anty-img-wrap">
-
             <span shape="square" v-if="record.orderType == 0">普通订单</span>
             <span shape="square" v-if="record.orderType == 1">拼团订单</span>
             <span shape="square" v-if="record.orderType == 2">抢购订单</span>
@@ -153,15 +148,15 @@
           </div>
         </template>
         <template slot="action" slot-scope="text, record">
-          <div v-if="record.status==0">
+          <div v-if="record.status == 0">
             <a @click="showModalRejectReason(record.id)">拒绝</a>
             <a-divider type="vertical" />
             <a @click="showModalAgreeWith(record)">通过</a>
           </div>
 
-          <a  v-if="record.status==3 || record.status==4" @click="showModalMoneyDetail(record)">退款金额明细</a>
+          <a v-if="record.status == 3 || record.status == 4" @click="showModalMoneyDetail(record)">退款金额明细</a>
 
-          <a v-if="record.status == 5" @click='showModalRefusedExplain(record)'>拒绝原因</a>
+          <a v-if="record.status == 5" @click="showModalRefusedExplain(record)">拒绝原因</a>
 
           <a v-if="record.status == 1 || record.status == 2" @click="showModalLogitic(record)">查看物流</a>
 
@@ -291,16 +286,14 @@
       :footer="null"
       :width="800"
       okText="确认"
-      cancelText="取消">
-
+      cancelText="取消"
+    >
       <div>
         <a-form>
-          <a-form-item
-            label="取消原因">
-            <a-textarea disabled v-model="closeExplain"  placeholder="请输入100以内"  show-count :maxlength="100"/>
+          <a-form-item label="取消原因">
+            <a-textarea disabled v-model="closeExplain" placeholder="请输入100以内" show-count :maxlength="100" />
           </a-form-item>
         </a-form>
-
       </div>
     </a-modal>
     <!-- 展示退款凭证 -->
@@ -310,13 +303,13 @@
       :footer="null"
       :width="800"
       okText="确认"
-      cancelText="取消">
-
+      cancelText="取消"
+    >
       <div class="imageContainer">
         <div class="imgLeft" @click="reduceImage">
           <a-icon type="left" />
         </div>
-        <img class="imageCover" :src="refundCertificateList[indeImage]"  alt="">
+        <img class="imageCover" :src="refundCertificateList[indeImage]" alt="" />
         <div class="imgLeft" @click="addImage">
           <a-icon type="right" />
         </div>
@@ -326,7 +319,10 @@
     <orderList-modal ref="modalForm" @ok="modalFormOk"></orderList-modal>
 
     <!--取消并退款-->
-    <refund-and-abrogate-order-modal ref="refundAndAbrogateOrderModal" @ok="modalFormOk"></refund-and-abrogate-order-modal>
+    <refund-and-abrogate-order-modal
+      ref="refundAndAbrogateOrderModal"
+      @ok="modalFormOk"
+    ></refund-and-abrogate-order-modal>
   </a-card>
 </template>
 
@@ -334,7 +330,7 @@
 import OrderListModal from './modules/OrderListModal'
 import { JeecgListMixin } from '@/mixins/JeecgListMixin'
 import { filterObj, getUrlParams } from '@/utils/util'
-import RefundAndAbrogateOrderModal from'./modules/RefundAndAbrogateOrderModal'
+import RefundAndAbrogateOrderModal from './modules/RefundAndAbrogateOrderModal'
 import { deleteAction, getAction } from '@/api/manage'
 //字典
 import { initDictOptions } from '@/components/dict/JDictSelectUtil'
@@ -347,14 +343,14 @@ export default {
   },
   data() {
     return {
-      indeImage:0,
-      refundCertificateList:[],
-      visiblRefundCertificate:false,
-      closeExplain:'',
-      visiblRefusedExplain:false,
-      visiblGoodsInformation:false,
-      orderProviderGoodRecordDTOList:[],
-      goodscolumns:[
+      indeImage: 0,
+      refundCertificateList: [],
+      visiblRefundCertificate: false,
+      closeExplain: '',
+      visiblRefusedExplain: false,
+      visiblGoodsInformation: false,
+      orderProviderGoodRecordDTOList: [],
+      goodscolumns: [
         // {
         //     title: '商品编号',
         //     align: 'center',
@@ -364,39 +360,38 @@ export default {
           title: '商品主图',
           align: 'center',
           dataIndex: 'goodMainPicture',
-          scopedSlots: { customRender: 'goodMainPicture' }
+          scopedSlots: { customRender: 'goodMainPicture' },
         },
         {
           title: '商品名称',
           align: 'center',
           dataIndex: 'goodName',
-          width: 200
+          width: 200,
         },
 
         {
           title: '商品规格',
           align: 'center',
           dataIndex: 'goodSpecification',
-          scopedSlots: { customRender: 'specification' }
+          scopedSlots: { customRender: 'specification' },
         },
 
         {
           title: '单价',
           align: 'center',
-          dataIndex: 'goodRecordActualPayment'
+          dataIndex: 'goodRecordActualPayment',
         },
         {
           title: '数量',
           align: 'center',
           dataIndex: 'goodRecordAmount',
-          scopedSlots: { customRender: 'amount' }
+          scopedSlots: { customRender: 'amount' },
         },
         {
           title: '小计',
           align: 'center',
-          dataIndex: 'goodRecordTotal'
+          dataIndex: 'goodRecordTotal',
         },
-
       ],
       description: '订单列表管理页面',
       distribution: '',
@@ -408,19 +403,19 @@ export default {
           key: 'rowIndex',
           width: 60,
           align: 'center',
-          customRender: function(t, r, index) {
+          customRender: function (t, r, index) {
             return parseInt(index) + 1
-          }
+          },
         },
         {
           title: '订单编号',
           align: 'center',
-          dataIndex: 'orderNo'
+          dataIndex: 'orderNo',
         },
         {
           title: '售后单编号',
           align: 'center',
-          dataIndex: 'id'
+          dataIndex: 'id',
         },
         {
           title: '订单类型',
@@ -452,82 +447,82 @@ export default {
           title: '售后商品',
           align: 'center',
           dataIndex: 'goods',
-          scopedSlots: { customRender: 'goods' }
+          scopedSlots: { customRender: 'goods' },
         },
         {
           title: '售后申请类型',
           align: 'center',
           dataIndex: 'refundType',
-          scopedSlots: { customRender: 'refundType' }
+          scopedSlots: { customRender: 'refundType' },
           // sorter:true,
         },
         {
           title: '商品原价',
           align: 'center',
-          dataIndex: 'goodRecordTotal'
+          dataIndex: 'goodRecordTotal',
           // sorter:true,
         },
         {
           title: '售后数量',
           align: 'center',
-          dataIndex: 'goodRecordAmount'
+          dataIndex: 'refundAmount',
           // sorter:true,
         },
         {
           title: '售后商品总原价',
           align: 'center',
-          dataIndex: 'goodUnitPrice'
+          dataIndex: 'goodUnitPrice',
           // sorter:true,
         },
         {
           title: '优惠金额',
           align: 'center',
-          dataIndex: 'goodRecordTotalCoupon'
+          dataIndex: 'goodRecordTotalCoupon',
           // sorter:true,
         },
         {
           title: '售后商品总实付款',
           align: 'center',
-          dataIndex: 'goodRecordActualPayment'
+          dataIndex: 'goodRecordActualPayment',
           // sorter:true,
         },
         {
           title: '退款申请金额',
           align: 'center',
-          dataIndex: 'refundPrice'
+          dataIndex: 'refundPrice',
           // sorter:true,
         },
         {
           title: '售后原因',
           align: 'center',
-          dataIndex: 'refundReason_dictText'
+          dataIndex: 'refundReason_dictText',
           // sorter:true,
         },
         {
           title: '申请说明',
           align: 'center',
           dataIndex: 'application',
-          scopedSlots: { customRender: 'application' }
+          scopedSlots: { customRender: 'application' },
           // sorter:true,
         },
         {
           title: '凭证',
           align: 'center',
           dataIndex: 'voucher',
-          scopedSlots: { customRender: 'voucher' }
+          scopedSlots: { customRender: 'voucher' },
           // sorter:true,
         },
         {
           title: '售后处理进度',
           align: 'center',
           dataIndex: 'status',
-          scopedSlots: { customRender: 'status' }
+          scopedSlots: { customRender: 'status' },
           // sorter:true,
         },
         {
           title: '售后发起时间',
           align: 'center',
-          dataIndex: 'createTime'
+          dataIndex: 'createTime',
           // sorter:true,
         },
         {
@@ -536,68 +531,67 @@ export default {
           align: 'center',
           fixed: 'right',
           width: 300,
-          scopedSlots: { customRender: 'action' }
-        }
+          scopedSlots: { customRender: 'action' },
+        },
       ],
       url: {
         list: '/order/orderRefundList/list',
         delete: '/orderList/orderList/delete',
         deleteBatch: '/orderList/orderList/deleteBatch',
-        exportXlsUrl: 'orderList/orderList/exportXls',
-        importExcelUrl: 'orderList/orderList/importExcel',
+        exportXlsUrl: '/order/orderRefundList/exportXls',
+        // importExcelUrl: '/order/orderRefundList/exportXls',
         imgerver: window._CONFIG['domianURL'] + '/sys/common/view',
         //checkGoodsRepertory:"/orderList/orderList/checkGoodsRepertory"
-      }
+      },
     }
   },
   computed: {
-    importExcelUrl: function() {
+    importExcelUrl: function () {
       return `${window._CONFIG['domianURL']}/${this.url.importExcelUrl}`
-    }
+    },
   },
   mounted() {
     this.init()
   },
   methods: {
-    reduceImage(){
-      if(this.indeImage==0){
-        this.indeImage=this.refundCertificateList.length-1
-      }else{
-        this.indeImage=this.indeImage-1
+    reduceImage() {
+      if (this.indeImage == 0) {
+        this.indeImage = this.refundCertificateList.length - 1
+      } else {
+        this.indeImage = this.indeImage - 1
       }
       console.log(this.indeImage)
     },
-    addImage(){
-      if(this.indeImage==this.refundCertificateList.length-1){
-        this.indeImage=0
-      }else{
-        this.indeImage=this.indeImage+1
+    addImage() {
+      if (this.indeImage == this.refundCertificateList.length - 1) {
+        this.indeImage = 0
+      } else {
+        this.indeImage = this.indeImage + 1
       }
       console.log(this.indeImage)
     },
-    showImagePrew(record){
-      let that=this
-      this.indeImage=0
-      if(record.refundCertificate!=''&&record.refundCertificate!=null&&record.refundCertificate!=undefined){
-        let list=record.refundCertificate.split(",")
-        that.refundCertificateList=list
-        that.visiblRefundCertificate=true
-      }else{
-
+    showImagePrew(record) {
+      let that = this
+      this.indeImage = 0
+      if (record.refundCertificate != '' && record.refundCertificate != null && record.refundCertificate != undefined) {
+        let list = record.refundCertificate.split(',')
+        that.refundCertificateList = list
+        that.visiblRefundCertificate = true
+      } else {
         that.$message.success('暂无凭证')
       }
     },
-    getAvatarView: function(mainPicture) {
+    getAvatarView: function (mainPicture) {
       return this.url.imgerver + '/' + mainPicture
     },
-    refundAndAbrogateOrderModalClick(param){
-      this.$refs.refundAndAbrogateOrderModal.open(param);
+    refundAndAbrogateOrderModalClick(param) {
+      this.$refs.refundAndAbrogateOrderModal.open(param)
     },
     /**查询栏时间区间查询*/
     getQueryParams() {
       console.log(this.queryParam.createTime)
       let pathQueryParam = getUrlParams()
-      var param = Object.assign({}, this.queryParam, this.isorter,pathQueryParam)
+      var param = Object.assign({}, this.queryParam, this.isorter, pathQueryParam)
       param.field = this.getQueryField()
       param.pageNo = this.ipagination.current
       param.pageSize = this.ipagination.pageSize
@@ -608,27 +602,27 @@ export default {
       delete param.deliveryTime
       return filterObj(param)
     },
-    onDateChange: function(value, dateString) {
+    onDateChange: function (value, dateString) {
       console.log('*****************************************************', dateString[0], dateString[1])
       this.queryParam.createTime_begin = dateString[0]
       this.queryParam.createTime_end = dateString[1]
     },
-    onDateChange1: function(value, dateString) {
+    onDateChange1: function (value, dateString) {
       console.log('*****************************************************', dateString[0], dateString[1])
       this.queryParam.closeTime_begin = dateString[0]
       this.queryParam.closeTime_end = dateString[1]
     },
-    onDateChange2: function(value, dateString) {
+    onDateChange2: function (value, dateString) {
       console.log('*****************************************************', dateString[0], dateString[1])
       this.queryParam.payTime_begin = dateString[0]
       this.queryParam.payTime_end = dateString[1]
     },
-    onDateChange3: function(value, dateString) {
+    onDateChange3: function (value, dateString) {
       console.log('*****************************************************', dateString[0], dateString[1])
       this.queryParam.shipmentsTime_begin = dateString[0]
       this.queryParam.shipmentsTime_end = dateString[1]
     },
-    onDateChange4: function(value, dateString) {
+    onDateChange4: function (value, dateString) {
       console.log('*****************************************************', dateString[0], dateString[1])
       this.queryParam.deliveryTime_begin = dateString[0]
       this.queryParam.deliveryTime_end = dateString[1]
@@ -655,16 +649,16 @@ export default {
     },
     //商品信息
     showModalGoodsInformation(record) {
-      this.orderProviderGoodRecordDTOList=[]
+      this.orderProviderGoodRecordDTOList = []
       this.orderProviderGoodRecordDTOList.push(record)
-      this.visiblGoodsInformation=true
+      this.visiblGoodsInformation = true
       // this.$refs.modalForm.showModalGoodsInformation(orderProviderListDTOs)
       // this.$refs.modalForm.title = '商品信息'
       // this.$refs.modalForm.disableSubmit = false
     },
     //申请说明
-    showModalRemark(record){
-      if(record.remarks==''){
+    showModalRemark(record) {
+      if (record.remarks == '') {
         return this.$message.success('暂无说明')
       }
       this.$refs.modalForm.showModalRemark(record)
@@ -714,7 +708,7 @@ export default {
       this.$refs.modalForm.disableSubmit = false
     },
     //删除
-    showModalDeletess: function(id) {
+    showModalDeletess: function (id) {
       if (!this.url.delete) {
         this.$message.error('请设置url.delete属性!')
 
@@ -724,8 +718,8 @@ export default {
       this.$confirm({
         title: '确定要删除订单吗，删除后不可恢复。',
         content: '确定要删除吗？',
-        onOk: function() {
-          deleteAction(that.url.delete, { id: id }).then(res => {
+        onOk: function () {
+          deleteAction(that.url.delete, { id: id }).then((res) => {
             console.log(res)
             if (res.success) {
               that.$message.success(res.message)
@@ -734,7 +728,7 @@ export default {
               that.$message.warning(res.message)
             }
           })
-        }
+        },
       })
     },
     //跳转详情
@@ -766,51 +760,48 @@ export default {
       this.$refs.modalForm.disableSubmit = false
     },
     //拒绝
-    showModalRejectReason(id){
+    showModalRejectReason(id) {
       this.$refs.modalForm.showRejectReasonModa(id)
       this.$refs.modalForm.title = '拒绝原因'
       this.$refs.modalForm.disableSubmit = false
     },
     //同意
-    showModalAgreeWith(record){
-      if(record.refundType==0){
+    showModalAgreeWith(record) {
+      if (record.refundType == 0) {
         this.$refs.modalForm.showAgreeWithModa(record)
         this.$refs.modalForm.title = ''
         this.$refs.modalForm.disableSubmit = false
-      }
-      else{
+      } else {
         this.$refs.modalForm.showModalEditLogistics(record)
         this.$refs.modalForm.title = ''
         this.$refs.modalForm.disableSubmit = false
       }
-
-
     },
     //拒绝原因展示
-    showModalRefusedExplain(record){
-      this.closeExplain=record.refusedExplain
-      this.visiblRefusedExplain=true
+    showModalRefusedExplain(record) {
+      this.closeExplain = record.refusedExplain
+      this.visiblRefusedExplain = true
     },
     //换货明细
-    showMidalChangeGoods(record){
+    showMidalChangeGoods(record) {
       this.$refs.modalForm.showMidalChangeGoods(record)
       this.$refs.modalForm.title = ''
       this.$refs.modalForm.disableSubmit = false
     },
     //查看物流
-    showModalLogitic(record){
+    showModalLogitic(record) {
       this.$refs.modalForm.showModalLogistics(record)
       this.$refs.modalForm.title = ''
       this.$refs.modalForm.disableSubmit = false
     },
     //填写物流
-    showModalEditLogitic(){
+    showModalEditLogitic() {
       this.$refs.modalForm.showModalEditLogistics()
       this.$refs.modalForm.title = ''
       this.$refs.modalForm.disableSubmit = false
     },
     //资金明细
-    showModalMoneyDetail(record){
+    showModalMoneyDetail(record) {
       this.$refs.modalForm.showModalMoneyDetail(record)
       this.$refs.modalForm.title = ''
       this.$refs.modalForm.disableSubmit = false
@@ -820,7 +811,7 @@ export default {
       this.initIndex()
     },
     initIndex() {
-      initDictOptions('oder_distribution').then(res => {
+      initDictOptions('oder_distribution').then((res) => {
         if (res.success) {
           /*for(let item of res.result){
               if(item.value == this.distribution  ){
@@ -833,7 +824,7 @@ export default {
     },
 
     checkGoodsRepertory() {
-      getAction(this.url.checkGoodsRepertory).then(res => {
+      getAction(this.url.checkGoodsRepertory).then((res) => {
         console.log(res)
       })
     },
@@ -858,7 +849,7 @@ export default {
       for (var key in data) {
         var value = data[key]
         if (value.constructor == Array) {
-          value.forEach(function(_value) {
+          value.forEach(function (_value) {
             _result.push(key + '=' + _value)
           })
         } else {
@@ -866,27 +857,27 @@ export default {
         }
       }
       return _result.join('&')
-    }
-  }
+    },
+  },
 }
 </script>
 <style scoped>
 @import '~@assets/less/common.less';
-.imageContainer{
+.imageContainer {
   display: flex;
   flex-direction: row;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
 }
-.imageCover{
+.imageCover {
   display: flex;
   flex: 1;
   height: 600px;
 }
-.imgLeft{
+.imgLeft {
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   width: 50px;
   height: 600px;
   cursor: pointer;

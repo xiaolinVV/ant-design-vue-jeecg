@@ -104,7 +104,7 @@
       <a-button @click="toAdd" type="primary" icon="plus">新增</a-button>
       <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
       <a-button type="primary" @click="searchReset2" icon="reload">重置</a-button>
-      <!-- <a-button type="primary" icon="download" :loading="exportLoading" @click="handleExportXls('免单商品')">导出</a-button>
+      <!-- <a-button type="primary" icon="download"  :loading="exportLoading"  @click="handleExportXls('免单商品')">导出</a-button>
       <a-upload
         name="file"
         :showUploadList="false"

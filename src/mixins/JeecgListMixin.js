@@ -26,12 +26,12 @@ export const JeecgListMixin = {
         },
         showQuickJumper: true,
         showSizeChanger: true,
-        total: 0,
+        total: 0
       },
       /* 排序参数 */
       isorter: {
         column: 'createTime',
-        order: 'desc',
+        order: 'desc'
       },
       /* 筛选参数 */
       filters: {},
@@ -50,7 +50,7 @@ export const JeecgListMixin = {
       /** 高级查询拼接方式 */
       superQueryMatchType: 'and',
       //导出状态 是否导出中
-      exportLoading: false,
+      exportLoading: false
     }
   },
   created() {
@@ -70,7 +70,7 @@ export const JeecgListMixin = {
         head['tenant-id'] = tenantid
       }
       return head
-    },
+    }
   },
   methods: {
     loadData(arg) {
@@ -87,7 +87,7 @@ export const JeecgListMixin = {
       if (typeof this.beforeSearch === 'function') this.beforeSearch(params)
       this.loading = true
       getAction(this.url.list, params)
-        .then((res) => {
+        .then(res => {
           if (res.success) {
             //update-begin---author:zhangyafei    Date:20201118  for：适配不分页的数据列表------------
             this.dataSource = res.result.records || res.result
@@ -137,7 +137,7 @@ export const JeecgListMixin = {
     getQueryField() {
       //TODO 字段权限控制
       var str = 'id,'
-      this.columns.forEach(function (value) {
+      this.columns.forEach(function(value) {
         str += ',' + value.dataIndex
       })
       return str
@@ -165,7 +165,7 @@ export const JeecgListMixin = {
       this.queryParam = {}
       this.loadData(1)
     },
-    batchDel: function () {
+    batchDel: function() {
       if (!this.url.deleteBatch) {
         this.$message.error('请设置url.deleteBatch属性!')
         return
@@ -182,10 +182,10 @@ export const JeecgListMixin = {
         this.$confirm({
           title: '确认删除',
           content: '是否删除选中数据?',
-          onOk: function () {
+          onOk: function() {
             that.loading = true
             deleteAction(that.url.deleteBatch, { ids: ids })
-              .then((res) => {
+              .then(res => {
                 if (res.success) {
                   //重新计算分页问题
                   that.reCalculatePage(that.selectedRowKeys.length)
@@ -199,17 +199,17 @@ export const JeecgListMixin = {
               .finally(() => {
                 that.loading = false
               })
-          },
+          }
         })
       }
     },
-    handleDelete: function (id) {
+    handleDelete: function(id) {
       if (!this.url.delete) {
         this.$message.error('请设置url.delete属性!')
         return
       }
       var that = this
-      deleteAction(that.url.delete, { id: id }).then((res) => {
+      deleteAction(that.url.delete, { id: id }).then(res => {
         if (res.success) {
           //重新计算分页问题
           that.reCalculatePage(1)
@@ -231,12 +231,12 @@ export const JeecgListMixin = {
       }
       console.log('currentIndex', currentIndex)
     },
-    handleEdit: function (record) {
+    handleEdit: function(record) {
       this.$refs.modalForm.edit(record)
       this.$refs.modalForm.title = '编辑'
       this.$refs.modalForm.disableSubmit = false
     },
-    handleAdd: function () {
+    handleAdd: function() {
       this.$refs.modalForm.add()
       this.$refs.modalForm.title = '新增'
       this.$refs.modalForm.disableSubmit = false
@@ -265,7 +265,7 @@ export const JeecgListMixin = {
       //清空列表选中
       this.onClearSelected()
     },
-    handleDetail: function (record) {
+    handleDetail: function(record) {
       this.$refs.modalForm.edit(record)
       this.$refs.modalForm.title = '详情'
       this.$refs.modalForm.disableSubmit = true
@@ -283,11 +283,12 @@ export const JeecgListMixin = {
       let param = this.getQueryParams()
       if (this.selectedRowKeys && this.selectedRowKeys.length > 0) {
         param['selections'] = this.selectedRowKeys.join(',')
+        param['ids'] = this.selectedRowKeys.join(',')
       }
       console.log('导出参数', param)
       this.exportLoading = true
       downFile(this.url.exportXlsUrl, param)
-        .then((data) => {
+        .then(data => {
           if (!data) {
             this.$message.warning('文件下载失败')
             return
@@ -324,7 +325,7 @@ export const JeecgListMixin = {
           if (info.file.response.code === 201) {
             let {
               message,
-              result: { msg, fileUrl, fileName },
+              result: { msg, fileUrl, fileName }
             } = info.file.response
             let href = window._CONFIG['domianURL'] + fileUrl
             this.$warning({
@@ -340,7 +341,7 @@ export const JeecgListMixin = {
                     </a>{' '}
                   </span>
                 </div>
-              ),
+              )
             })
           } else {
             this.$message.success(info.file.response.message || `${info.file.name} 文件上传成功`)
@@ -365,7 +366,7 @@ export const JeecgListMixin = {
                   Vue.ls.remove(ACCESS_TOKEN)
                   window.location.reload()
                 })
-              },
+              }
             })
           }
         } else {
@@ -392,6 +393,6 @@ export const JeecgListMixin = {
       }
       let url = getFileAccessHttpUrl(text)
       window.open(url)
-    },
-  },
+    }
+  }
 }

@@ -415,11 +415,13 @@ export default {
         this.$emit('handleOk', ids.join(','), sz)
         this.visible = false
         this.searchName = ''
+        this.selectPagination.current = 1
       })
     },
     handleCancel() {
       this.visible = false
       this.searchName = ''
+      this.selectPagination.current = 1
       this.$emit('handleCancel')
     },
     async reset() {

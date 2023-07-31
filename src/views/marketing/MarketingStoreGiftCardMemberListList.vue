@@ -96,9 +96,13 @@
 
     <!-- 操作按钮区域 -->
     <div class="table-operator">
-      <!-- <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
-      <a-button type="primary" icon="download" :loading="exportLoading" @click="handleExportXls('店铺会员礼品卡')">导出</a-button>
-      <a-upload
+      <!-- <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button> -->
+      <a-button type="primary" icon="download"  :loading="exportLoading"  @click="handleExportXls('店铺营销-店铺礼品卡-会员礼品卡')"
+        >导出</a-button
+      >
+      <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
+      <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
+      <!-- <a-upload
         name="file"
         :showUploadList="false"
         :multiple="false"
@@ -107,7 +111,7 @@
         @change="handleImportExcel"
       >
         <a-button type="primary" icon="import">导入</a-button>
-      </a-upload> -->
+      </a-upload> 
       <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
       <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
       <a-dropdown v-if="selectedRowKeys.length > 0">
@@ -115,12 +119,12 @@
           <a-menu-item key="1" @click="batchDel"><a-icon type="delete" />删除</a-menu-item>
         </a-menu>
         <a-button style="margin-left: 8px"> 批量操作 <a-icon type="down"/></a-button>
-      </a-dropdown>
+      </a-dropdown> -->
     </div>
 
     <!-- table区域-begin -->
     <div>
-      <div class="ant-alert ant-alert-info" style="margin-bottom: 16px;">
+      <div class="ant-alert ant-alert-info" style="margin-bottom: 16px">
         <i class="anticon anticon-info-circle ant-alert-icon"></i> 已选择
         <a style="font-weight: 600">{{ selectedRowKeys.length }}</a
         >项
@@ -191,7 +195,7 @@ export default {
   mixins: [JeecgListMixin],
   components: {
     MarketingStoreGiftCardMemberListModal,
-    MarketingStoreGiftCardCanSelectGoods
+    MarketingStoreGiftCardCanSelectGoods,
   },
   data() {
     return {
@@ -204,94 +208,94 @@ export default {
           key: 'rowIndex',
           width: 60,
           align: 'center',
-          customRender: function(t, r, index) {
+          customRender: function (t, r, index) {
             return parseInt(index) + 1
-          }
+          },
         },
         {
           title: '会员账号',
           align: 'center',
-          dataIndex: 'phone'
+          dataIndex: 'phone',
         },
         {
           title: '会员头像',
           align: 'center',
           dataIndex: 'headPortrait',
-          scopedSlots: { customRender: 'headPortrait' }
+          scopedSlots: { customRender: 'headPortrait' },
         },
         {
           title: '会员昵称',
           align: 'center',
-          dataIndex: 'nickName'
+          dataIndex: 'nickName',
         },
         {
           title: '获得方式',
           align: 'center',
           dataIndex: 'waysObtain',
-          scopedSlots: { customRender: 'waysObtain' }
+          scopedSlots: { customRender: 'waysObtain' },
         },
         {
           title: '获得时间',
           align: 'center',
-          dataIndex: 'getTime'
+          dataIndex: 'getTime',
         },
         {
           title: '礼品卡编号',
           align: 'center',
-          dataIndex: 'cardSerialNumber'
+          dataIndex: 'cardSerialNumber',
         },
         {
           title: '礼品卡号',
           align: 'center',
-          dataIndex: 'serialNumber'
+          dataIndex: 'serialNumber',
         },
         {
           title: '发行店铺',
           align: 'center',
-          dataIndex: 'storeName'
+          dataIndex: 'storeName',
         },
         {
           title: '卡名称',
           align: 'center',
-          dataIndex: 'carName'
+          dataIndex: 'carName',
         },
         {
           title: '可用面额',
           align: 'center',
-          dataIndex: 'denomination'
+          dataIndex: 'denomination',
         },
         {
           title: '可选商品',
           align: 'center',
           dataIndex: 'goodCount',
-          scopedSlots: { customRender: 'goodCount' }
+          scopedSlots: { customRender: 'goodCount' },
         },
         {
           title: '有效期开始',
           align: 'center',
-          dataIndex: 'startTime'
+          dataIndex: 'startTime',
         },
         {
           title: '有效期结束',
           align: 'center',
-          dataIndex: 'endTime'
+          dataIndex: 'endTime',
         },
         {
           // ；0：已失效；1：可使用；2：已赠送
           title: '状态',
           align: 'center',
           dataIndex: 'status',
-          scopedSlots: { customRender: 'status' }
-        }
+          scopedSlots: { customRender: 'status' },
+        },
       ],
       url: {
         list: '/marketing/marketingStoreGiftCardMemberList/list',
         delete: '/marketing/marketingStoreGiftCardMemberList/delete',
         deleteBatch: '/marketing/marketingStoreGiftCardMemberList/deleteBatch',
         exportXlsUrl: 'marketing/marketingStoreGiftCardMemberList/exportXls',
-        importExcelUrl: 'marketing/marketingStoreGiftCardMemberList/importExcel'
+        importExcelUrl: 'marketing/marketingStoreGiftCardMemberList/importExcel',
       },
-      isMerchant: false
+      isMerchant: false,
     }
   },
   created() {
@@ -305,9 +309,9 @@ export default {
     }
   },
   computed: {
-    importExcelUrl: function() {
+    importExcelUrl: function () {
       return `${window._CONFIG['domianURL']}/${this.url.importExcelUrl}`
-    }
+    },
   },
   methods: {
     showModal(record) {
@@ -324,19 +328,19 @@ export default {
 
       return filterObj(param)
     },
-    onDateChange2: function(value, dateString) {
+    onDateChange2: function (value, dateString) {
       this.queryParam.getTime_begin = dateString[0]
       this.queryParam.getTime_end = dateString[1]
     },
-    onDateChange3: function(value, dateString) {
+    onDateChange3: function (value, dateString) {
       this.queryParam.startTime = dateString[0]
       this.queryParam.endTime = dateString[1]
     },
-    onDateChange4: function(value, dateString) {
+    onDateChange4: function (value, dateString) {
       this.queryParam.endTime_begin = dateString[0]
       this.queryParam.endTime_end = dateString[1]
-    }
-  }
+    },
+  },
 }
 </script>
 <style scoped>

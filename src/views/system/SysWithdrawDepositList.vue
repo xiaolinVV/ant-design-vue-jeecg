@@ -49,7 +49,7 @@
     <!-- 操作按钮区域 -->
     <div class="table-operator">
       <a-button @click="handleAdd" type="primary" icon="plus">提现</a-button>
-      <a-button type="primary" icon="download" :loading="exportLoading" @click="handleExportXls('总账提现')">导出</a-button>
+      <a-button type="primary" icon="download"  :loading="exportLoading"  @click="handleExportXls('总账提现')">导出</a-button>
       <!-- <a-upload
         name="file"
         :showUploadList="false"

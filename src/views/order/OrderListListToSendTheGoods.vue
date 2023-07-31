@@ -58,7 +58,7 @@
             </a-col>
           </template>
           <a-col :md="6" :sm="8">
-            <span style="float: left;overflow: hidden;" class="table-page-search-submitButtons">
+            <span style="float: left; overflow: hidden" class="table-page-search-submitButtons">
               <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
               <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
               <a @click="handleToggleSearch" style="margin-left: 8px">
@@ -73,17 +73,17 @@
 
     <!--&lt;!&ndash; 操作按钮区域 &ndash;&gt;-->
     <!--<div class="table-operator">-->
-    <!--<a-button type="primary" icon="download" :loading="exportLoading" @click="orderListExport(1)">导出预览</a-button>-->
+    <!--<a-button type="primary" icon="download"  :loading="exportLoading"  @click="orderListExport(1)">导出预览</a-button>-->
     <!--</div>-->
 
     <!-- 操作按钮区域 -->
     <div class="table-operator">
-      <a-button type="primary" icon="download" :loading="exportLoading"  @click="handleExportXls('订单列表')">导出</a-button>
+      <a-button type="primary" icon="download"  :loading="exportLoading"  @click="handleExportXls('订单-平台订单-待发货订单')">导出</a-button>
     </div>
 
     <!--<div class="table-operator">
       <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
-      <a-button type="primary" icon="download" :loading="exportLoading" @click="handleExportXls('订单列表')">导出</a-button>
+      <a-button type="primary" icon="download"  :loading="exportLoading"  @click="handleExportXls('订单列表')">导出</a-button>
       <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">
         <a-button type="primary" icon="import">导入</a-button>
       </a-upload>
@@ -97,7 +97,7 @@
 -->
     <!-- table区域-begin -->
     <div>
-      <div class="ant-alert ant-alert-info" style="margin-bottom: 16px;">
+      <div class="ant-alert ant-alert-info" style="margin-bottom: 16px">
         <i class="anticon anticon-info-circle ant-alert-icon"></i> 已选择
         <a style="font-weight: 600">{{ selectedRowKeys.length }}</a
         >项
@@ -208,7 +208,7 @@ export default {
   name: 'OrderListList',
   mixins: [JeecgListMixin],
   components: {
-    OrderListModal
+    OrderListModal,
   },
   data() {
     return {
@@ -222,19 +222,19 @@ export default {
           key: 'rowIndex',
           width: 60,
           align: 'center',
-          customRender: function(t, r, index) {
+          customRender: function (t, r, index) {
             return parseInt(index) + 1
-          }
+          },
         },
         {
           title: '订单编号',
           align: 'center',
-          dataIndex: 'orderNo'
+          dataIndex: 'orderNo',
         },
         {
           title: '订单类型',
           align: 'center',
-          dataIndex: 'orderType_dictText'
+          dataIndex: 'orderType_dictText',
           // sorter: true
         },
 
@@ -242,69 +242,69 @@ export default {
           title: '买家',
           align: 'center',
           dataIndex: 'memberPhone',
-          scopedSlots: { customRender: 'memberPhone' }
+          scopedSlots: { customRender: 'memberPhone' },
         },
 
         {
           title: '留言',
           align: 'center',
           dataIndex: 'message',
-          scopedSlots: { customRender: 'message' }
+          scopedSlots: { customRender: 'message' },
         },
         {
           title: '商品',
           align: 'center',
           dataIndex: 'goods',
-          scopedSlots: { customRender: 'goods' }
+          scopedSlots: { customRender: 'goods' },
         },
         {
           title: '商品总价',
           align: 'center',
-          dataIndex: 'goodsTotal'
+          dataIndex: 'goodsTotal',
         },
         {
           title: '赠送',
           align: 'center',
           dataIndex: 'giveWelfarePayments',
-          scopedSlots: { customRender: 'giveWelfarePayments' }
+          scopedSlots: { customRender: 'giveWelfarePayments' },
         },
         {
           title: '优惠',
           align: 'center',
           dataIndex: 'coupon',
-          scopedSlots: { customRender: 'coupon' }
+          scopedSlots: { customRender: 'coupon' },
         },
         {
           title: '配送方式', //；对应数据字典
           align: 'center',
           dataIndex: 'oder_distribution',
-          scopedSlots: { customRender: 'distribution' }
+          scopedSlots: { customRender: 'distribution' },
         },
         {
           title: '配送费用',
           align: 'center',
-          dataIndex: 'shipFee'
+          dataIndex: 'shipFee',
         },
         {
           title: '应付款',
           align: 'center',
-          dataIndex: 'customaryDues'
+          dataIndex: 'customaryDues',
         },
         {
           title: '实付款',
           align: 'center',
-          dataIndex: 'actualPayment'
+          dataIndex: 'actualPayment',
         },
         {
           title: '付款时间',
           align: 'center',
-          dataIndex: 'payTime'
+          dataIndex: 'payTime',
         },
         {
           title: '部分发货',
           align: 'center',
           dataIndex: 'isSender',
-          scopedSlots: { customRender: 'isSender' }
+          scopedSlots: { customRender: 'isSender' },
         },
 
         {
@@ -313,22 +313,22 @@ export default {
           align: 'center',
           fixed: 'right',
           width: 300,
-          scopedSlots: { customRender: 'action' }
-        }
+          scopedSlots: { customRender: 'action' },
+        },
       ],
       url: {
         list: '/orderList/orderList/queryPageListToSendTheGoods',
         delete: '/orderList/orderList/delete',
         deleteBatch: '/orderList/orderList/deleteBatch',
-        exportXlsUrl: 'orderList/orderList/exportXls',
-        importExcelUrl: 'orderList/orderList/importExcel'
-      }
+        exportXlsUrl: 'orderList/orderList/exportPageListToSendTheGoods',
+        // importExcelUrl: 'orderList/orderList/importExcel'
+      },
     }
   },
   computed: {
-    importExcelUrl: function() {
+    importExcelUrl: function () {
       return `${window._CONFIG['domianURL']}/${this.url.importExcelUrl}`
-    }
+    },
   },
   mounted() {
     //订单状态；0：待付款；1：待发货（已付款、部分发货）；2：待收货（已发货）；3：交易成功；4：交易失败；5：交易完成；
@@ -347,12 +347,12 @@ export default {
       delete param.closeTime
       return filterObj(param)
     },
-    onDateChange: function(value, dateString) {
+    onDateChange: function (value, dateString) {
       console.log('*****************************************************', dateString[0], dateString[1])
       this.queryParam.createTime_begin = dateString[0]
       this.queryParam.createTime_end = dateString[1]
     },
-    onDateChange1: function(value, dateString) {
+    onDateChange1: function (value, dateString) {
       console.log('*****************************************************', dateString[0], dateString[1])
       this.queryParam.closeTime_begin = dateString[0]
       this.queryParam.closeTime_end = dateString[1]
@@ -446,7 +446,7 @@ export default {
       this.initIndex()
     },
     initIndex() {
-      initDictOptions('oder_distribution').then(res => {
+      initDictOptions('oder_distribution').then((res) => {
         if (res.success) {
           /*for(let item of res.result){
               if(item.value == this.distribution  ){
@@ -479,7 +479,7 @@ export default {
       for (var key in data) {
         var value = data[key]
         if (value.constructor == Array) {
-          value.forEach(function(_value) {
+          value.forEach(function (_value) {
             _result.push(key + '=' + _value)
           })
         } else {
@@ -487,8 +487,8 @@ export default {
         }
       }
       return _result.join('&')
-    }
-  }
+    },
+  },
 }
 </script>
 <style scoped>
