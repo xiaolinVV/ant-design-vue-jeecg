@@ -121,13 +121,13 @@
     </div>
 
     <!-- 操作按钮区域 -->
-    <!-- <div class="table-operator">
-       <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
-       <a-button type="primary" icon="download"  :loading="exportLoading"  @click="handleExportXls('兑换券记录')">导出</a-button>
-       <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl"
+    <div class="table-operator">
+       <!-- <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button> -->
+       <!-- <a-button type="primary" icon="download"  :loading="exportLoading"  @click="handleExportXls('兑换券记录')">导出</a-button> -->
+       <!-- <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl"
                  @change="handleImportExcel">
          <a-button type="primary" icon="import">导入</a-button>
-       </a-upload>
+       </a-upload> -->
        <a-dropdown v-if="selectedRowKeys.length > 0">
          <a-menu slot="overlay">
            <a-menu-item key="1" @click="batchDel">
@@ -139,7 +139,7 @@
            <a-icon type="down"/>
          </a-button>
        </a-dropdown>
-     </div>-->
+     </div>
 
     <!-- table区域-begin -->
     <div>
