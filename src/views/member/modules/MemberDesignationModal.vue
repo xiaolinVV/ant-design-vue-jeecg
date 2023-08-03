@@ -1,13 +1,6 @@
 <template>
-  <a-modal
-    :title="title"
-    :width="1200"
-    :visible="visible"
-    :confirmLoading="confirmLoading"
-    @ok="handleOk"
-    @cancel="handleCancel"
-    cancelText="关闭"
-  >
+  <a-modal :title="title" :width="1200" :visible="visible" :confirmLoading="confirmLoading" @ok="handleOk"
+    @cancel="handleCancel" cancelText="关闭">
     <a-spin :spinning="confirmLoading">
       <a-form :form="form" style="height: 500px; overflow: scroll">
         <!--        <a-form-item-->
@@ -44,26 +37,15 @@
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="称号名称">
           <a-input placeholder="请输入称号名称" v-decorator="['name', validatorRules.name]" />
         </a-form-item>
-        <a-form-item
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-          validate-status="validating"
-          help="尺寸40*40 支持png格式，大小不超过200k"
-          :colon="false"
-        >
+        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" validate-status="validating"
+          help="尺寸40*40 支持png格式，大小不超过200k" :colon="false">
           <div slot="label">
             <span class="dataCheckedStar"> * </span>
             <span style="margin-right: 10px"> 图标: </span>
           </div>
-          <a-upload
-            :action="uploadAction"
-            :headers="headers"
-            :fileList="frontCoverFileList"
-            :beforeUpload="frontCoverBeforeUpload"
-            list-type="picture-card"
-            @preview="frontCoverPreview"
-            @change="frontCoverChange"
-          >
+          <a-upload :action="uploadAction" :headers="headers" :fileList="frontCoverFileList"
+            :beforeUpload="frontCoverBeforeUpload" list-type="picture-card" @preview="frontCoverPreview"
+            @change="frontCoverChange">
             <div v-if="frontCoverFileList.length < 1">
               <a-icon type="plus" />
               <div class="ant-upload-text">上传</div>
@@ -82,17 +64,9 @@
         </a-form-item>
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="团队归属">
           <!-- v-if="showTeamFor" -->
-          <a-select
-            show-search
-            v-decorator="['memberDesignationGroupId', validatorRules.memberDesignationGroupId]"
-            placeholder="请输入"
-            style="width: 100%"
-            :disabled="model.id ? true : false"
-            :filter-option="false"
-            :not-found-content="fetching ? undefined : null"
-            @search="fetchPhone"
-            @change="phoneChange"
-          >
+          <a-select show-search v-decorator="['memberDesignationGroupId', validatorRules.memberDesignationGroupId]"
+            placeholder="请输入" style="width: 100%" :disabled="model.id ? true : false" :filter-option="false"
+            :not-found-content="fetching ? undefined : null" @search="fetchPhone" @change="phoneChange">
             <a-spin v-if="fetching" slot="notFoundContent" size="small" />
             <a-select-option v-for="d in teamList" :key="d.id">
               {{ d.groupName }}
@@ -100,13 +74,8 @@
           </a-select>
         </a-form-item>
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="级别">
-          <a-input-number
-            :min="minSort"
-            :precision="0"
-            :disabled="model.id ? true : false"
-            v-decorator="['sort', validatorRules.sort]"
-            @change="sortHandleChange"
-          />
+          <a-input-number :min="minSort" :precision="0" :disabled="model.id ? true : false"
+            v-decorator="['sort', validatorRules.sort]" @change="sortHandleChange" />
         </a-form-item>
         <!--        <a-form-item-->
         <!--          :labelCol="labelCol"-->
@@ -287,8 +256,20 @@
             <span class="dataCheckedStar" v-if="showTeamFor"> * </span>
             称号特权
           </span>
-          <div class="sjtj">
-            <a-checkbox @change="isAverageHandleChange" v-model="model.isAverage"> 均分当前称号分红资金 </a-checkbox>
+          <div>
+            <div>
+              <a-checkbox @change="isAverageHandleChange" v-model="model.isAverage"> 均分当前称号分红资金 </a-checkbox>
+            </div>
+            <div>
+              <a-checkbox v-model="model.isPastDueControl">
+                称号有效期：获得称号起的<a-input-number v-model="model.periodOfValidity" :precision="0" :min="0"></a-input-number>天内有效
+              </a-checkbox>
+            </div>
+            <div>
+              <a-checkbox v-model="model.isPastDueWarn">
+                到期前<a-input-number v-model="model.pastDueWarn" :precision="0" :min="0"></a-input-number>天发起续费提醒
+              </a-checkbox>
+            </div>
           </div>
           <div class="sjtj" v-if="lowLevelDividendsOptions.length > 0">
             <div class="specialTwo">
@@ -297,11 +278,8 @@
               </a-checkbox>
             </div>
             <div class="specialOne">
-              <a-checkbox-group
-                :options="lowLevelDividendsOptions"
-                v-model="model.memberDesignations"
-                :disabled="!model.lowLevelDividends"
-              />
+              <a-checkbox-group :options="lowLevelDividendsOptions" v-model="model.memberDesignations"
+                :disabled="!model.lowLevelDividends" />
             </div>
           </div>
           <!--          <div class="sjtj">-->
@@ -454,18 +432,10 @@
 
           <a-button @click="PopUp(popPart, 'true')" type="primary"> 查询 </a-button>
         </div>
-        <a-table
-          :columns="popUpColumns"
-          :dataSource="popUpData"
-          :loading="tableloading"
-          :pagination="selectPagination"
-          :rowKey="record => (popPart == 2 ? record.sysUserId : record.id)"
-          :rowSelection="rowSelection"
-          :scroll="{ y: 300, x: (popUpColumns.length + 1) * columnsWidth }"
-          bordered
-          style="margin-top: 20px"
-          @change="handleSelectTableChange"
-        >
+        <a-table :columns="popUpColumns" :dataSource="popUpData" :loading="tableloading" :pagination="selectPagination"
+          :rowKey="record => (popPart == 2 ? record.sysUserId : record.id)" :rowSelection="rowSelection"
+          :scroll="{ y: 300, x: (popUpColumns.length + 1) * columnsWidth }" bordered style="margin-top: 20px"
+          @change="handleSelectTableChange">
           <template slot="goodQuantity" slot-scope="text, record, index">
             <a @click="showExchangeGoodInformation(record.id)">{{ record.goodQuantity }}</a>
           </template>
@@ -539,7 +509,7 @@ const giftBagColumns = [
 ]
 export default {
   name: 'MemberDesignationModal',
-  data() {
+  data () {
     this.lastFetchId = 0
     this.fetchPhone = debounce(this.fetchPhone, 800)
     return {
@@ -559,6 +529,8 @@ export default {
         // recommendedType:'',
         // recommendType:'',
         isAverage: true,
+        isPastDueControl: false,
+        isPastDueWarn: false,
         lowLevelDividends: false,
         memberDesignations: '',
         memberDesignationGroupId: '',
@@ -656,7 +628,7 @@ export default {
     }
   },
   computed: {
-    rowSelection() {
+    rowSelection () {
       const { selectedRowKeys } = this
       return {
         selectedRowKeys,
@@ -676,7 +648,7 @@ export default {
       }
     }
   },
-  created() {
+  created () {
     const token = Vue.ls.get('Access-Token')
     this.headers = { 'X-Access-Token': token }
   },
@@ -686,7 +658,7 @@ export default {
 
   watch: {
     lowLevelDividendsOptions: {
-      handler(newVal) {
+      handler (newVal) {
         this.directDeduction = false
         this.model.lowLevelDividends = false
         this.model.straightPushId = ''
@@ -699,7 +671,7 @@ export default {
     }
   },
   methods: {
-    isDefaultChange(e) {
+    isDefaultChange (e) {
       let value = e.target.value
       if (value == 1) {
         this.showTeamFor = false
@@ -709,7 +681,7 @@ export default {
         this.$set(this.validatorRules.memberDesignationGroupId.rules[0], 'required', true)
       }
     },
-    fetchPhone(phone) {
+    fetchPhone (phone) {
       console.log('fetching phone', phone)
 
       this.lastFetchId += 1
@@ -752,7 +724,7 @@ export default {
       //     this.fetching = false;
       //   });
     },
-    async phoneChange(id) {
+    async phoneChange (id) {
       console.log(id)
       let sort = this.teamList.filter(v => v.id === id)[0].sort + 1
       await this.getMemberDesignationListBySort(sort, id)
@@ -770,17 +742,17 @@ export default {
       //   }
       // }
     },
-    filterOption(input, option) {
+    filterOption (input, option) {
       return option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
     },
-    handleImage(url) {
+    handleImage (url) {
       if (url) {
         return this.configure.imgerver + '/' + Object.values(JSON.parse(url))[0]
       } else {
         return ''
       }
     },
-    onDelete(id, index) {
+    onDelete (id, index) {
       let that = this
       let attributeName = [
         //兑换券
@@ -817,11 +789,11 @@ export default {
         this.model.marketingGiftBagId = ''
       })
     },
-    onSelectChange(selectedRowKeys) {
+    onSelectChange (selectedRowKeys) {
       this.selectedRowKeys = selectedRowKeys
       console.log(selectedRowKeys)
     },
-    PopUp(index = '-1', isSearch = 'false') {
+    PopUp (index = '-1', isSearch = 'false') {
       // this.selectedRowKeys = []
       this.popPart = index
       if (index == 3) {
@@ -839,12 +811,12 @@ export default {
         this.search(true)
       }
     },
-    handleSelectTableChange(pagination) {
+    handleSelectTableChange (pagination) {
       console.log(pagination)
       this.selectPagination.current = pagination.current
       this.search()
     },
-    search(clickSearch = false) {
+    search (clickSearch = false) {
       if (clickSearch) {
         this.selectPagination.current = 1
       }
@@ -947,7 +919,7 @@ export default {
       }
     },
     //选择确定弹窗
-    selectLineData() {
+    selectLineData () {
       let ids = this.selectedRowKeys,
         sz = []
       let attributeName = [
@@ -1003,15 +975,15 @@ export default {
         this.model.marketingGiftBagId = ''
       }
     },
-    add() {
+    add () {
       this.edit({})
     },
-    sortHandleChange(value) {
+    sortHandleChange (value) {
       if (value) {
         this.getMemberDesignationListBySort(value)
       }
     },
-    getMemberDesignationListBySort(
+    getMemberDesignationListBySort (
       sort = this.form.getFieldValue('sort'),
       memberDesignationGroupId = this.form.getFieldValue('memberDesignationGroupId')
     ) {
@@ -1040,7 +1012,7 @@ export default {
         }
       })
     },
-    async edit(record) {
+    async edit (record) {
       this.form.resetFields()
       this.confirmLoading = true
       this.model = {
@@ -1052,6 +1024,8 @@ export default {
         // recommendedType:'',
         // recommendType:'',
         isAverage: true,
+        isPastDueControl: false,
+        isPastDueWarn: false,
         lowLevelDividends: false,
         memberDesignations: '',
         memberDesignationGroupId: '',
@@ -1087,6 +1061,9 @@ export default {
         console.log(record)
         await this.getMemberDesignationListBySort(record.sort, record.memberDesignationGroupId)
         record.isAverage = record.isAverage == 1 ? true : false
+        record.isPastDueControl = record.isPastDueControl == 1 ? true : false
+        record.isPastDueWarn = record.isPastDueWarn == 1 ? true : false
+
         record.lowLevelDividends = record.lowLevelDividends == 1 ? true : false
         record.isBuyGiftbag = record.isBuyGiftbag == 1 ? true : false
         this.isDefault = record.isDefault == 1 ? 1 : 0
@@ -1133,7 +1110,7 @@ export default {
       }, 1200)
     },
     //购买指定礼包
-    marketingGiftBagIdHandleChange(e) {
+    marketingGiftBagIdHandleChange (e) {
       let checked = e.target.checked
       // marketingGiftBagId giftTotalSales directPromition  directDeduction
       let allChecked = this.giftTotalSales || this.directPromition || this.directDeduction
@@ -1148,7 +1125,7 @@ export default {
       }
     },
     //团队礼包销售总额
-    giftTotalSalesHandleChange(e) {
+    giftTotalSalesHandleChange (e) {
       let checked = e.target.checked
       let allChecked = this.marketingGiftBagId || this.directPromition || this.directDeduction
       if (!checked) {
@@ -1161,7 +1138,7 @@ export default {
       }
     },
     //直推人数
-    directPromitionHandleChange(e) {
+    directPromitionHandleChange (e) {
       let checked = e.target.checked
       let allChecked = this.marketingGiftBagId || this.giftTotalSales || this.directDeduction
       if (!checked) {
@@ -1175,7 +1152,7 @@ export default {
       }
     },
     //关联直推
-    directDeductionHandleChange(e) {
+    directDeductionHandleChange (e) {
       let checked = e.target.checked
       let allChecked = this.marketingGiftBagId || this.giftTotalSales || this.directDeduction
       if (!checked) {
@@ -1190,7 +1167,7 @@ export default {
       }
     },
     // 均分当前称号分红资金
-    isAverageHandleChange(e) {
+    isAverageHandleChange (e) {
       let checked = e.target.checked
       // && !this.custom
       if (!checked && !this.model.lowLevelDividends && this.showTeamFor) {
@@ -1200,7 +1177,7 @@ export default {
       }
     },
     //参与低级分红
-    lowLevelDividendsHandleChange(e) {
+    lowLevelDividendsHandleChange (e) {
       let checked = e.target.checked
       if (!checked) {
         // && !this.custom
@@ -1237,11 +1214,11 @@ export default {
     // juniorTalentHandleChange(e){
     //   console.log(e.target.value)
     // },
-    close() {
+    close () {
       this.$emit('close')
       this.visible = false
     },
-    isEmpty(number) {
+    isEmpty (number) {
       if (number !== undefined && number !== null && number !== '' && number >= 0) {
         return false
       } else {
@@ -1249,7 +1226,7 @@ export default {
       }
     },
     //校验
-    allChecked() {
+    allChecked () {
       //      if (this.directPromition) {
       //        if (this.isEmpty(this.model.directReferrals)) {
       //          this.$message.warn('请输入正确的直推人数！')
@@ -1314,7 +1291,7 @@ export default {
       // }
       return true
     },
-    handleOk() {
+    handleOk () {
       const that = this
       // 触发表单验证
       if (!this.allChecked()) return
@@ -1339,6 +1316,8 @@ export default {
           //时间格式化
           formData.closeTime = formData.closeTime ? formData.closeTime.format('YYYY-MM-DD HH:mm:ss') : null
           formData.isAverage = formData.isAverage ? 1 : 0
+          formData.isPastDueControl = formData.isPastDueControl ? 1 : 0
+          formData.isPastDueWarn = formData.isPastDueWarn ? 1 : 0
           formData.lowLevelDividends = formData.lowLevelDividends ? 1 : 0
           formData.isBuyGiftbag = formData.isBuyGiftbag ? 1 : 0
           // formData.isMonthlyPerformance = formData.isMonthlyPerformance ? 1 : 0
@@ -1363,16 +1342,16 @@ export default {
         }
       })
     },
-    handleCancel() {
+    handleCancel () {
       this.close()
     },
     //提交图片的数据处理封装
-    async allHandleImg(callback) {
+    async allHandleImg (callback) {
       this.model.logoAddr = await this.beforeSubmitHandleImg('frontCoverFileList')
       callback()
     },
     //提交前的处理图片格式方法（多图）
-    beforeSubmitHandleImg(varName) {
+    beforeSubmitHandleImg (varName) {
       return new Promise((resolve, reject) => {
         let Obj = {},
           result = ''
@@ -1389,7 +1368,7 @@ export default {
       })
     },
     //编辑反显的处理图片格式方法（多图）
-    editShowHandleImg(values, varName) {
+    editShowHandleImg (values, varName) {
       let sz = []
       if (values && values != '{}') {
         let result = Object.values(JSON.parse(values))
@@ -1406,22 +1385,22 @@ export default {
       this[varName] = sz
     },
     //封面图
-    frontCoverCancel() {
+    frontCoverCancel () {
       this.frontCoverPreviewVisible = false
     },
-    async frontCoverPreview(file) {
+    async frontCoverPreview (file) {
       if (!file.url && !file.preview) {
         file.preview = await getBase64(file.originFileObj)
       }
       this.frontCoverPreviewImage = file.url || file.preview
       this.frontCoverPreviewVisible = true
     },
-    frontCoverChange({ fileList }) {
+    frontCoverChange ({ fileList }) {
       if (this.frontCoverPic) {
         this.frontCoverFileList = fileList
       }
     },
-    frontCoverBeforeUpload(file) {
+    frontCoverBeforeUpload (file) {
       const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/jpg'
       const isLt2M = file.size / 1024 / 1024 < 0.2
       if (!isJpgOrPng) {
@@ -1443,7 +1422,7 @@ export default {
   align-items: center;
   height: 100%;
 
-  > div {
+  >div {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1451,6 +1430,7 @@ export default {
     margin-right: 20px;
   }
 }
+
 .specialOne {
   width: 65%;
   background: #f2f2f2;
@@ -1459,22 +1439,26 @@ export default {
   padding: 5px;
   margin-bottom: 5px;
 }
+
 .specialThird {
   background: #f2f2f2;
   border: 1px solid #cccccc;
   justify-content: flex-start;
   padding: 0 10px;
   width: 80%;
-  > div {
+
+  >div {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 20px;
   }
-  > div:last-child {
+
+  >div:last-child {
     margin-bottom: 0;
   }
 }
+
 .specialTwo {
   width: 35%;
   justify-content: flex-start !important;
