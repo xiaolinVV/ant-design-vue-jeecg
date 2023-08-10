@@ -4,10 +4,8 @@
       <a-form :form="form">
         <!--      v-decorator="[ 'remarkExplian', validatorRules.remarkExplian]"-->
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="栏目" v-if="!skeletonLoading">
-          <a-select
-            style="width: 120px"
-            v-decorator="['marketingTextbookColumnId', validatorRules.marketingTextbookColumnId]"
-          >
+          <a-select style="width: 120px"
+            v-decorator="['marketingTextbookColumnId', validatorRules.marketingTextbookColumnId]">
             <a-select-option value=""> 请选择 </a-select-option>
             <a-select-option v-for="(item, index) in marketingMaterialColumnData" :key="index" :value="item.id">
               {{ item.name }}
@@ -24,32 +22,18 @@
           <a-input v-decorator="['keyword', validatorRules.keyword]" placeholder="请输入关键字以，隔开"></a-input>
         </a-form-item>
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="摘要">
-          <a-textarea
-            v-decorator="['abstractDigest', validatorRules.abstractDigest]"
-            placeholder="摘要说明"
-          ></a-textarea>
+          <a-textarea v-decorator="['abstractDigest', validatorRules.abstractDigest]" placeholder="摘要说明"></a-textarea>
         </a-form-item>
 
-        <a-form-item
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-          validate-status="validating"
-          help=" 尺寸800*800 支持jpg、jpeg、png格式，大小不超过2M"
-          :colon="false"
-        >
+        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" validate-status="validating"
+          help=" 尺寸800*800 支持jpg、jpeg、png格式，大小不超过2M" :colon="false">
           <div slot="label">
             <span class="dataCheckedStar"> * </span>
             <span style="margin-right: 10px"> 封面图: </span>
           </div>
-          <a-upload
-            :action="uploadAction"
-            :headers="headers"
-            :fileList="frontCoverFileList"
-            :beforeUpload="frontCoverBeforeUpload"
-            list-type="picture-card"
-            @preview="frontCoverPreview"
-            @change="frontCoverChange"
-          >
+          <a-upload :action="uploadAction" :headers="headers" :fileList="frontCoverFileList"
+            :beforeUpload="frontCoverBeforeUpload" list-type="picture-card" @preview="frontCoverPreview"
+            @change="frontCoverChange">
             <div v-if="frontCoverFileList.length < 1">
               <a-icon type="plus" />
               <div class="ant-upload-text">上传</div>
@@ -60,26 +44,14 @@
           </a-modal>
         </a-form-item>
 
-        <a-form-item
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-          validate-status="validating"
-          help="尺寸800*640 ，支持jpg、jpeg、png格式，大小不超过2M"
-          :colon="false"
-        >
+        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" validate-status="validating"
+          help="尺寸800*640 ，支持jpg、jpeg、png格式，大小不超过2M" :colon="false">
           <div slot="label">
             <span class="dataCheckedStar"> * </span>
             <span style="color: red; margin-right: 10px"> 分享图: </span>
           </div>
-          <a-upload
-            :action="uploadAction"
-            :headers="headers"
-            :fileList="shareFileList"
-            :beforeUpload="shareBeforeUpload"
-            list-type="picture-card"
-            @preview="sharePreview"
-            @change="shareChange"
-          >
+          <a-upload :action="uploadAction" :headers="headers" :fileList="shareFileList" :beforeUpload="shareBeforeUpload"
+            list-type="picture-card" @preview="sharePreview" @change="shareChange">
             <div v-if="shareFileList.length < 1">
               <a-icon type="plus" />
               <div class="ant-upload-text">上传</div>
@@ -90,26 +62,14 @@
           </a-modal>
         </a-form-item>
 
-        <a-form-item
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-          validate-status="validating"
-          help="尺寸1428*2540，支持jpg、jpeg、png格式，大小不超过2M。必须预留好二维码位置。以免影响展示效果"
-          :colon="false"
-        >
+        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" validate-status="validating"
+          help="尺寸1428*2540，支持jpg、jpeg、png格式，大小不超过2M。必须预留好二维码位置。以免影响展示效果" :colon="false">
           <div slot="label">
             <span class="dataCheckedStar"> * </span>
             <span style="margin-right: 10px"> 海报图: </span>
           </div>
-          <a-upload
-            :action="uploadAction"
-            :headers="headers"
-            :fileList="posterFileList"
-            :beforeUpload="posterBeforeUpload"
-            list-type="picture-card"
-            @preview="posterPreview"
-            @change="posterChange"
-          >
+          <a-upload :action="uploadAction" :headers="headers" :fileList="posterFileList"
+            :beforeUpload="posterBeforeUpload" list-type="picture-card" @preview="posterPreview" @change="posterChange">
             <div v-if="posterFileList.length < 1">
               <a-icon type="plus" />
               <div class="ant-upload-text">上传</div>
@@ -127,28 +87,17 @@
           </a-radio-group>
         </a-form-item>
 
-        <a-form-item
-          :labelCol="labelCol"
-          :wrapperCol="{
-            xs: { span: 24 },
-            sm: { span: 20 },
-          }"
-          :colon="false"
-        >
+        <a-form-item :labelCol="labelCol" :wrapperCol="{
+          xs: { span: 24 },
+          sm: { span: 20 },
+        }" :colon="false">
           <div slot="label">
             <span class="dataCheckedStar"> * </span>
             <span style="margin-right: 10px"> 内容: </span>
           </div>
           <JEditor v-model="twContent" v-if="AllData.materialType == 1"> </JEditor>
-          <a-upload
-            name="file"
-            :headers="headers"
-            :action="uploadAction"
-            @change="videoChange"
-            :fileList="videoFileList"
-            :beforeUpload="videoBeforeUpload"
-            v-if="AllData.materialType == 2"
-          >
+          <a-upload name="file" :headers="headers" :action="uploadAction" @change="videoChange" :fileList="videoFileList"
+            :beforeUpload="videoBeforeUpload" v-if="AllData.materialType == 2">
             <a-button style="font-size: 14px" v-if="videoFileList.length <= 0">
               <a-icon type="upload" />
               点击上传视频
@@ -168,24 +117,19 @@
         </a-form-item>
 
         <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="初始浏览量">
-          <a-input-number
-            :min="0"
-            v-decorator="['initialViews', validatorRules.initialViews]"
-            style="width: 250px"
-          ></a-input-number>
+          <a-input-number :min="0" v-decorator="['initialViews', validatorRules.initialViews]"
+            style="width: 250px"></a-input-number>
         </a-form-item>
 
         <div class="button-end"></div>
-        <div
-          style="
+        <div style="
             display: flex;
             align-items: center;
             justify-content: space-between;
             width: 150px;
             height: 100px;
             margin: 0 auto;
-          "
-        >
+          ">
           <a-button type="white"> 取消 </a-button>
           <a-button type="primary" @click="submit"> 确定 </a-button>
         </div>
@@ -196,7 +140,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-function getBase64(file) {
+function getBase64 (file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader()
     reader.readAsDataURL(file)
@@ -262,7 +206,7 @@ const columns = [
 export default {
   name: 'AddMarketingMaterialModel',
   components: { ATextarea, JEditor },
-  data() {
+  data () {
     return {
       skeletonLoading: false,
       form: this.$form.createForm(this),
@@ -348,7 +292,7 @@ export default {
       },
     }
   },
-  async created() {
+  async created () {
     this.skeletonLoading = true
     const token = Vue.ls.get('Access-Token')
     this.headers = { 'X-Access-Token': token }
@@ -390,28 +334,28 @@ export default {
   methods: {
     ...mapGetters(['nickname', 'pictureAddr', 'userInfo']),
     //图片格式处理
-    getImgView(url = '') {
+    getImgView (url = '') {
       if (url) {
         return this.configure.imgerver + '/' + Object.values(JSON.parse(url))[0]
       }
     },
     //封面图
-    frontCoverCancel() {
+    frontCoverCancel () {
       this.frontCoverPreviewVisible = false
     },
-    async frontCoverPreview(file) {
+    async frontCoverPreview (file) {
       if (!file.url && !file.preview) {
         file.preview = await getBase64(file.originFileObj)
       }
       this.frontCoverPreviewImage = file.url || file.preview
       this.frontCoverPreviewVisible = true
     },
-    frontCoverChange({ fileList }) {
+    frontCoverChange ({ fileList }) {
       if (this.frontCoverPic) {
         this.frontCoverFileList = fileList
       }
     },
-    frontCoverBeforeUpload(file) {
+    frontCoverBeforeUpload (file) {
       const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/jpg'
       const isLt2M = file.size / 1024 / 1024 < 2
       if (!isJpgOrPng) {
@@ -424,22 +368,22 @@ export default {
       return isLt2M && isJpgOrPng
     },
     //分享图
-    shareCancel() {
+    shareCancel () {
       this.sharePreviewVisible = false
     },
-    async sharePreview(file) {
+    async sharePreview (file) {
       if (!file.url && !file.preview) {
         file.preview = await getBase64(file.originFileObj)
       }
       this.sharePreviewImage = file.url || file.preview
       this.sharePreviewVisible = true
     },
-    shareChange({ fileList }) {
+    shareChange ({ fileList }) {
       if (this.sharePic) {
         this.shareFileList = fileList
       }
     },
-    shareBeforeUpload(file) {
+    shareBeforeUpload (file) {
       const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/jpg'
       const isLt2M = file.size / 1024 / 1024 < 2
       if (!isJpgOrPng) {
@@ -452,22 +396,22 @@ export default {
       return isLt2M && isJpgOrPng
     },
     //海报图
-    posterCancel() {
+    posterCancel () {
       this.posterPreviewVisible = false
     },
-    async posterPreview(file) {
+    async posterPreview (file) {
       if (!file.url && !file.preview) {
         file.preview = await getBase64(file.originFileObj)
       }
       this.posterPreviewImage = file.url || file.preview
       this.posterPreviewVisible = true
     },
-    posterChange({ fileList }) {
+    posterChange ({ fileList }) {
       if (this.posterPic) {
         this.posterFileList = fileList
       }
     },
-    posterBeforeUpload(file) {
+    posterBeforeUpload (file) {
       const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/jpg'
       const isLt2M = file.size / 1024 / 1024 < 2
       if (!isJpgOrPng) {
@@ -480,7 +424,7 @@ export default {
       return isLt2M && isJpgOrPng
     },
     //上传视频
-    videoChange(info) {
+    videoChange (info) {
       // if (this.canUploadVideo) {
       let fileList = [...info.fileList]
       // 1. Limit the number of uploaded files
@@ -498,7 +442,7 @@ export default {
       // }
     },
     //视频校验
-    videoBeforeUpload(file) {
+    videoBeforeUpload (file) {
       const isVideo =
         file.type === 'video/mp4' ||
         file.type === 'video/rmvb' ||
@@ -519,12 +463,12 @@ export default {
       return isVideo && isLt2M
     },
     //显示选择商品弹窗
-    showSelectGoodsPopUp() {
+    showSelectGoodsPopUp () {
       // console.log(this.$refs.selectGoodsToAddPopUp)
       this.$refs.selectGoodsToAddPopUp.open()
     },
     //确认选择商品弹窗
-    selectGoodsHandleOk(ids) {
+    selectGoodsHandleOk (ids) {
       // let duplicationArray = ids ? ids.split(',') : [];
       // for(let item of this.dataSource){
       //   duplicationArray.push(item.goodListId)
@@ -540,7 +484,7 @@ export default {
       })
     },
     //图片校验
-    imgUpLoadCheck() {
+    imgUpLoadCheck () {
       //封面图
       if (!Array.isArray(this.frontCoverFileList) || this.frontCoverFileList.length <= 0) {
         this.$message.warn('请上传封面图！')
@@ -558,11 +502,11 @@ export default {
       }
       return true
     },
-    materialTypeChange(e) {
+    materialTypeChange (e) {
       this.AllData.materialType = e.target.value
     },
     //提交
-    submit() {
+    submit () {
       console.log(this.videoFileList)
       if (!this.imgUpLoadCheck()) {
         return
@@ -622,7 +566,7 @@ export default {
       })
     },
     //栏目列表数据
-    getMarketingMaterialColumnList() {
+    getMarketingMaterialColumnList () {
       return new Promise((resolve, reject) => {
         getAction(this.url.findMarketingTextbookColumn).then((res) => {
           if (res.success) {
@@ -637,14 +581,19 @@ export default {
       })
     },
     //提交前的处理图片格式方法（多图）
-    beforeSubmitHandleImg(varName) {
+    beforeSubmitHandleImg (varName) {
       return new Promise((resolve, reject) => {
         let Obj = {},
           result = ''
         console.log(this[varName])
         if (this[varName].length > 0) {
           for (let index = 0; index < this[varName].length; index++) {
-            Obj[index] = this[varName][index].response.message
+            if (typeof this[varName][index].response === 'string') {
+              Obj[index] = this[varName][index].response
+            } else {
+              Obj[index] = this[varName][index].response.message
+            }
+
           }
           result = JSON.stringify(Obj)
         } else {
@@ -654,7 +603,7 @@ export default {
       })
     },
     //提交图片的数据处理封装
-    async allHandleImg(callback) {
+    async allHandleImg (callback) {
       this.AllData.coverPlan = await this.beforeSubmitHandleImg('shareFileList')
       this.AllData.surfacePlot = await this.beforeSubmitHandleImg('frontCoverFileList')
       this.AllData.posters = await this.beforeSubmitHandleImg('posterFileList')
@@ -662,7 +611,7 @@ export default {
       callback()
     },
     //编辑反显的处理图片格式方法（多图）
-    editShowHandleImg(values, varName) {
+    editShowHandleImg (values, varName) {
       let sz = []
       if (values && values != '{}') {
         let result = Object.values(JSON.parse(values))
@@ -682,7 +631,7 @@ export default {
       this[varName] = sz
     },
     //获取作者
-    getRealname() {
+    getRealname () {
       return new Promise((resolve, reject) => {
         getAction(this.url.queryById, { id: this.userInfo().id }).then((res) => {
           if (res.success) {
@@ -695,7 +644,7 @@ export default {
         })
       })
     },
-    onDelete(goodListId) {
+    onDelete (goodListId) {
       const dataSource = [...this.dataSource]
       this.dataSource = dataSource.filter((item) => item.goodListId !== goodListId)
     },
