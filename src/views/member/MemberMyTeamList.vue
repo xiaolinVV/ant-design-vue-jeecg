@@ -27,24 +27,13 @@
     <!-- table区域-begin -->
     <div class="ant-alert ant-alert-info" style="margin-bottom: 16px;width: 100%">
       <i class="anticon anticon-info-circle ant-alert-icon"></i> 已选择
-      <a style="font-weight: 600">{{ selectedRowKeys.length }}</a
-      >项
+      <a style="font-weight: 600">{{ selectedRowKeys.length }}</a>项
       <a style="margin-left: 24px" @click="onClearSelected">清空</a>
     </div>
     <div>
-      <a-table
-        ref="table"
-        size="middle"
-        rowKey="onlyKey"
-        :columns="columns"
-        :dataSource="dataSource"
-        :pagination="ipagination"
-        :loading="loading"
-        :expandedRowKeys="expandedRowKeys"
-        @change="handleTableChange"
-        @expand="handleExpand"
-        v-bind="tableProps"
-      >
+      <a-table ref="table" size="middle" rowKey="onlyKey" :columns="columns" :dataSource="dataSource"
+        :pagination="ipagination" :loading="loading" :expandedRowKeys="expandedRowKeys" :scroll="{ x: 1200 }"
+        @change="handleTableChange" @expand="handleExpand" v-bind="tableProps">
         <template slot="headPortrait" slot-scope="text, record, index">
           <img class="clickShowImage" :preview="'headPortrait' + index" :src="record.headPortrait" alt="" />
         </template>
@@ -75,6 +64,9 @@
             -
           </span>
         </template>
+        <template slot="isPastDue" slot-scope="text,record">
+          {{ text == 1 ? '过期' : '未过期' }}{{ text != 1 && record.pastDueTime ? ` 称号到期时间：${record.pastDueTime}` : '' }}
+        </template>
         <template slot="totalMembers" slot-scope="text, record">
           <a @click="showTotalMembersDetail(record)">
             {{ text }}
@@ -94,7 +86,7 @@ export default {
   name: 'MemberMyTeamList',
   mixins: [JeecgListMixin],
   inject: ['rush'],
-  data() {
+  data () {
     return {
       visible: false,
       description: '商品分类管理页面',
@@ -165,6 +157,11 @@ export default {
           title: '当前称号',
           align: 'center',
           dataIndex: 'designationName'
+        }, {
+          title: '称号是否有效',
+          align: 'center',
+          dataIndex: 'isPastDue',
+          scopedSlots: { customRender: 'isPastDue' }
         },
         {
           title: '团队礼包销售总额',
@@ -192,10 +189,10 @@ export default {
     MemberMyTeamListModal
   },
   computed: {
-    importExcelUrl() {
+    importExcelUrl () {
       return `${window._CONFIG['domianURL']}/${this.url.importExcelUrl}`
     },
-    tableProps() {
+    tableProps () {
       let _this = this
       return {
         // 列表项是否可选择
@@ -208,7 +205,7 @@ export default {
   },
   watch: {
     queryParam: {
-      handler(newVal) {
+      handler (newVal) {
         if (newVal && newVal.phone) {
           this.url.requestList = this.url.childList
         } else {
@@ -220,25 +217,25 @@ export default {
     }
   },
   methods: {
-    showTotalMembersDetail(item) {
+    showTotalMembersDetail (item) {
       this.$refs.modalForm.open(item)
     },
     // 生成全局唯一id
-    generateUUID() {
-      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    generateUUID () {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
         let r = (Math.random() * 16) | 0,
           v = c == 'x' ? r : (r & 0x3) | 0x8
         return v.toString(16)
       })
     },
-    searchResetSpecial() {
+    searchResetSpecial () {
       this.queryParam = {}
       setTimeout(() => {
         this.searchReset()
       }, 200)
     },
 
-    loadData(arg) {
+    loadData (arg) {
       console.log(this.ipagination, 'ipaginationipaginationipaginationipagination')
       this.ipagination.hideOnSinglePage = false
       if (arg == 1) {
@@ -267,7 +264,7 @@ export default {
         })
       })
     },
-    showTeamCount(item) {
+    showTeamCount (item) {
       console.log(item)
       if (item.id) {
         this.$refs.modalForm.open(item)
@@ -275,7 +272,7 @@ export default {
         this.$message.warn('此数据的id不存在！')
       }
     },
-    getDataByResult(result) {
+    getDataByResult (result) {
       return result.map(item => {
         //判断是否标记了带有子节点
         item.onlyKey = this.generateUUID()
@@ -286,7 +283,7 @@ export default {
         return item
       })
     },
-    handleExpand(expanded, record) {
+    handleExpand (expanded, record) {
       // 判断是否是展开状态
       if (expanded) {
         this.expandedRowKeys.push(record.onlyKey)
@@ -322,7 +319,7 @@ export default {
         }
       }
     },
-    initDictConfig() {}
+    initDictConfig () { }
   }
 }
 </script>

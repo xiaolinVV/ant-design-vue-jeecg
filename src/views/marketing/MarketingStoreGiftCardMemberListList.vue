@@ -59,24 +59,14 @@
 
           <a-col :md="8" :sm="8">
             <a-form-item label="获得时间">
-              <a-range-picker
-                style="width: 100%"
-                v-model="queryParam.getTime"
-                format="YYYY-MM-DD HH:MM:SS"
-                :placeholder="['开始时间', '结束时间']"
-                @change="onDateChange2"
-              />
+              <a-range-picker style="width: 100%" v-model="queryParam.getTime" format="YYYY-MM-DD HH:MM:SS"
+                :placeholder="['开始时间', '结束时间']" @change="onDateChange2" />
             </a-form-item>
           </a-col>
           <a-col :md="8" :sm="8">
             <a-form-item label="有效期开始">
-              <a-range-picker
-                style="width: 100%"
-                v-model="queryParam.effectTime"
-                format="YYYY-MM-DD HH:MM:SS"
-                :placeholder="['开始时间', '结束时间']"
-                @change="onDateChange3"
-              />
+              <a-range-picker style="width: 100%" v-model="queryParam.effectTime" format="YYYY-MM-DD HH:MM:SS"
+                :placeholder="['开始时间', '结束时间']" @change="onDateChange3" />
             </a-form-item>
           </a-col>
           <!-- <a-col :md="8" :sm="8">
@@ -97,9 +87,8 @@
     <!-- 操作按钮区域 -->
     <div class="table-operator">
       <!-- <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button> -->
-      <a-button type="primary" icon="download"  :loading="exportLoading"  @click="handleExportXls('店铺营销-店铺礼品卡-会员礼品卡')"
-        >导出</a-button
-      >
+      <a-button type="primary" icon="download" :loading="exportLoading"
+        @click="handleExportXls('店铺营销-店铺礼品卡-会员礼品卡')">导出</a-button>
       <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
       <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
       <!-- <a-upload
@@ -126,24 +115,13 @@
     <div>
       <div class="ant-alert ant-alert-info" style="margin-bottom: 16px">
         <i class="anticon anticon-info-circle ant-alert-icon"></i> 已选择
-        <a style="font-weight: 600">{{ selectedRowKeys.length }}</a
-        >项
+        <a style="font-weight: 600">{{ selectedRowKeys.length }}</a>项
         <a style="margin-left: 24px" @click="onClearSelected">清空</a>
       </div>
 
-      <a-table
-        ref="table"
-        size="middle"
-        bordered
-        rowKey="id"
-        :columns="columns"
-        :dataSource="dataSource"
-        :scroll="{ x: 2000 }"
-        :pagination="ipagination"
-        :loading="loading"
-        :rowSelection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
-        @change="handleTableChange"
-      >
+      <a-table ref="table" size="middle" bordered rowKey="id" :columns="columns" :dataSource="dataSource"
+        :scroll="{ x: 2000 }" :pagination="ipagination" :loading="loading"
+        :rowSelection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }" @change="handleTableChange">
         <template slot="headPortrait" slot-scope="text, record, index">
           <img class="clickShowImage" v-if="text != undefined" :preview="'headPortrait' + index" :src="text" alt="" />
         </template>
@@ -160,21 +138,24 @@
           <div v-if="text == 2">已赠送</div>
         </template>
 
-        <!-- <span slot="action" slot-scope="text, record">
-          <a @click="handleEdit(record)">编辑</a>
+        <span slot="action" slot-scope="text, record">
+          <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.id)">
+            <a>删除</a>
+          </a-popconfirm>
+          <!-- <a @click="handleEdit(record)">编辑</a> -->
 
-          <a-divider type="vertical" />
-          <a-dropdown>
-            <a class="ant-dropdown-link">更多 <a-icon type="down" /></a>
-            <a-menu slot="overlay">
-              <a-menu-item>
-                <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.id)">
-                  <a>删除</a>
-                </a-popconfirm>
-              </a-menu-item>
-            </a-menu>
-          </a-dropdown>
-        </span> -->
+          <!-- <a-divider type="vertical" /> -->
+          <!-- <a-dropdown> -->
+          <!-- <a class="ant-dropdown-link">更多 <a-icon type="down" /></a> -->
+          <!-- <a-menu slot="overlay"> -->
+          <!-- <a-menu-item> -->
+
+
+
+          <!-- </a-menu-item> -->
+          <!-- </a-menu> -->
+          <!-- </a-dropdown> -->
+        </span>
       </a-table>
     </div>
     <!-- table区域-end -->
@@ -197,7 +178,7 @@ export default {
     MarketingStoreGiftCardMemberListModal,
     MarketingStoreGiftCardCanSelectGoods,
   },
-  data() {
+  data () {
     return {
       description: '店铺会员礼品卡管理页面',
       // 表头
@@ -286,7 +267,14 @@ export default {
           align: 'center',
           dataIndex: 'status',
           scopedSlots: { customRender: 'status' },
-        },
+        }, {
+          title: '操作',
+          dataIndex: 'action',
+          align: 'center',
+          fixed: 'right',
+          width: 100,
+          scopedSlots: { customRender: 'action' }
+        }
       ],
       url: {
         list: '/marketing/marketingStoreGiftCardMemberList/list',
@@ -298,7 +286,7 @@ export default {
       isMerchant: false,
     }
   },
-  created() {
+  created () {
     let userInfo = localStorage.getItem('pro__Login_Userinfo')
     if (userInfo) {
       userInfo = JSON.parse(userInfo)
@@ -314,11 +302,11 @@ export default {
     },
   },
   methods: {
-    showModal(record) {
+    showModal (record) {
       this.$refs.modalForm3.showModal(record)
     },
     /**查询栏时间区间查询*/
-    getQueryParams() {
+    getQueryParams () {
       var param = Object.assign({}, this.queryParam, this.isorter)
       param.field = this.getQueryField()
       param.pageNo = this.ipagination.current
