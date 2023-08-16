@@ -1,10 +1,13 @@
 <template>
   <a-row :gutter="10">
     <a-col :span="6">
-      <a-card :bordered="false" style="min-height: 800px">
+      <!-- <a-card :bordered="false" style="min-height: 800px">
         <a-input-search style="margin-bottom: 8px" placeholder="店铺查询" @change="onChange" />
 
         <a-tree v-if="storeList.length > 0" :tree-data="storeListFilt" @select="getSelectStore"> </a-tree>
+      </a-card> -->
+      <a-card title="店铺列表" :bordered="false" style="min-height: 1000px">
+        <store-tree @ok="getSelectStore"></store-tree>
       </a-card>
     </a-col>
     <a-col :span="18">
@@ -133,12 +136,14 @@
 import StoreFranchiserModal from './modules/StoreFranchiserModal'
 import { JeecgListMixin } from '@/mixins/JeecgListMixin'
 import { getAction } from '@/api/manage'
+import StoreTree from '../common/StoreTree/StoreTree'
 
 export default {
   name: 'StoreFranchiserList',
   mixins: [JeecgListMixin],
   components: {
-    StoreFranchiserModal
+    StoreFranchiserModal,
+    StoreTree,
   },
   data() {
     return {
