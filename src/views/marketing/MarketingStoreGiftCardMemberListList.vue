@@ -53,6 +53,7 @@
                 <a-select-option value="">请选择</a-select-option>
                 <a-select-option :value="0">礼包赠送</a-select-option>
                 <a-select-option :value="1">好友赠送</a-select-option>
+                <a-select-option :value="2">平台赠送</a-select-option>
               </a-select>
             </a-form-item>
           </a-col>
@@ -91,6 +92,7 @@
         @click="handleExportXls('店铺营销-店铺礼品卡-会员礼品卡')">导出</a-button>
       <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
       <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
+      <a-button type="primary" @click="sendCouponModel" icon="plus" >送礼品卡</a-button>
       <!-- <a-upload
         name="file"
         :showUploadList="false"
@@ -128,6 +130,7 @@
         <template slot="waysObtain" slot-scope="text, record, index">
           <div v-if="text == 0">礼包赠送</div>
           <div v-if="text == 1">好友赠送</div>
+          <div v-if="text == 2">平台赠送</div>
         </template>
         <template slot="goodCount" slot-scope="text, record">
           <a @click="showModal(record)">{{ text }}</a>
@@ -142,7 +145,9 @@
           <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.id)">
             <a>删除</a>
           </a-popconfirm>
-          <!-- <a @click="handleEdit(record)">编辑</a> -->
+          <a-divider type="vertical" />
+
+          <a @click="handleEdit(record)">编辑</a>
 
           <!-- <a-divider type="vertical" /> -->
           <!-- <a-dropdown> -->
@@ -163,23 +168,65 @@
     <!-- 表单区域 -->
     <marketingStoreGiftCardMemberList-modal ref="modalForm" @ok="modalFormOk"></marketingStoreGiftCardMemberList-modal>
     <MarketingStoreGiftCardCanSelectGoods ref="modalForm3"></MarketingStoreGiftCardCanSelectGoods>
+
+    <!-- 送礼品卡弹窗 -->
+    <marketing-store-gift-card-member-list-list-send-couponModel ref="MarketingStoreGiftCardMemberListListSendCouponModel" @success="loadData">
+    </marketing-store-gift-card-member-list-list-send-couponModel>
+
+    <!-- 编辑 -->
+    <a-modal
+      title="编辑会员礼品卡"
+      :width="800"
+      v-model="visible"
+      okText="确认修改"
+      @ok="handleOk"
+      @cancel="handleCancel"
+      :confirmLoading="confirmLoading"
+    >
+      <a-spin :spinning="confirmLoading">
+        <a-form :form="form" :label-col="{ span: 4 }" :wrapper-col="{ span: 12 }">
+          <a-form-item label="会员账号">
+            <div>{{ form.phone ? form.phone : null }}</div>
+          </a-form-item>
+          <a-form-item label="会员昵称">
+            <div>{{ form.nickName }}</div>
+          </a-form-item>
+          <a-form-item label="卡名称">
+            <div>{{ form.carName }}</div>
+          </a-form-item>
+          <a-form-item label="发行店铺">
+            <div>{{ form.storeName }}</div>
+          </a-form-item>
+          <a-form-item label="可用面额">
+            <a-input-number :min="0" v-model="form.denomination" style="width: 300px;"/>
+            <div style="color:red">确认更改后，将立即更改该会员卡的可用面额</div>
+          </a-form-item>
+        </a-form>
+      </a-spin>
+    </a-modal>
   </a-card>
 </template>
 
 <script>
+import { httpAction } from '@/api/manage'
+
 import MarketingStoreGiftCardMemberListModal from './modules/MarketingStoreGiftCardMemberListModal'
 import MarketingStoreGiftCardCanSelectGoods from './modules/MarketingStoreGiftCardCanSelectGoods'
 import { JeecgListMixin } from '@/mixins/JeecgListMixin'
 import { filterObj } from '@/utils/util'
+import MarketingStoreGiftCardMemberListListSendCouponModel from './modules/MarketingStoreGiftCardMemberListListSendCouponModel'
+
 export default {
   name: 'MarketingStoreGiftCardMemberListList',
   mixins: [JeecgListMixin],
   components: {
     MarketingStoreGiftCardMemberListModal,
     MarketingStoreGiftCardCanSelectGoods,
+    MarketingStoreGiftCardMemberListListSendCouponModel
   },
   data () {
     return {
+      visible: false,
       description: '店铺会员礼品卡管理页面',
       // 表头
       columns: [
@@ -272,7 +319,7 @@ export default {
           dataIndex: 'action',
           align: 'center',
           fixed: 'right',
-          width: 100,
+          width: 120,
           scopedSlots: { customRender: 'action' }
         }
       ],
@@ -282,8 +329,11 @@ export default {
         deleteBatch: '/marketing/marketingStoreGiftCardMemberList/deleteBatch',
         exportXlsUrl: 'marketing/marketingStoreGiftCardMemberList/exportXls',
         importExcelUrl: 'marketing/marketingStoreGiftCardMemberList/importExcel',
+        editUrl: '/marketing/marketingStoreGiftCardMemberList/edit',
       },
       isMerchant: false,
+      form: this.$form.createForm(this, { denomination: 0 }),
+      confirmLoading: false,
     }
   },
   created () {
@@ -302,8 +352,33 @@ export default {
     },
   },
   methods: {
+    // 编辑
+    handleEdit(record){
+      this.form = Object.assign({}, record);
+      this.visible = true
+      console.log('this.form====',this.form);
+    },
+    handleOk () {
+      const that = this;
+      httpAction(this.url.editUrl,this.form, 'PUT').then(res => {
+        if (res.success) {
+          that.visible = false;
+          that.loadData()
+        }
+      }).finally(() => {
+        that.confirmLoading = false;
+      })
+    },
+    handleCancel(){
+      this.visible = false;
+    },
     showModal (record) {
       this.$refs.modalForm3.showModal(record)
+    },
+    //送礼品卡弹窗
+    sendCouponModel(value = {}){
+        value.modalTitle = '送礼品卡'
+        this.$refs.MarketingStoreGiftCardMemberListListSendCouponModel.open(value);
     },
     /**查询栏时间区间查询*/
     getQueryParams () {
