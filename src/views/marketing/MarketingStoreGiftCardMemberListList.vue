@@ -53,6 +53,7 @@
                 <a-select-option value="">请选择</a-select-option>
                 <a-select-option :value="0">礼包赠送</a-select-option>
                 <a-select-option :value="1">好友赠送</a-select-option>
+                <a-select-option :value="2">平台赠送</a-select-option>
               </a-select>
             </a-form-item>
           </a-col>
