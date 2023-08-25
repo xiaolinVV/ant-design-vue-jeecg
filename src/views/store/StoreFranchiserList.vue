@@ -253,8 +253,8 @@ export default {
     },
     getSelectStore(e) {
       console.log(e)
-      this.storeId = e[0]
-      this.url.list = '/store/storeFranchiser/list?storeManageId=' + e[0]
+      this.storeId = e.key
+      this.url.list = '/store/storeFranchiser/list?storeManageId=' + e.key
       this.modalFormOk()
     },
     getAllStoreList() {
