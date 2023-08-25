@@ -51,6 +51,10 @@ const optionsSec = [
   {
     title: '封坛经销商',
     value: 1
+  },
+  {
+    title: '产品批发经销商',
+    value: 2
   }
 ]
 export default {

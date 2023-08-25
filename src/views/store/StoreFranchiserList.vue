@@ -231,6 +231,9 @@ export default {
         case 1:
           text = '封坛经销商'
           break
+        case 2:
+          text = '产品批发经销商'
+          break
         default:
           break
       }
