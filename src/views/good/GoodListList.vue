@@ -367,6 +367,7 @@
           }
         ],
         url: {
+          updateFrameStatus:"goodList/goodList/updateFrameStatus",
           list: "/goodList/goodList/list",
           delete: "/goodList/goodList/delete",
           deleteBatch: "/goodList/goodList/deleteBatch",
