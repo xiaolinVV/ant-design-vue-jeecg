@@ -24,10 +24,10 @@
           />
         </a-form-item>
 
-        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="选择经销商类型">
+        <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="选择代理商类型">
           <a-select
-            placeholder="请选择经销商类型"
-            v-decorator="['franchiserType', { rules: [{ required: true, message: '请选择经销商类型' }] }]"
+            placeholder="请选择代理商类型"
+            v-decorator="['agencyType', { rules: [{ required: true, message: '请选择代理商类型' }] }]"
           >
             <a-select-option v-for="(item, index) in optionsSec" :key="index" :value="item.value">
               {{ item.title }}
@@ -45,20 +45,12 @@ import pick from 'lodash.pick'
 import moment from 'moment'
 const optionsSec = [
   {
-    title: '店铺专区进销商',
+    title: '店铺批发产品代理商',
     value: 0
   },
-  {
-    title: '封坛经销商',
-    value: 1
-  },
-  {
-    title: '产品批发经销商',
-    value: 2
-  }
 ]
 export default {
-  name: 'StoreFranchiserModal',
+  name: 'StoreAgencyModal',
   data() {
     return {
       title: '操作',
@@ -78,8 +70,8 @@ export default {
       form: this.$form.createForm(this),
       validatorRules: {},
       url: {
-        add: '/store/storeFranchiser/add',
-        edit: '/store/storeFranchiser/edit',
+        add: '/storeAgency/storeAgency/add',
+        edit: '/storeAgency/storeAgency/edit',
         likeMemberByPhone: 'memberList/memberList/likeMemberByPhone',
         queryById: 'memberList/memberList/queryById'
       },

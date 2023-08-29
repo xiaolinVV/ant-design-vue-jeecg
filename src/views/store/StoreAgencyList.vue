@@ -62,7 +62,7 @@
         <!-- 操作按钮区域 -->
         <div class="table-operator">
           <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
-          <a-button type="primary" icon="download"  :loading="exportLoading"  @click="handleExportXls('店铺经销商')">导出</a-button>
+          <a-button type="primary" icon="download"  :loading="exportLoading"  @click="handleExportXls('店铺代理商')">导出</a-button>
           <a-upload
             name="file"
             :showUploadList="false"
@@ -103,7 +103,7 @@
             :rowSelection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
             @change="handleTableChange"
           >
-            <span slot="franchiserType" slot-scope="text, record">
+            <span slot="agencyType" slot-scope="text, record">
               {{ franchiserTypeText(record) }}
             </span>
             <span slot="action" slot-scope="text, record">
@@ -126,28 +126,28 @@
         <!-- table区域-end -->
 
         <!-- 表单区域 -->
-        <storeFranchiser-modal ref="modalForm" @ok="modalFormOk"></storeFranchiser-modal>
+        <storeAgency-modal ref="modalForm" @ok="modalFormOk"></storeAgency-modal>
       </a-card>
     </a-col>
   </a-row>
 </template>
 
 <script>
-import StoreFranchiserModal from './modules/StoreFranchiserModal'
+import StoreAgencyModal from './modules/StoreAgencyModal'
 import { JeecgListMixin } from '@/mixins/JeecgListMixin'
 import { getAction } from '@/api/manage'
 import StoreTree from '../common/StoreTree/StoreTree'
 
 export default {
-  name: 'StoreFranchiserList',
+  name: 'StoreAgencyList',
   mixins: [JeecgListMixin],
   components: {
-    StoreFranchiserModal,
+    StoreAgencyModal,
     StoreTree,
   },
   data() {
     return {
-      description: '店铺经销商管理页面',
+      description: '店铺代理商管理页面',
       // 表头
       columns: [
         {
@@ -176,10 +176,10 @@ export default {
           dataIndex: 'memberList.nickName'
         },
         {
-          title: '经销商类型',
+          title: '代理商类型',
           align: 'center',
           dataIndex: 'memberList.franchiserType',
-          scopedSlots: { customRender: 'franchiserType' }
+          scopedSlots: { customRender: 'agencyType' }
         },
 
         {
@@ -201,10 +201,10 @@ export default {
       ],
       url: {
         list: '',
-        delete: '/store/storeFranchiser/delete',
-        deleteBatch: '/store/storeFranchiser/deleteBatch',
-        exportXlsUrl: 'store/storeFranchiser/exportXls',
-        importExcelUrl: 'store/storeFranchiser/importExcel',
+        delete: '/storeAgency/storeAgency/delete',
+        deleteBatch: '/storeAgency/storeAgency/deleteBatch',
+        exportXlsUrl: '/storeAgency/storeAgency/exportXls',
+        importExcelUrl: '/storeAgency/storeAgency/importExcel',
         getAllStoreList: 'storeManage/storeManage/getAllStoreList'
       },
       storeList: [],
@@ -224,17 +224,9 @@ export default {
   methods: {
     franchiserTypeText(record) {
       let text = ''
-      switch (record.franchiserType * 1) {
+      switch (record.agencyType * 1) {
         case 0:
-          text = '店铺专区经销商'
-          break
-        case 1:
-          text = '封坛经销商'
-          break
-        case 2:
-          text = '产品批发经销商'
-          break
-        default:
+          text = '店铺批发产品代理商'
           break
       }
       return text
@@ -257,7 +249,7 @@ export default {
     getSelectStore(e) {
       console.log(e)
       this.storeId = e.key
-      this.url.list = '/store/storeFranchiser/list?storeManageId=' + e.key
+      this.url.list = '/storeAgency/storeAgency/list?storeManageId=' + e.key
       this.modalFormOk()
     },
     getAllStoreList() {
