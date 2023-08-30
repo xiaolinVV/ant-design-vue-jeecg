@@ -32,35 +32,57 @@
         </a-input-number>
       </a-form-item>
 
-      <a-form-item :label-col="labelCol" :wrapper-col="wrapperCol">
-        <span slot="label">
-          <span class="dataCheckedStar">
-            *
-          </span>
-          可选商品
-        </span>
-        <a-button @click="PopUp">
-          选择商品
-        </a-button>
-
-        <a-table
-          :columns="isSelectColumns"
-          :dataSource="isSelectData"
-          :pagination="{ pageSize: 5 }"
-          bordered
-          style="margin-top: 20px;"
+      <a-form-item :label-col="labelCol" :wrapper-col="wrapperCol" label="升级代理商">
+        <a-input-number
+          :min="0"
+          :precision="2"
+          style="width: 200px;"
+          placeholder="请输入升级为代理商充值的金额"
+          v-decorator="rules.agencyShouldRecharged"
         >
-          <template slot="mainPicture" slot-scope="text">
-            <img :src="text" alt=" " style="width: 40px;height: 40px;" />
-          </template>
-          <template slot="operation" slot-scope="text, record">
-            <a-popconfirm v-if="isSelectData.length" title="确定要删除吗?" @confirm="() => onDelete(record.id)">
-              <a href="javascript:;">删除</a>
-            </a-popconfirm>
-          </template>
-        </a-table>
-        <div>已选择商品共计{{ isSelectData.length }}件</div>
+        </a-input-number>
       </a-form-item>
+
+      <a-form-item :label-col="labelCol" :wrapper-col="wrapperCol" label="升级经销商">
+        <a-input-number
+          :min="0"
+          :precision="2"
+          style="width: 200px;"
+          placeholder="请输入升级为经销商充值的金额"
+          v-decorator="rules.franchiserShouldRecharged"
+        >
+        </a-input-number>
+      </a-form-item>
+
+<!--      <a-form-item :label-col="labelCol" :wrapper-col="wrapperCol">-->
+<!--        <span slot="label">-->
+<!--          <span class="dataCheckedStar">-->
+<!--            *-->
+<!--          </span>-->
+<!--          可选商品-->
+<!--        </span>-->
+<!--        <a-button @click="PopUp">-->
+<!--          选择商品-->
+<!--        </a-button>-->
+
+<!--        <a-table-->
+<!--          :columns="isSelectColumns"-->
+<!--          :dataSource="isSelectData"-->
+<!--          :pagination="{ pageSize: 5 }"-->
+<!--          bordered-->
+<!--          style="margin-top: 20px;"-->
+<!--        >-->
+<!--          <template slot="mainPicture" slot-scope="text">-->
+<!--            <img :src="text" alt=" " style="width: 40px;height: 40px;" />-->
+<!--          </template>-->
+<!--          <template slot="operation" slot-scope="text, record">-->
+<!--            <a-popconfirm v-if="isSelectData.length" title="确定要删除吗?" @confirm="() => onDelete(record.id)">-->
+<!--              <a href="javascript:;">删除</a>-->
+<!--            </a-popconfirm>-->
+<!--          </template>-->
+<!--        </a-table>-->
+<!--        <div>已选择商品共计{{ isSelectData.length }}件</div>-->
+<!--      </a-form-item>-->
 
       <a-form-item label="有效期" :label-col="labelCol" :wrapper-col="wrapperCol">
         <!--          v-model="model.timeWay"-->
@@ -111,8 +133,8 @@
           </div>
         </a-radio-group>
       </a-form-item>
-      <a-form-item label="礼品卡说明" :label-col="labelCol" :wrapper-col="wrapperCol">
-        <JEditor v-model="model.carExplain" placeholder="礼品卡说明能让客户更加了解礼品卡"> </JEditor>
+      <a-form-item label="批发卡说明" :label-col="labelCol" :wrapper-col="wrapperCol">
+        <JEditor v-model="model.carExplain" placeholder="批发卡说明能让客户更加了解批发卡"> </JEditor>
       </a-form-item>
     </a-form>
     <select-goods-to-add-pop-up
@@ -146,11 +168,11 @@ import pick from 'lodash.pick'
 import selectGoodsToAddPopUp from '@/components/popUp/selectGoodsToAddPopUp.vue'
 import dayjs from 'dayjs'
 export default {
-  name: 'MarketingStoreGiftCardListListAdd',
+  name: 'MarketingStoreWholesaleCardListListAdd',
   data() {
     return {
-      cardType:"0",
-      title: '添加礼品卡',
+      cardType:"1",
+      title: '添加批发卡',
       form: this.$form.createForm(this),
       labelCol: Object.freeze({ span: 2 }),
       wrapperCol: Object.freeze({ span: 22 }),
@@ -237,6 +259,8 @@ export default {
           }
         ],
         denomination: ['denomination', { rules: [{ required: true, message: '请输入面额' }] }],
+        franchiserShouldRecharged: ['franchiserShouldRecharged', { rules: [{ required: true, message: '请输入金额' }] }],
+        agencyShouldRecharged: ['agencyShouldRecharged', { rules: [{ required: true, message: '请输入金额' }] }],
         storeManageId: ['storeManageId', { rules: [{ required: true, message: '请选择发行店铺' }] }],
         timeWay: ['timeWay', { rules: [{ required: true, message: '请选择有效期' }] }]
       }),
@@ -371,9 +395,9 @@ export default {
         this.form.setFieldsValue(this.model)
         this.oldStoreManageId = record.storeManageId
         this.getSelectGoods()
-        this.title = '编辑礼品卡'
+        this.title = '编辑批发卡'
       } else {
-        this.title = '添加礼品卡'
+        this.title = '添加批发卡'
       }
     },
 
