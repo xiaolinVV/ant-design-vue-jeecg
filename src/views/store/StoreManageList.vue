@@ -127,6 +127,14 @@
             <a-icon type="delete" />
             删除
           </a-menu-item>
+          <a-menu-item key="2" @click="batchDel">
+            <a-icon type="delete" />
+            产品批发栏目设置
+          </a-menu-item>
+          <a-menu-item key="2" @click="batchDel">
+            <a-icon type="delete" />
+            臻选优品栏目设置
+          </a-menu-item>
         </a-menu>
         <a-button style="margin-left: 8px">
           批量操作
@@ -339,6 +347,12 @@
               </a-menu-item>
               <a-menu-item>
                 <a @click="storeFunctionSetModalClick(record)">功能设置</a>
+              </a-menu-item>
+              <a-menu-item>
+                <a @click="storeFunctionSetModalClick(record)">产品批发栏目设置</a>
+              </a-menu-item>
+              <a-menu-item>
+                <a @click="storeFunctionSetModalClick(record)">臻选优品栏目设置</a>
               </a-menu-item>
             </a-menu>
           </a-dropdown>
