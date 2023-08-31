@@ -121,19 +121,13 @@
         <a-button type="primary" icon="import">导入</a-button>
       </a-upload> -->
       <a-button type="primary" icon="download"  :loading="exportLoading"  @click="handleExportXls('店铺-店铺管理-店铺列表')">导出</a-button>
+      <a-button type="primary" @click="batchPifa" icon="plus" >批量设置产品批发栏目</a-button>
+      <a-button type="primary" @click="batchZx" icon="plus" >批量设置臻品优选栏目</a-button>
       <a-dropdown v-if="selectedRowKeys.length > 0">
         <a-menu slot="overlay">
           <a-menu-item key="1" @click="batchDel">
             <a-icon type="delete" />
             删除
-          </a-menu-item>
-          <a-menu-item key="2" @click="batchDel">
-            <a-icon type="delete" />
-            产品批发栏目设置
-          </a-menu-item>
-          <a-menu-item key="2" @click="batchDel">
-            <a-icon type="delete" />
-            臻选优品栏目设置
           </a-menu-item>
         </a-menu>
         <a-button style="margin-left: 8px">
@@ -384,6 +378,12 @@
 
 <!--    臻选优品栏目设置-->
     <store-manage-best-selection-modal ref="modalForm3" @ok="modalFormOk1"></store-manage-best-selection-modal>
+
+<!--    批量设置批发栏目-->
+    <store-batch-pifa-model ref="StoreBatchPifaModel" @success="modalFormOk1"></store-batch-pifa-model>
+
+<!--    批量设置臻选栏目-->
+    <store-batch-zx-model ref="StoreBatchZxModel" @success="modalFormOk1"></store-batch-zx-model>
   </a-card>
 </template>
 
@@ -407,6 +407,8 @@ import StoreOrderSettingModal from './modules/StoreOrderSettingModal'
 import StoreFunctionSetModal from './modules/StoreFunctionSetModal'
 import StoreCashierRoutingList from './StoreCashierRoutingList'
 import StoreManageBestSelectionModal from './modules/StoreManageBestSelectionModal'
+import StoreBatchPifaModel from './modules/StoreBatchPifaModel'
+import StoreBatchZxModel from './modules/StoreBatchZxModel'
 
 export default {
   name: 'StoreManageList',
@@ -421,7 +423,9 @@ export default {
     StoreCashierRoutingList,
     StoreOrderSettingModal,
     StoreWholesaleModal,
-    StoreManageBestSelectionModal
+    StoreManageBestSelectionModal,
+    StoreBatchPifaModel,
+    StoreBatchZxModel
   },
   inject: ['rush'],
   data() {
@@ -980,6 +984,15 @@ export default {
       record.fashionableType = fashionableType
       this.$refs.storeCashierRoutingList.show(record)
     },
+    batchPifa(value = {}){
+      value.modalTitle = '批量设置产品批发栏目'
+      this.$refs.StoreBatchPifaModel.open(value);
+    },
+    batchZx(value = {}){
+      value.modalTitle = '批量设置臻品优选栏目'
+      this.$refs.StoreBatchZxModel.open(value);
+    },
+
   },
 }
 </script>

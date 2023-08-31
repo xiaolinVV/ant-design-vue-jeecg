@@ -25,7 +25,7 @@
           </a-col>
           <a-col :span="24">
             <a-form-model-item label="申请海报" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="productWholesaleApplyPicture">
-              <j-image-upload isMultiple  v-model="model.productWholesaleApplyPicture" ></j-image-upload>
+              <j-image-upload  v-model="model.productWholesaleApplyPicture" ></j-image-upload>
             </a-form-model-item>
           </a-col>
         </a-row>

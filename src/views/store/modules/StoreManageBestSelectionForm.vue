@@ -15,7 +15,7 @@
           </a-col>
           <a-col :span="24">
             <a-form-model-item label="分享海报" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="productsSelectedSharePicture">
-              <j-image-upload isMultiple  v-model="model.productsSelectedSharePicture" ></j-image-upload>
+              <j-image-upload  v-model="model.productsSelectedSharePicture" ></j-image-upload>
             </a-form-model-item>
           </a-col>
         </a-row>
