@@ -28,7 +28,7 @@
               </a-select-option>
             </a-select>
       </a-form-item>
-          <a-form-item :label-col="labelCol" :wrapper-col="wrapperCol" v-if="titleLabel == '礼品卡'">
+          <a-form-item :label-col="labelCol" :wrapper-col="wrapperCol" v-if="titleLabel == '批发卡'">
             <span slot="label">
               <span class="dataCheckedStar">
                 *
@@ -36,7 +36,7 @@
               {{titleLabel}}
             </span>
             <a-button @click="PopUp(1)">
-              选择礼品卡
+              选择批发卡
             </a-button>
             <a-table :columns="couponListColumns" :dataSource="couponListData" :pagination="{pageSize:5}"
                      :scroll="{x:couponListColumns.length * columnsWidth}"
@@ -165,7 +165,7 @@
       align: 'center'
     },*/
     {
-      title: '礼品卡编号',
+      title: '批发卡编号',
       dataIndex: 'serialNumber',
       width: columnsWidth,
       align: 'center'
@@ -182,12 +182,12 @@
       width: columnsWidth,
       align: 'center'
     },
-    {
-      title: '可选商品',
-      dataIndex: 'goodCount',
-      width: columnsWidth,
-      align: 'center'
-    },
+    // {
+    //   title: '可选商品',
+    //   dataIndex: 'goodCount',
+    //   width: columnsWidth,
+    //   align: 'center'
+    // },
     {
       title: '赠送数量',
       dataIndex: 'distributedAmount',
@@ -227,7 +227,7 @@
   import AppMarketingCertificateGoodModal from './AppMarketingCertificateGoodModal'
   import AppMarketingGoodModal from './AppMarketingGoodModal'
   export default {
-    name: 'MarketingStoreGiftCardMemberListListSendCouponModel',
+    name: 'MarketingStoreWholesaleCardMemberListListSendCouponModel',
     data() {
       this.lastFetchId = 0;
       this.fetchPhone = debounce(this.fetchPhone, 800);
@@ -245,16 +245,16 @@
         title: '',
         visible: false,
         isSure:false,
-        titleLabel:'礼品卡',
+        titleLabel:'批发卡',
         // certificateType: '',
         searchName: '',//查询内容
         columnsWidth,
         couponListColumns,
-        //礼品卡列表数据
+        //批发卡列表数据
         couponListData: [],
         //兑换券列表数据
         exchangeCertificateListDatas: [],
-        discoountAllData: [],//选择礼品卡所有数据
+        discoountAllData: [],//选择批发卡所有数据
         certificateAllData: [],//选择兑换券所有数据
         //弹窗名称
         popName: '',
@@ -274,17 +274,17 @@
         },
         AllData:{
          certificateIds: '',//选择兑换券ids
-         discountIds: '',//选择礼品卡  ids
+         discountIds: '',//选择批发卡  ids
         },
         url:{
 
-          //送礼品卡
+          //送批发卡
           giveMarketingDiscount:"marketing/marketingStoreGiftCardMemberList/give",
           //校验手机号码接口 (通过手机号码获取会员信息)
           likeMemberByPhone: "/memberList/memberList/likeMemberByPhone",//校验手机号码接口 (通过手机号码获取会员信息)
           //选择兑换券弹窗列表(传入字段 certificateName(券名称),id(券id),certificateType(兑换方式；0：全部兑换；1：任选一个))
           exchangeCertificatePopUpList: '/marketingCertificate/marketingCertificate/findGiveMarketingCertificateVO',
-          //选择礼品卡弹窗列表(传入字段 discoountName(券名称),id(券id),getRestrict(使用人限制:0 普通会员 1:vip),issuer(发行人))
+          //选择批发卡弹窗列表(传入字段 discoountName(券名称),id(券id),getRestrict(使用人限制:0 普通会员 1:vip),issuer(发行人))
           CouponPopupList: 'marketing/marketingStoreGiftCardList/list',
         },
         //配置
@@ -292,7 +292,7 @@
           imgErver: window._CONFIG['domianURL'] + '/sys/common/view',
           fileUpload: window._CONFIG['domianURL'] + '/sys/common/upload'
         },
-        cardType: '0'
+        cardType: '1'
       }
     },
     computed:{
@@ -325,7 +325,7 @@
       showExchangeGoodInformation(id){
         this.$refs.AppMarketingCertificateGoodModal.showModalVisible(id);
       },
-      //适用商品弹窗（礼品卡）
+      //适用商品弹窗（批发卡）
       showGoodInformation(id){
         this.$refs.AppMarketingGoodModal.showModalVisible(id);
       },
@@ -398,7 +398,7 @@
             data: 'exchangeCertificateListDatas',
             selectedRowKeys: 'certificateSelectedRowKeys'
           }, {
-            //礼品卡
+            //批发卡
             ids: 'discountIds',
             data: 'couponListData',
             selectedRowKeys: 'discountRowKeys'
@@ -459,7 +459,7 @@
             columns: 'couponListColumns',
             url: 'CouponPopupList',
             selectedRowKeys: 'discountRowKeys',
-            popName: '礼品卡',
+            popName: '批发卡',
             searchName: 'serialNumber',
             allData: 'discoountAllData'
           }, {
@@ -584,9 +584,9 @@
         this.form.validateFields((err, values) => {
           if (!err) {
             let requestUrl
-            if(this.titleLabel == '礼品卡'){
+            if(this.titleLabel == '批发卡'){
               if(!this.couponListData || (this.couponListData && this.couponListData.length <= 0)){
-                this.$message.warn('请至少选择一张礼品卡！')
+                this.$message.warn('请至少选择一张批发卡！')
                 return;
               }
               requestUrl = this.url.giveMarketingDiscount
@@ -615,7 +615,7 @@
         let list = [],
            analysisList,
           analysisIdName;
-        if(this.titleLabel == '礼品卡'){
+        if(this.titleLabel == '批发卡'){
           analysisList = this.couponListData
           analysisIdName = 'marketingStoreGiftCardListId'
         }else{
@@ -634,8 +634,8 @@
         console.log('=open==============',value);
         this.visible = true
         this.title = value.modalTitle
-        if(value.modalTitle == '赠送送礼品卡'){
-          this.titleLabel = '礼品卡'
+        if(value.modalTitle == '赠送送批发卡'){
+          this.titleLabel = '批发卡'
         }
         this.form.resetFields();
         this.isSure = false
