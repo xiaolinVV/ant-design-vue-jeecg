@@ -349,7 +349,7 @@
                 <a @click="storeFunctionSetModalClick(record)">功能设置</a>
               </a-menu-item>
               <a-menu-item>
-                <a @click="storeFunctionSetModalClick(record)">产品批发栏目设置</a>
+                <a @click="handlePifa(record)">产品批发栏目设置</a>
               </a-menu-item>
               <a-menu-item>
                 <a @click="storeFunctionSetModalClick(record)">臻选优品栏目设置</a>
@@ -378,6 +378,9 @@
 
     <!--功能设置-->
     <store-function-set-modal ref="storeFunctionSetModal"></store-function-set-modal>
+
+<!--    产品批发栏目设置-->
+    <store-wholesale-modal ref="modalForm2" @ok="modalFormOk1"></store-wholesale-modal>
   </a-card>
 </template>
 
@@ -391,6 +394,7 @@ import { filterDictText, initDictOptions } from '@/components/dict/JDictSelectUt
 import Vue from 'vue'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
 import StoreManageAuditModal from './modules/StoreManageAuditModal'
+import StoreWholesaleModal from './modules/StoreWholesaleModal'
 import StoreManageModal from './modules/StoreManageModal'
 import { colAuthFilter } from '@/utils/authFilter'
 import selectAddress from '@/components/selectAddress/selectAddress'
@@ -412,6 +416,7 @@ export default {
     StoreFunctionSetModal,
     StoreCashierRoutingList,
     StoreOrderSettingModal,
+    StoreWholesaleModal
   },
   inject: ['rush'],
   data() {
@@ -696,6 +701,11 @@ export default {
   },
 
   methods: {
+    handlePifa: function(record) {
+      this.$refs.modalForm2.edit(record)
+      this.$refs.modalForm2.title = '批发栏目设置'
+      this.$refs.modalForm2.disableSubmit = false
+    },
     changeCommand(record) {
       let modelInfo = {
         title: '点击确定将该店铺设为推荐',
@@ -932,6 +942,12 @@ export default {
           this.$message.warning(res.message)
         }
       })
+    },
+    modalFormOk1() {
+      // 新增/修改 成功时，重载列表
+      this.loadData()
+      //清空列表选中
+      this.onClearSelected()
     },
     showModal(item) {
       this.$refs.modalForm1.showModal(item)
