@@ -4,28 +4,18 @@
       <a-form-model ref="form" :model="model" :rules="validatorRules" slot="detail">
         <a-row>
           <a-col :span="24">
-            <a-form-model-item label="是否开启" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="productWholesaleStatus">
-              <j-switch v-model="model.productWholesaleStatus" :options='ynOptions'  ></j-switch>
+            <a-form-model-item label="是否开启栏目" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="productsSelectedStatus">
+              <j-switch v-model="model.productsSelectedStatus" :options='ynOptions' ></j-switch>
             </a-form-model-item>
           </a-col>
           <a-col :span="24">
-            <a-form-model-item label="栏目名称" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="productWholesaleTitle">
-              <a-input v-model="model.productWholesaleTitle" placeholder="请输入栏目名称"  ></a-input>
+            <a-form-model-item label="栏目名称" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="productsSelectedTitle">
+              <a-input v-model="model.productsSelectedTitle" placeholder="请输入栏目名称"  ></a-input>
             </a-form-model-item>
           </a-col>
           <a-col :span="24">
-            <a-form-model-item label="仅经销商" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="productWholesaleOnlyFranchiser">
-              <j-switch v-model="model.productWholesaleOnlyFranchiser" :options='ynOptions'  ></j-switch>
-            </a-form-model-item>
-          </a-col>
-          <a-col :span="24">
-            <a-form-model-item label="仅代理商" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="productWholesaleOnlyAgency">
-              <j-switch v-model="model.productWholesaleOnlyAgency" :options='ynOptions' ></j-switch>
-            </a-form-model-item>
-          </a-col>
-          <a-col :span="24">
-            <a-form-model-item label="申请海报" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="productWholesaleApplyPicture">
-              <j-image-upload isMultiple  v-model="model.productWholesaleApplyPicture" ></j-image-upload>
+            <a-form-model-item label="分享海报" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="productsSelectedSharePicture">
+              <j-image-upload isMultiple  v-model="model.productsSelectedSharePicture" ></j-image-upload>
             </a-form-model-item>
           </a-col>
         </a-row>
@@ -40,7 +30,7 @@
   import { validateDuplicateValue } from '@/utils/util'
 
   export default {
-    name: 'StoreWholesaleForm',
+    name: 'StoreManageBestSelectionForm',
     components: {
     },
     props: {
@@ -66,20 +56,14 @@
         },
         confirmLoading: false,
         validatorRules: {
-           productWholesaleStatus: [
-              { required: true, message: '请输入是否开启!'},
+           productsSelectedStatus: [
+              { required: true, message: '请输入是否开启栏目!'},
            ],
-           productWholesaleTitle: [
+           productsSelectedTitle: [
               { required: true, message: '请输入栏目名称!'},
            ],
-           productWholesaleOnlyFranchiser: [
-              { required: true, message: '请输入仅经销商!'},
-           ],
-           productWholesaleOnlyAgency: [
-              { required: true, message: '请输入仅代理商!'},
-           ],
-           productWholesaleApplyPicture: [
-              { required: true, message: '请输入申请海报!'},
+           productsSelectedSharePicture: [
+              { required: true, message: '请输入分享海报!'},
            ],
         },
         url: {

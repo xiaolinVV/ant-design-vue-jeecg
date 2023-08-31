@@ -352,7 +352,7 @@
                 <a @click="handlePifa(record)">产品批发栏目设置</a>
               </a-menu-item>
               <a-menu-item>
-                <a @click="storeFunctionSetModalClick(record)">臻选优品栏目设置</a>
+                <a @click="handleZxyp(record)">臻选优品栏目设置</a>
               </a-menu-item>
             </a-menu>
           </a-dropdown>
@@ -381,6 +381,9 @@
 
 <!--    产品批发栏目设置-->
     <store-wholesale-modal ref="modalForm2" @ok="modalFormOk1"></store-wholesale-modal>
+
+<!--    臻选优品栏目设置-->
+    <store-manage-best-selection-modal ref="modalForm3" @ok="modalFormOk1"></store-manage-best-selection-modal>
   </a-card>
 </template>
 
@@ -403,6 +406,7 @@ import StoreCashierSettingModal from './modules/StoreCashierSettingModal'
 import StoreOrderSettingModal from './modules/StoreOrderSettingModal'
 import StoreFunctionSetModal from './modules/StoreFunctionSetModal'
 import StoreCashierRoutingList from './StoreCashierRoutingList'
+import StoreManageBestSelectionModal from './modules/StoreManageBestSelectionModal'
 
 export default {
   name: 'StoreManageList',
@@ -416,7 +420,8 @@ export default {
     StoreFunctionSetModal,
     StoreCashierRoutingList,
     StoreOrderSettingModal,
-    StoreWholesaleModal
+    StoreWholesaleModal,
+    StoreManageBestSelectionModal
   },
   inject: ['rush'],
   data() {
@@ -705,6 +710,11 @@ export default {
       this.$refs.modalForm2.edit(record)
       this.$refs.modalForm2.title = '批发栏目设置'
       this.$refs.modalForm2.disableSubmit = false
+    },
+    handleZxyp: function(record) {
+      this.$refs.modalForm3.edit(record)
+      this.$refs.modalForm3.title = '臻选优品栏目设置'
+      this.$refs.modalForm3.disableSubmit = false
     },
     changeCommand(record) {
       let modelInfo = {
