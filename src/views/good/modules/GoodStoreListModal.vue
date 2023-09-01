@@ -134,7 +134,7 @@
               <a-card style="background-color: #cccccc">
                 <div v-if="specifications.length > 0">
                   <span style="color: #cf1322;font-weight: bold">批量设置：在下方栏中选择内容进行批量填充</span>
-                  <a-card style="margin-top: 20px;background-color: #c0ccda;">
+                  <a-card style="margin-top: 20px;background-color: #c0ccda; width: 100%">
                     <div style="display: flex;justify-content: space-between;">
                       <div>
                         <a-select
@@ -155,7 +155,7 @@
                           v-model="twoSpecification"
                           placeholder="请选择"
                           v-if="specifications.length == 2"
-                          style="margin-left: 20px;width: 120px"
+                          style="margin-left: 10px;width: 120px"
                         >
                           <a-select-option value="-1">全部</a-select-option>
                           <a-select-option
@@ -168,37 +168,37 @@
                         <a-input
                           placeholder="销售价"
                           v-model="setting.salesPrice"
-                          style="margin-left: 20px;width: 100px"
+                          style="margin-left: 10px;width: 100px"
                         ></a-input>
                         <a-input
                           placeholder="成本价"
                           v-model="setting.costPrice"
-                          style="margin-left: 20px;width: 100px"
+                          style="margin-left: 10px;width: 100px"
                         ></a-input>
                         <a-input
                           placeholder="会员价"
                           v-model="setting.vipPrice"
-                          style="margin-left: 20px;width: 100px"
+                          style="margin-left: 10px;width: 100px"
                         ></a-input>
                         <a-input
                           placeholder="库存"
                           v-model="setting.repertory"
-                          style="margin-left: 20px;width: 100px"
+                          style="margin-left: 10px;width: 100px"
                         ></a-input>
                         <a-input
                           placeholder="重量"
                           v-model="setting.weight"
-                          style="margin-left: 20px;width: 100px"
+                          style="margin-left: 10px;width: 100px"
                         ></a-input>
                         <a-input
                           placeholder="skuNo"
                           v-model="setting.skuNo"
-                          style="margin-left: 20px;width: 100px"
+                          style="margin-left: 10px;width: 100px"
                         ></a-input>
                         <a-input
                           placeholder="起批数量"
                           v-model="setting.minWholesaleNum"
-                          style="margin-left: 20px;width: 100px"
+                          style="margin-left: 10px;width: 100px"
                         ></a-input>
                       </div>
                       <div>
@@ -693,6 +693,9 @@ export default {
       }
       if (this.setting.skuNo) {
         item.skuNo = this.setting.skuNo
+      }
+      if (this.setting.minWholesaleNum) {
+        item.minWholesaleNum = this.setting.minWholesaleNum
       }
     },
     //商品数据统计
