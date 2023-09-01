@@ -12,13 +12,13 @@
 
         <a-form :form="form">
           <a-form-item label="是否开启" :label-col="labelCol" :wrapper-col="wrapperCol">
-            <j-switch v-model="productsSelectedStatus" :options='ynOptions'  ></j-switch>
+            <j-switch v-decorator="['productsSelectedStatus',{ rules: [{ required: true, message: '请输入选择是否开启!' }] },]" :options='ynOptions'  ></j-switch>
           </a-form-item>
           <a-form-item label="栏目名称" :label-col="labelCol" :wrapper-col="wrapperCol">
-            <a-input v-model="productsSelectedTitle" placeholder="请输入栏目名称"  ></a-input>
+            <a-input v-decorator="['productsSelectedTitle',{ rules: [{ required: true, message: '请输入栏目名称' }] },]" placeholder="请输入栏目名称"  ></a-input>
           </a-form-item>
           <a-form-item label="分享海报" :label-col="labelCol" :wrapper-col="wrapperCol">
-            <j-image-upload  v-model="productsSelectedSharePicture" ></j-image-upload>
+            <j-image-upload v-decorator="['productsSelectedSharePicture',{ rules: [{ required: true, message: '请上传分享海报' }] },]"  ></j-image-upload>
           </a-form-item>
           <a-form-item :label-col="labelCol" :wrapper-col="wrapperCol" v-if="titleLabel == '店铺'">
             <span slot="label">
