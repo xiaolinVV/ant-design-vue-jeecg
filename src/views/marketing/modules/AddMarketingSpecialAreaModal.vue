@@ -452,7 +452,7 @@
 
       <a-form-item label="开始时间" :label-col="labelCol" :wrapper-col="wrapperCol">
         <!--        :disabled="AllData.vouchersWay!=0" -->
-        <a-date-picker v-decorator="['startTime', { rules: [{ required: true, message: '请选择开始时间' }] }]" />
+        <a-date-picker v-decorator="['startTime', { rules: [{ required: true, message: '请选择开始时间' }] }]" format="YYYY-MM-DD HH:mm:ss" />
       </a-form-item>
       <a-form-item label="结束时间" :label-col="labelCol" :wrapper-col="wrapperCol" v-if="allData.validTime == 1">
         <!--        :disabled="AllData.vouchersWay!=0" -->
@@ -461,6 +461,7 @@
             'endTime',
             { rules: [{ required: allData.validTime == 1 ? true : false, message: '请选择结束时间' }] }
           ]"
+          format="YYYY-MM-DD HH:mm:ss"
         />
       </a-form-item>
       <a-form-item label="备注说明" :label-col="labelCol" :wrapper-col="wrapperCol">
