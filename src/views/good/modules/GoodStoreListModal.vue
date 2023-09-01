@@ -195,6 +195,11 @@
                           v-model="setting.skuNo"
                           style="margin-left: 20px;width: 100px"
                         ></a-input>
+                        <a-input
+                          placeholder="起批数量"
+                          v-model="setting.minWholesaleNum"
+                          style="margin-left: 20px;width: 100px"
+                        ></a-input>
                       </div>
                       <div>
                         <a-button type="primary" @click="submitInfo">确认</a-button>
@@ -231,6 +236,9 @@
                     </template>
                     <template slot="skuNo" slot-scope="text, record, index">
                       <a-input v-model="specificationsDecribes[index].skuNo"></a-input>
+                    </template>
+                    <template slot="minWholesaleNum" slot-scope="text, record, index">
+                      <a-input v-model="specificationsDecribes[index].minWholesaleNum"></a-input>
                     </template>
                     <template slot="imgUrl" slot-scope="text, record, index">
                       <kq-upload
@@ -277,6 +285,9 @@
                   <template slot="skuNo" slot-scope="text, record">
                     <a-input v-model="shopInfo[0].skuNo" :disabled="specifications.length != 0"></a-input>
                   </template>
+                  <template slot="minWholesaleNum" slot-scope="text, record, index">
+                    <a-input v-model="shopInfo[0].minWholesaleNum"></a-input>
+                  </template>
                 </a-table>
               </a-card>
             </div>
@@ -285,6 +296,14 @@
           <a-form-model-item :labelCol="labelCol" :wrapperCol="wrapperCol" prop="marketPrice" label="市场价">
             <a-input-number :min="0" :precision="2" v-model="model.marketPrice" style="width: 95%"></a-input-number>元
           </a-form-model-item>
+        </a-card>
+        <a-card title="批发设置" style="margin-top: 30px">
+          <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="代理商分佣比例">
+            <a-input-number v-model="model.productAgencyCommissionRate" placeholder="请输入代理商分佣比例" style="width: 100%" />
+          </a-form-item>
+          <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="店铺分佣比例">
+            <a-input-number v-model="model.productStoreCommissionRate" placeholder="请输入店铺分佣比例" style="width: 100%" />
+          </a-form-item>
         </a-card>
         <a-card title="服务承诺" style="margin-top: 30px">
           <a-form-model-item :labelCol="labelCol" :wrapperCol="wrapperCol" prop="distributionArray" label="配送方式">
@@ -430,7 +449,8 @@ export default {
           vipPrice: 0,
           repertory: 0,
           weight: 0,
-          skuNo: ''
+          skuNo: '',
+          // minWholesaleNum: 0
         }
       ],
       shopColumns: [
@@ -463,7 +483,12 @@ export default {
           title: 'skuNo编码',
           dataIndex: 'skuNo',
           scopedSlots: { customRender: 'skuNo' }
-        }
+        },
+        {
+          title: '起批数量',
+          dataIndex: 'minWholesaleNum',
+          scopedSlots: { customRender: 'minWholesaleNum' }
+        },
       ],
       specificationsColumns: [
         {
@@ -501,6 +526,11 @@ export default {
           scopedSlots: { customRender: 'skuNo' }
         },
         {
+          title: '起批数量',
+          dataIndex: 'minWholesaleNum',
+          scopedSlots: { customRender: 'minWholesaleNum' }
+        },
+        {
           title: '规格图',
           dataIndex: 'imgUrl',
           scopedSlots: { customRender: 'imgUrl' }
@@ -514,7 +544,8 @@ export default {
         weight: '',
         repertory: '',
         skuNo: '',
-        vipPrice: ''
+        vipPrice: '',
+        minWholesaleNum: ''
       },
       typeParam: {},
       goodTypeByTwoId: '',
@@ -574,14 +605,14 @@ export default {
       getAction(this.url.getStoreGoodTypeByTree, {
         storeManageId: this.storeInfo.key
       }).then(res => {
-        
+
         if (res.success) {
-          
+
           this.goodTypeTree2 = []
           this.$nextTick(() => {
             this.goodTypeTree2 = res.result
           })
-          
+
           console.log(this.goodTypeTree)
         } else {
           this.$message.warning(res.message)
