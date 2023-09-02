@@ -292,12 +292,12 @@ export default {
           align: 'center',
           dataIndex: 'denomination',
         },
-        {
-          title: '可选商品',
-          align: 'center',
-          dataIndex: 'goodCount',
-          scopedSlots: { customRender: 'goodCount' },
-        },
+        // {
+        //   title: '可选商品',
+        //   align: 'center',
+        //   dataIndex: 'goodCount',
+        //   scopedSlots: { customRender: 'goodCount' },
+        // },
         {
           title: '有效期开始',
           align: 'center',
