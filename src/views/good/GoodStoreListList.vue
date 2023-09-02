@@ -156,6 +156,7 @@ import GoodPriceModal from './modules/GoodPriceModal'
 import { JeecgListMixin } from '@/mixins/JeecgListMixin'
 import { getAction } from '@/api/manage'
 import StoreTree from '../common/StoreTree/StoreTree'
+import { filterObj, getUrlParams } from '@/utils/util'
 export default {
   name: 'GoodStoreListList',
   mixins: [JeecgListMixin],
@@ -360,6 +361,8 @@ export default {
       storeInfo: {
         key: '',
       },
+      isWholesale: '0', // 是否批发商品页面
+      isSelectedProducts: '0' // 是否甄选优品页面
     }
   },
   computed: {
@@ -367,7 +370,19 @@ export default {
       return `${window._CONFIG['domianURL']}/${this.url.importExcelUrl}`
     },
   },
-  created() {},
+  created() {
+    if (!this.disableMixinCreated) {
+      console.log(' -- mixin created -- ')
+      this.loadData()
+      //初始化字典配置 在自己页面定义
+      this.initDictConfig()
+
+      // 初始化url路径参数，用于判断是从哪个页面打开的
+      let pathQueryParam = getUrlParams()
+      this.isWholesale = pathQueryParam.isWholesale
+      this.isSelectedProducts = pathQueryParam.isSelectedProducts
+    }
+  },
   methods: {
     //启用
     updateStatus: function (id, status) {
@@ -515,7 +530,16 @@ export default {
         this.$message.warning('请先选择左侧店铺信息')
         return
       }
+      this.$refs.modalForm.isSelectedProducts = this.isSelectedProducts
+      this.$refs.modalForm.isWholesale = this.isWholesale
       this.$refs.modalForm.add(this.goodTypeParam, this.storeInfo)
+    },
+    handleEdit: function(record) {
+      this.$refs.modalForm.edit(record)
+      this.$refs.modalForm.isSelectedProducts = this.isSelectedProducts
+      this.$refs.modalForm.isWholesale = this.isWholesale
+      this.$refs.modalForm.title = '编辑'
+      this.$refs.modalForm.disableSubmit = false
     },
     getByGoodType(id, level) {
       console.log(id, '----', level)

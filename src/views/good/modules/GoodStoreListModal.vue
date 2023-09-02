@@ -191,13 +191,13 @@
                           style="margin-left: 10px;width: 100px"
                         ></a-input>
                         <a-input
-                          placeholder="skuNo"
-                          v-model="setting.skuNo"
+                          placeholder="起批数量"
+                          v-model="setting.minWholesaleNum"
                           style="margin-left: 10px;width: 100px"
                         ></a-input>
                         <a-input
-                          placeholder="起批数量"
-                          v-model="setting.minWholesaleNum"
+                          placeholder="skuNo"
+                          v-model="setting.skuNo"
                           style="margin-left: 10px;width: 100px"
                         ></a-input>
                       </div>
@@ -234,11 +234,11 @@
                     <template slot="weight" slot-scope="text, record, index">
                       <a-input v-model="specificationsDecribes[index].weight"></a-input>
                     </template>
-                    <template slot="skuNo" slot-scope="text, record, index">
-                      <a-input v-model="specificationsDecribes[index].skuNo"></a-input>
-                    </template>
                     <template slot="minWholesaleNum" slot-scope="text, record, index">
                       <a-input v-model="specificationsDecribes[index].minWholesaleNum"></a-input>
+                    </template>
+                    <template slot="skuNo" slot-scope="text, record, index">
+                      <a-input v-model="specificationsDecribes[index].skuNo"></a-input>
                     </template>
                     <template slot="imgUrl" slot-scope="text, record, index">
                       <kq-upload
@@ -282,11 +282,11 @@
                   <template slot="weight" slot-scope="text, record">
                     <a-input v-model="shopInfo[0].weight" :disabled="specifications.length != 0"></a-input>
                   </template>
+                  <template slot="minWholesaleNum" slot-scope="text, record, index">
+                    <a-input v-model="shopInfo[0].minWholesaleNum" :disabled="specifications.length != 0"></a-input>
+                  </template>
                   <template slot="skuNo" slot-scope="text, record">
                     <a-input v-model="shopInfo[0].skuNo" :disabled="specifications.length != 0"></a-input>
-                  </template>
-                  <template slot="minWholesaleNum" slot-scope="text, record, index">
-                    <a-input v-model="shopInfo[0].minWholesaleNum"></a-input>
                   </template>
                 </a-table>
               </a-card>
@@ -297,12 +297,17 @@
             <a-input-number :min="0" :precision="2" v-model="model.marketPrice" style="width: 95%"></a-input-number>元
           </a-form-model-item>
         </a-card>
-        <a-card title="批发设置" style="margin-top: 30px">
+        <a-card  title="产品批发" style="margin-top: 30px" v-if='isWholesale==="1"'>
           <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="代理商分佣比例">
             <a-input-number v-model="model.productAgencyCommissionRate" placeholder="请输入代理商分佣比例" style="width: 100%" />
           </a-form-item>
           <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="店铺分佣比例">
             <a-input-number v-model="model.productStoreCommissionRate" placeholder="请输入店铺分佣比例" style="width: 100%" />
+          </a-form-item>
+        </a-card>
+        <a-card  title="甄品优选" style="margin-top: 30px" v-if='isSelectedProducts==="1"'>
+          <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="分享分佣比例">
+            <a-input-number v-model="model.shareCommissionRate" placeholder="请输入分享分佣比例" style="width: 100%" />
           </a-form-item>
         </a-card>
         <a-card title="服务承诺" style="margin-top: 30px">
@@ -392,6 +397,8 @@ export default {
   components: { ATextarea, KqUpload },
   data() {
     return {
+      isWholesale: '0', // 是否批发商品页面
+      isSelectedProducts: '0', // 是否甄选优品页面
       goodTypeTree2:[],
       title: '商品添加',
       visible: false,
@@ -450,7 +457,7 @@ export default {
           repertory: 0,
           weight: 0,
           skuNo: '',
-          // minWholesaleNum: 0
+          minWholesaleNum: 1
         }
       ],
       shopColumns: [
@@ -480,14 +487,14 @@ export default {
           scopedSlots: { customRender: 'weight' }
         },
         {
-          title: 'skuNo编码',
-          dataIndex: 'skuNo',
-          scopedSlots: { customRender: 'skuNo' }
-        },
-        {
           title: '起批数量',
           dataIndex: 'minWholesaleNum',
           scopedSlots: { customRender: 'minWholesaleNum' }
+        },
+        {
+          title: 'skuNo编码',
+          dataIndex: 'skuNo',
+          scopedSlots: { customRender: 'skuNo' }
         },
       ],
       specificationsColumns: [
@@ -521,14 +528,14 @@ export default {
           scopedSlots: { customRender: 'weight' }
         },
         {
-          title: 'sku编码',
-          dataIndex: 'skuNo',
-          scopedSlots: { customRender: 'skuNo' }
-        },
-        {
           title: '起批数量',
           dataIndex: 'minWholesaleNum',
           scopedSlots: { customRender: 'minWholesaleNum' }
+        },
+        {
+          title: 'sku编码',
+          dataIndex: 'skuNo',
+          scopedSlots: { customRender: 'skuNo' }
         },
         {
           title: '规格图',
