@@ -198,6 +198,7 @@
   import UserRecycleBinModal from './modules/UserRecycleBinModal'
   import JSuperQuery from '@/components/jeecg/JSuperQuery'
   import JThirdAppButton from '@/components/jeecgbiz/thirdApp/JThirdAppButton'
+  import { getUrlParam } from '@/utils/util'
 
   export default {
     name: "UserList",
@@ -319,6 +320,9 @@
       importExcelUrl: function(){
         return `${window._CONFIG['domianURL']}/${this.url.importExcelUrl}`;
       }
+    },
+    mounted () {
+      // console.log('type===', this.$route.query.type || getUrlParam('type') || 'test');
     },
     methods: {
       getAvatarView: function (avatar) {

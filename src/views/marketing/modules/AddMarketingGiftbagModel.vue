@@ -773,6 +773,8 @@
           <!--          v-model="selectDateToTime"-->
           <a-range-picker
             v-decorator="['selectDateToTime', { rules: [{ required: true, message: '请选择礼包发行时间' }] }]"
+            format="YYYY-MM-DD HH:mm:ss" 
+            :show-time="{ format: 'HH:mm:ss' }"
           />
         </a-form-item>
         <a-form-item
