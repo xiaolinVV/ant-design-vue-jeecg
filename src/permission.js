@@ -22,7 +22,7 @@ router.beforeEach((to, from, next) => {
   }
   //update-end---author:scott ---date::2022-10-13  for：[jeecg-boot/issues/4091]多级路由缓存问题 #4091--------------
   
-  
+
   NProgress.start() // start progress bar
 
   if (Vue.ls.get(ACCESS_TOKEN)) {
@@ -40,15 +40,23 @@ router.beforeEach((to, from, next) => {
               }
               let constRoutes = [];
               constRoutes = generateIndexRouter(menuData);
+              let hasParamRouters = store.state.permission.hasParamRouters;
               // 添加主界面路由
               store.dispatch('UpdateAppRouter',  { constRoutes }).then(() => {
                 // 根据roles权限生成可访问的路由表
                 // 动态添加可访问路由表
                 router.addRoutes(store.getters.addRouters)
-                const redirect = decodeURIComponent(from.query.redirect || to.path)
-                if (to.path === redirect) {
+                // 对于有参数的权限路由的name进行查询设置才会跳转到对应的路由
+                let toObjCopy = Object.assign({}, to);
+                let paramRouterItem = hasParamRouters.find(item => item.path == toObjCopy.fullPath);
+                if (paramRouterItem) {
+                  toObjCopy.name = paramRouterItem.name;
+                  toObjCopy.query = {}
+                }
+                const redirect = decodeURIComponent(from.query.redirect || toObjCopy.path)
+                if (toObjCopy.path === redirect) {
                   // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record
-                  next({ ...to, replace: true })
+                  next({ ...toObjCopy, replace: true })
                 } else {
                   // 跳转到目的路由
                   next({ path: redirect })
