@@ -535,11 +535,11 @@ export default {
       this.$refs.modalForm.add(this.goodTypeParam, this.storeInfo)
     },
     handleEdit: function(record) {
-      this.$refs.modalForm.edit(record)
       this.$refs.modalForm.isSelectedProducts = this.isSelectedProducts
       this.$refs.modalForm.isWholesale = this.isWholesale
       this.$refs.modalForm.title = '编辑'
       this.$refs.modalForm.disableSubmit = false
+      this.$refs.modalForm.edit(record)
     },
     getByGoodType(id, level) {
       console.log(id, '----', level)

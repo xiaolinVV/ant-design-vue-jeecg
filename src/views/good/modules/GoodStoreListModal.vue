@@ -181,6 +181,12 @@
                           style="margin-left: 10px;width: 100px"
                         ></a-input>
                         <a-input
+                          v-if='isSelectedProducts === "1"'
+                          placeholder="黔行者大使价"
+                          v-model="setting.ambassadorPrice"
+                          style="margin-left: 10px;width: 100px"
+                        ></a-input>
+                        <a-input
                           placeholder="库存"
                           v-model="setting.repertory"
                           style="margin-left: 10px;width: 100px"
@@ -191,6 +197,7 @@
                           style="margin-left: 10px;width: 100px"
                         ></a-input>
                         <a-input
+                          v-if='isWholesale === "1"'
                           placeholder="起批数量"
                           v-model="setting.minWholesaleNum"
                           style="margin-left: 10px;width: 100px"
@@ -224,6 +231,9 @@
                     </template>
                     <template slot="vipPrice" slot-scope="text, record, index">
                       <a-input v-model="specificationsDecribes[index].vipPrice" @input="vipPriceChange"></a-input>
+                    </template>
+                    <template slot="ambassadorPrice" slot-scope="text, record, index">
+                      <a-input v-model="specificationsDecribes[index].ambassadorPrice" @input="ambassadorPriceChange"></a-input>
                     </template>
                     <template slot="costPrice" slot-scope="text, record, index">
                       <a-input v-model="specificationsDecribes[index].costPrice" @input="costPriceChange"></a-input>
@@ -272,6 +282,9 @@
                   </template>
                   <template slot="vipPrice" slot-scope="text, record">
                     <a-input v-model="shopInfo[0].vipPrice" :disabled="specifications.length != 0"></a-input>
+                  </template>
+                  <template slot="ambassadorPrice" slot-scope="text, record">
+                    <a-input v-model="shopInfo[0].ambassadorPrice" :disabled="specifications.length != 0"></a-input>
                   </template>
                   <template slot="costPrice" slot-scope="text, record">
                     <a-input v-model="shopInfo[0].costPrice" :disabled="specifications.length != 0"></a-input>
@@ -454,6 +467,7 @@ export default {
           salesPrice: 0,
           costPrice: 0,
           vipPrice: 0,
+          ambassadorPrice: 0,
           repertory: 0,
           weight: 0,
           skuNo: '',
@@ -487,17 +501,53 @@ export default {
           scopedSlots: { customRender: 'weight' }
         },
         {
-          title: '起批数量',
-          dataIndex: 'minWholesaleNum',
-          scopedSlots: { customRender: 'minWholesaleNum' }
-        },
-        {
           title: 'skuNo编码',
           dataIndex: 'skuNo',
           scopedSlots: { customRender: 'skuNo' }
         },
       ],
       specificationsColumns: [
+        {
+          title: '规格',
+          dataIndex: 'pName'
+        },
+        {
+          title: '销售价（元）',
+          dataIndex: 'salesPrice',
+          scopedSlots: { customRender: 'salesPrice' }
+        },
+        {
+          title: '成本价（元）',
+          dataIndex: 'costPrice',
+          scopedSlots: { customRender: 'costPrice' }
+        },
+        {
+          title: '会员价（元）',
+          dataIndex: 'vipPrice',
+          scopedSlots: { customRender: 'vipPrice' }
+        },
+        {
+          title: '库存',
+          dataIndex: 'repertory',
+          scopedSlots: { customRender: 'repertory' }
+        },
+        {
+          title: '重量',
+          dataIndex: 'weight',
+          scopedSlots: { customRender: 'weight' }
+        },
+        {
+          title: 'sku编码',
+          dataIndex: 'skuNo',
+          scopedSlots: { customRender: 'skuNo' }
+        },
+        {
+          title: '规格图',
+          dataIndex: 'imgUrl',
+          scopedSlots: { customRender: 'imgUrl' }
+        }
+      ],
+      wholesaleSpecificationsColumns: [
         {
           title: '规格',
           dataIndex: 'pName'
@@ -543,6 +593,126 @@ export default {
           scopedSlots: { customRender: 'imgUrl' }
         }
       ],
+      wholesaleShopColumns : [
+        {
+          title: '销售价（元）',
+          dataIndex: 'salesPrice',
+          scopedSlots: { customRender: 'salesPrice' }
+        },
+        {
+          title: '成本价（元）',
+          dataIndex: 'costPrice',
+          scopedSlots: { customRender: 'costPrice' }
+        },
+        {
+          title: '会员价（元）',
+          dataIndex: 'vipPrice',
+          scopedSlots: { customRender: 'vipPrice' }
+        },
+        {
+          title: '总库存',
+          dataIndex: 'repertory',
+          scopedSlots: { customRender: 'repertory' }
+        },
+        {
+          title: '重量',
+          dataIndex: 'weight',
+          scopedSlots: { customRender: 'weight' }
+        },
+        {
+          title: '起批数量',
+          dataIndex: 'minWholesaleNum',
+          scopedSlots: { customRender: 'minWholesaleNum' }
+        },
+        {
+          title: 'skuNo编码',
+          dataIndex: 'skuNo',
+          scopedSlots: { customRender: 'skuNo' }
+        },
+      ],
+      selectedProductsShopColumns: [
+          {
+            title: '销售价/普通会员价（元）',
+            dataIndex: 'salesPrice',
+            scopedSlots: { customRender: 'salesPrice' }
+          },
+          {
+            title: '成本价（元）',
+            dataIndex: 'costPrice',
+            scopedSlots: { customRender: 'costPrice' }
+          },
+          {
+            title: '会员价/黔行者称号（元）',
+            dataIndex: 'vipPrice',
+            scopedSlots: { customRender: 'vipPrice' }
+          },
+          {
+            title: '黔行者大使价（元）',
+            dataIndex: 'ambassadorPrice',
+            scopedSlots: { customRender: 'ambassadorPrice' }
+          },
+          {
+            title: '总库存',
+            dataIndex: 'repertory',
+            scopedSlots: { customRender: 'repertory' }
+          },
+          {
+            title: '重量',
+            dataIndex: 'weight',
+            scopedSlots: { customRender: 'weight' }
+          },
+          {
+            title: 'skuNo编码',
+            dataIndex: 'skuNo',
+            scopedSlots: { customRender: 'skuNo' }
+          }
+        ],
+      selectedProductsSpecificationsColumns: [
+        {
+          title: '规格',
+          dataIndex: 'pName'
+        },
+        {
+          title: '销售价/普通会员价（元）',
+          dataIndex: 'salesPrice',
+          scopedSlots: { customRender: 'salesPrice' }
+        },
+        {
+          title: '成本价（元）',
+          dataIndex: 'costPrice',
+          scopedSlots: { customRender: 'costPrice' }
+        },
+        {
+          title: '会员价/黔行者称号（元）',
+          dataIndex: 'vipPrice',
+          scopedSlots: { customRender: 'vipPrice' }
+        },
+        {
+          title: '黔行者大使价（元）',
+          dataIndex: 'ambassadorPrice',
+          scopedSlots: { customRender: 'ambassadorPrice' }
+        },
+        {
+          title: '库存',
+          dataIndex: 'repertory',
+          scopedSlots: { customRender: 'repertory' }
+        },
+        {
+          title: '重量',
+          dataIndex: 'weight',
+          scopedSlots: { customRender: 'weight' }
+        },
+        {
+          title: 'sku编码',
+          dataIndex: 'skuNo',
+          scopedSlots: { customRender: 'skuNo' }
+        },
+        {
+          title: '规格图',
+          dataIndex: 'imgUrl',
+          scopedSlots: { customRender: 'imgUrl' }
+        }
+      ],
       oneSpecification: '-1',
       twoSpecification: '-1',
       setting: {
@@ -566,7 +736,12 @@ export default {
       storeInfo: {}
     }
   },
-  created() {},
+  created() {
+
+  },
+  computed() {
+
+  },
   methods: {
     commitmentCustomersArrayChange(e) {
       console.log(e)
@@ -732,6 +907,19 @@ export default {
       }
       this.shopInfo[0].vipPrice = minVipPrice.toString() + '-' + maxVipPrice.toString()
     },
+    ambassadorPriceChange() {
+      let minAmbassadorPrice = parseFloat(this.specificationsDecribes[0].ambassadorPrice)
+      let maxAmbassadorPrice = parseFloat(this.specificationsDecribes[0].ambassadorPrice)
+      for (let sp of this.specificationsDecribes) {
+        if (minAmbassadorPrice > parseFloat(sp.ambassadorPrice)) {
+          minAmbassadorPrice = parseFloat(sp.ambassadorPrice)
+        }
+        if (maxAmbassadorPrice < parseFloat(sp.ambassadorPrice)) {
+          maxAmbassadorPrice = parseFloat(sp.ambassadorPrice)
+        }
+      }
+      this.shopInfo[0].ambassadorPrice = minAmbassadorPrice.toString() + '-' + maxAmbassadorPrice.toString()
+    },
     costPriceChange() {
       let minPrice = parseFloat(this.specificationsDecribes[0].costPrice)
       let maxPrice = parseFloat(this.specificationsDecribes[0].costPrice)
@@ -860,6 +1048,21 @@ export default {
       this.uploadImgs = []
       this.providerTemplateOption = []
       this.model.commitmentCustomersArray = []
+
+      if (this.isWholesale === '1') {
+        this.shopColumns.splice(0,this.shopColumns.length);
+        this.wholesaleShopColumns.forEach(e => this.shopColumns.push(e))
+        this.specificationsColumns.splice(0,this.specificationsColumns.length)
+        this.wholesaleSpecificationsColumns.forEach(e => this.specificationsColumns.push(e))
+      }
+
+      if (this.isSelectedProducts === '1') {
+        this.shopColumns.splice(0,this.shopColumns.length);
+        this.specificationsColumns.splice(0,this.specificationsColumns.length)
+
+        this.selectedProductsShopColumns.forEach(e => this.shopColumns.push(e))
+        this.selectedProductsSpecificationsColumns.forEach(e => this.specificationsColumns.push(e))
+      }
 
       if (this.model.id) {
         console.log(this.model)
