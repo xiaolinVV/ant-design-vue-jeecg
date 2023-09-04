@@ -18,7 +18,7 @@ const getters = {
     return state.enhance.enhanceJs[code]
   },
   sysSafeMode: state => state.user.sysSafeMode,
-
+  hasParamRouters: state => state.permission.hasParamRouters,
 }
 
 export default getters
