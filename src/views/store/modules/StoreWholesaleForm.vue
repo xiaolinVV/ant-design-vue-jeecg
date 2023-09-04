@@ -28,6 +28,21 @@
               <j-image-upload  v-model="model.productWholesaleApplyPicture" ></j-image-upload>
             </a-form-model-item>
           </a-col>
+          <a-col :span="24">
+            <a-form-model-item label="分享海报" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="productWholesaleSharePicture">
+              <j-image-upload  v-model="model.productWholesaleSharePicture" ></j-image-upload>
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="24">
+            <a-form-model-item label="代理商申请内容" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="productWholesaleApplyContent">
+              <JEditor v-model="model.productWholesaleApplyContent"> </JEditor>
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="24">
+            <a-form-model-item label="经销商申请内容" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="productFranchiserApplyContent">
+              <JEditor v-model="model.productFranchiserApplyContent"> </JEditor>
+            </a-form-model-item>
+          </a-col>
         </a-row>
       </a-form-model>
     </j-form-container>
@@ -79,7 +94,16 @@
               { required: true, message: '请输入仅代理商!'},
            ],
            productWholesaleApplyPicture: [
-              { required: true, message: '请输入申请海报!'},
+              { required: true, message: '请上传申请海报!'},
+           ],
+          productWholesaleSharePicture: [
+              { required: true, message: '请上传分享海报!'},
+           ],
+          productWholesaleApplyContent: [
+              { required: true, message: '请输入申请内容!'},
+           ],
+          productFranchiserApplyContent: [
+              { required: true, message: '请输入申请内容!'},
            ],
         },
         url: {

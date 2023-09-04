@@ -26,6 +26,21 @@
           <a-form-item label="申请海报" :label-col="labelCol" :wrapper-col="wrapperCol">
             <j-image-upload  v-decorator="['productWholesaleApplyPicture',{ rules: [{ required: true, message: '请上传申请海报!' }] },]" ></j-image-upload>
           </a-form-item>
+          <a-col :span="24">
+            <a-form-model-item label="分享海报" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="productWholesaleSharePicture">
+              <j-image-upload  v-model="model.productWholesaleSharePicture" ></j-image-upload>
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="24">
+            <a-form-model-item label="代理商申请内容" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="productWholesaleApplyContent">
+              <JEditor v-model="model.productWholesaleApplyContent"> </JEditor>
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="24">
+            <a-form-model-item label="经销商申请内容" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="productFranchiserApplyContent">
+              <JEditor v-model="model.productFranchiserApplyContent"> </JEditor>
+            </a-form-model-item>
+          </a-col>
           <a-form-item :label-col="labelCol" :wrapper-col="wrapperCol" v-if="titleLabel == '店铺'">
             <span slot="label">
               <span class="dataCheckedStar">
