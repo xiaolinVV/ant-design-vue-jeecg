@@ -21,16 +21,16 @@
         <a-input style="width:200px" placeholder="请输入卡名称" v-decorator="rules.carName"> </a-input>
       </a-form-item>
 
-      <a-form-item :label-col="labelCol" :wrapper-col="wrapperCol" label="面额">
-        <a-input-number
-          :min="0"
-          :precision="2"
-          style="width: 200px;"
-          placeholder="请输入面额"
-          v-decorator="rules.denomination"
-        >
-        </a-input-number>
-      </a-form-item>
+<!--      <a-form-item :label-col="labelCol" :wrapper-col="wrapperCol" label="面额">-->
+<!--        <a-input-number-->
+<!--          :min="0"-->
+<!--          :precision="2"-->
+<!--          style="width: 200px;"-->
+<!--          placeholder="请输入面额"-->
+<!--          v-decorator="rules.denomination"-->
+<!--        >-->
+<!--        </a-input-number>-->
+<!--      </a-form-item>-->
 
       <a-form-item :label-col="labelCol" :wrapper-col="wrapperCol" label="升级代理商">
         <a-input-number
