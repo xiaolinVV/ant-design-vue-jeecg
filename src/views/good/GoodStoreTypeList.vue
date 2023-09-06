@@ -224,6 +224,7 @@
     methods: {
       handleAdd: function() {
         this.$refs.modalForm.add()
+        this.$refs.modalForm.type = this.type
         this.$refs.modalForm.title = title
         this.$refs.modalForm.title = '新增'
         this.$refs.modalForm.disableSubmit = false
