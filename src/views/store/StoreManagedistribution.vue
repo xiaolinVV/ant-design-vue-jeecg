@@ -17,8 +17,10 @@
       <a-table
         ref="table"
         size="middle"
+        :rowKey="record => record.id"
         :columns="columns"
         :dataSource="dataSource"
+        :pagination="pagination"
         :loading="loading"
         bordered
         :rowSelection="rowSelection"
