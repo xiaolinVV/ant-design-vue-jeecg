@@ -784,9 +784,17 @@ export default {
       }
     },
        getStoreGoodTypeByTree() {
-      getAction(this.url.getStoreGoodTypeByTree, {
-        storeManageId: this.storeInfo.key
-      }).then(res => {
+         let param = {
+           storeManageId: this.storeInfo.key
+         }
+         if (this.isWholesale === '1') {
+           param.type = '1'
+         }
+         if (this.isWholesale === '1') {
+           param.type = '2'
+         }
+
+      getAction(this.url.getStoreGoodTypeByTree, param).then(res => {
 
         if (res.success) {
 
