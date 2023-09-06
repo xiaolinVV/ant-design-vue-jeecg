@@ -90,7 +90,7 @@
     <div>
       <a-modal title="" v-model="visible1" @ok="hideModal1()" okText="保存" cancelText="取消">
         <input style="display: none" :value="StoreManageId" placeholder="id" />
-        <p>注：因考虑实际送货路况，配送费计算按步行距离，非地图直线距离。</p>
+<!--        <p>注：因考虑实际送货路况，配送费计算按步行距离，非地图直线距离。</p>-->
         <!--<a-textarea-->
         <!--placeholder="设置计费规则"-->
         <!--v-model="accountingRules"-->
