@@ -316,6 +316,7 @@
       initDictConfig() {
       },
       modalFormOk(formData, arr) {
+        this.loadData()
         if (!formData.id) {
           this.addOk(formData, arr)
         } else {
