@@ -276,15 +276,21 @@ export default {
       this.loading = true
       getAction(this.url.list).then(res => {
         if (res.success) {
-          let sz = [res.result]
-          this.dataSource = sz
-          this.pagination.total = res.result.total
-        }
-        if (res.code === 510) {
+          //update-begin---author:zhangyafei    Date:20201118  for：适配不分页的数据列表------------
+          this.dataSource = res.result.records || res.result
+          if (res.result.total) {
+            this.ipagination.total = res.result.total
+          } else {
+            this.ipagination.total = 0
+          }
+          //update-end---author:zhangyafei    Date:20201118  for：适配不分页的数据列表------------
+        } else {
           this.$message.warning(res.message)
         }
-        this.loading = false
       })
+        .finally(() => {
+          this.loading = false
+        })
     },
     //启动停用弹窗
     showModal(id) {
