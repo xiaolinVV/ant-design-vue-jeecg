@@ -197,8 +197,13 @@
         expandedRowKeys: [],
         hasChildrenField: 'hasChild',
         pidField: 'parentId',
-        dictOptions: {}
+        dictOptions: {},
+        type: '0'
       }
+    },
+    created() {
+      let pathQueryParam = getUrlParams()
+      this.type = pathQueryParam.type
     },
     computed: {
       importExcelUrl() {
@@ -216,10 +221,17 @@
       }
     },
     methods: {
+      handleAdd: function() {
+        this.$refs.modalForm.add()
+        this.$refs.modalForm.title = title
+        this.$refs.modalForm.title = '新增'
+        this.$refs.modalForm.disableSubmit = false
+      },
 
       handleEdit: function(record, title = '') {
         this.$refs.modalForm.edit(record)
         this.$refs.modalForm.title = title
+        this.$refs.modalForm.type = this.type
         this.$refs.modalForm.disableSubmit = false
       },
 
