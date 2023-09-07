@@ -791,7 +791,7 @@ export default {
          if (this.isWholesale === '1') {
            param.type = '1'
          }
-         if (this.isWholesale === '1') {
+         if (this.isSelectedProducts === '1') {
            param.type = '2'
          }
 

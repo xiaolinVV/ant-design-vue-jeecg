@@ -551,9 +551,16 @@ export default {
         this.modalFormOk()
     },
     getStoreGoodTypeByTree() {
-      getAction(this.url.getStoreGoodTypeByTree, {
-        storeManageId: this.storeInfo.key,
-      }).then((res) => {
+      let param = {
+        storeManageId: this.storeInfo.key
+      }
+      if (this.isWholesale === '1') {
+        param.type = '1'
+      }
+      if (this.isSelectedProducts === '1') {
+        param.type = '2'
+      }
+      getAction(this.url.getStoreGoodTypeByTree,param ).then((res) => {
         if (res.success) {
           this.goodTypeTree = res.result
           console.log(this.goodTypeTree)
