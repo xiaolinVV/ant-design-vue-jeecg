@@ -78,8 +78,8 @@
            <a-input v-decorator="[ 'hasChild', validatorRules.hasChild]" placeholder="请输入是否有子节点"></a-input>
          </a-form-item>
 
-        <a-form-item label="所属店铺" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <j-dict-select-tag v-if='this.userRole.indexOf("Merchant") === -1' v-decorator="['sysUserId', { rules: [{ required: true, message: '请选择店铺' }] }]"  laceholder="请选择店铺" dictCode="store_manage,store_name,sys_user_id"/>
+        <a-form-item v-if='this.userRole.indexOf("Merchant") === -1' label="所属店铺" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <j-dict-select-tag  v-decorator="['sysUserId', { rules: [{ required: true, message: '请选择店铺' }] }]"  laceholder="请选择店铺" dictCode="store_manage,store_name,sys_user_id"/>
         </a-form-item>
 
         <!-- <a-form-item label="停用说明" :labelCol="labelCol" :wrapperCol="wrapperCol">
