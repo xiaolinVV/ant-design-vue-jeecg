@@ -1065,7 +1065,7 @@ export default {
         console.log(record)
         await this.getMemberDesignationListBySort(record.sort, record.memberDesignationGroupId)
         record.isAverage = record.isAverage == 1 ? true : false
-        record.isGetTeamAgency = record.isGetTeamAgency === 1 ? true : false
+        record.isGetTeamAgency = record.isGetTeamAgency == 1 ? true : false
         record.isPastDueControl = record.isPastDueControl == 1 ? true : false
         record.isPastDueWarn = record.isPastDueWarn == 1 ? true : false
 
