@@ -271,7 +271,7 @@
               </a-checkbox>
             </div>
             <div>
-              <a-checkbox v-model="model.isGetTeamAgency"> 自动获取团队代理商身份 </a-checkbox>
+              <a-checkbox v-model="model.isGetTeamAgency"> 自动获取团队批发代理商身份 </a-checkbox>
             </div>
           </div>
           <div class="sjtj" v-if="lowLevelDividendsOptions.length > 0">
