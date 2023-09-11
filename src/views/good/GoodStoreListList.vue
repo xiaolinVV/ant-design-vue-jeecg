@@ -572,7 +572,7 @@ export default {
       this.isSelectedProducts = pathQueryParam.isSelectedProducts
 
       // 动态切换表头
-      if (this.isSelectedProducts === 1){
+      if (this.isSelectedProducts === '1'){
         this.columns.splice(0,this.columns.length);
         this.selectedProductsColumns.forEach(e => this.columns.push(e))
       }
