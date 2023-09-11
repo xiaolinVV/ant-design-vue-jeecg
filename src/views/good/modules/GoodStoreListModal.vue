@@ -1185,6 +1185,9 @@ export default {
           this.model.detailsImages = JSON.stringify(this.detailsImages)
           this.model.specifications = JSON.stringify(this.specifications)
 
+          this.model.isWholesale = this.isWholesale
+          this.model.isSelectedProducts = this.isSelectedProducts
+
           this.model.specificationsDecribes = JSON.stringify(this.specificationsDecribes)
           this.model.goodTypeId = this.goodTypeByTwoId
           this.model.commitmentCustomers = JSON.stringify(this.model.commitmentCustomersArray)
