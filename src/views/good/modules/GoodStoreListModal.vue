@@ -328,7 +328,7 @@
             <a-checkbox-group v-model="distributionArray" @change="commitmentCustomersArrayChange">
               <a-checkbox value="0">快递</a-checkbox>
               <a-checkbox value="1">自提</a-checkbox>
-              <a-checkbox value="2">配送</a-checkbox>
+              <a-checkbox value="2">同城配送</a-checkbox>
             </a-checkbox-group>
           </a-form-model-item>
           <a-form-model-item :labelCol="labelCol" :wrapperCol="wrapperCol" prop="storeTemplateId" label="运费模板">
