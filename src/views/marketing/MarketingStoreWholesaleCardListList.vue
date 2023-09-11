@@ -185,11 +185,11 @@ export default {
           align: 'center',
           dataIndex: 'carName'
         },
-        {
-          title: '面额',
-          align: 'center',
-          dataIndex: 'denomination'
-        },
+        // {
+        //   title: '面额',
+        //   align: 'center',
+        //   dataIndex: 'denomination'
+        // },
         // {
         //   title: '可选商品',
         //   align: 'center',
