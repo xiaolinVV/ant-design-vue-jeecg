@@ -633,7 +633,7 @@ export default {
       ],
       selectedProductsShopColumns: [
           {
-            title: '销售价/普通会员价（元）',
+            title: '普通会员价（元）',
             dataIndex: 'salesPrice',
             scopedSlots: { customRender: 'salesPrice' }
           },
@@ -643,7 +643,7 @@ export default {
             scopedSlots: { customRender: 'costPrice' }
           },
           {
-            title: '会员价/黔行者称号（元）',
+            title: '黔行者称号价（元）',
             dataIndex: 'vipPrice',
             scopedSlots: { customRender: 'vipPrice' }
           },
@@ -674,7 +674,7 @@ export default {
           dataIndex: 'pName'
         },
         {
-          title: '销售价/普通会员价（元）',
+          title: '普通会员价（元）',
           dataIndex: 'salesPrice',
           scopedSlots: { customRender: 'salesPrice' }
         },
@@ -684,7 +684,7 @@ export default {
           scopedSlots: { customRender: 'costPrice' }
         },
         {
-          title: '会员价/黔行者称号（元）',
+          title: '黔行者称号价（元）',
           dataIndex: 'vipPrice',
           scopedSlots: { customRender: 'vipPrice' }
         },
