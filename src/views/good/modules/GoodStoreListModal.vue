@@ -723,6 +723,7 @@ export default {
         repertory: '',
         skuNo: '',
         vipPrice: '',
+        ambassadorPrice: '',
         minWholesaleNum: ''
       },
       typeParam: {},
@@ -865,6 +866,7 @@ export default {
       this.vipPriceChange()
       this.repertoryChange()
       this.costPriceChange()
+      this.ambassadorPriceChange()
     },
     setShuju(item) {
       if (this.setting.salesPrice) {
@@ -872,6 +874,9 @@ export default {
       }
       if (this.setting.vipPrice) {
         item.vipPrice = this.setting.vipPrice
+      }
+      if (this.setting.ambassadorPrice) {
+        item.ambassadorPrice = this.setting.ambassadorPrice
       }
       if (this.setting.costPrice) {
         item.costPrice = this.setting.costPrice
@@ -962,6 +967,7 @@ export default {
               pName: sp.pName,
               salesPrice: 0,
               vipPrice: 0,
+              ambassadorPrice: 0,
               costPrice: 0,
               weight: 0,
               repertory: 0,
@@ -977,6 +983,7 @@ export default {
                 pName: sp.pName + ',' + sp2.pName,
                 salesPrice: 0,
                 vipPrice: 0,
+                ambassadorPrice: 0,
                 costPrice: 0,
                 weight: 0,
                 repertory: 0,
@@ -1002,6 +1009,7 @@ export default {
         pName: '',
         salesPrice: 0,
         vipPrice: 0,
+        ambassadorPrice: 0,
         costPrice: 0,
         weight: 0,
         repertory: 0,
@@ -1114,6 +1122,7 @@ export default {
           {
             salesPrice: 0,
             vipPrice: 0,
+            ambassadorPrice: 0,
             costPrice: 0,
             repertory: 0,
             weight: 0,
