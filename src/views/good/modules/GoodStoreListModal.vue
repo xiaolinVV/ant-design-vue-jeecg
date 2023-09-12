@@ -322,6 +322,9 @@
           <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="分享分佣比例">
             <a-input-number v-model="model.shareCommissionRate" placeholder="请输入分享分佣比例" style="width: 100%" />
           </a-form-item>
+          <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="店铺分佣比例">
+            <a-input-number v-model="model.selectedStoreCommissionRate" placeholder="请输入店铺分佣比例" style="width: 100%" />
+          </a-form-item>
         </a-card>
         <a-card title="服务承诺" style="margin-top: 30px">
           <a-form-model-item :labelCol="labelCol" :wrapperCol="wrapperCol" prop="distributionArray" label="配送方式">
