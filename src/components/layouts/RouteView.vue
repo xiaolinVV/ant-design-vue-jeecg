@@ -1,9 +1,9 @@
 <template>
   <div class="main">
   <keep-alive :include="includedComponents">
-    <router-view v-if="keepAlive" />
+    <router-view v-if="keepAlive" :key="$route.fullPath" />
   </keep-alive>
-  <router-view v-if="!keepAlive" />
+  <router-view v-if="!keepAlive" :key="$route.fullPath"/>
   </div>
 </template>
 

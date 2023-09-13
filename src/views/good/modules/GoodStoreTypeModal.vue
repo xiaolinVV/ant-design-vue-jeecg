@@ -78,6 +78,10 @@
            <a-input v-decorator="[ 'hasChild', validatorRules.hasChild]" placeholder="请输入是否有子节点"></a-input>
          </a-form-item>
 
+        <a-form-item v-if='this.userRole.indexOf("Merchant") === -1' label="所属店铺" :labelCol="labelCol" :wrapperCol="wrapperCol">
+          <j-dict-select-tag  v-decorator="['sysUserId', { rules: [{ required: true, message: '请选择店铺' }] }]"  laceholder="请选择店铺" dictCode="store_manage,store_name,sys_user_id"/>
+        </a-form-item>
+
         <!-- <a-form-item label="停用说明" :labelCol="labelCol" :wrapperCol="wrapperCol">
            <a-input v-decorator="[ 'stopRemark', validatorRules.stopRemark]" placeholder="请输入停用说明"></a-input>
          </a-form-item>-->
@@ -111,6 +115,8 @@
     data () {
       return {
         form: this.$form.createForm(this),
+        userRole: this.userInfo().userRole,
+        type: '0',
         title:"操作",
         width:800,
         visible: false,
@@ -264,7 +270,9 @@
           this.model.level=record.level;
         }
 
-        this.model.sysUserId = this.userInfo().id;//获取userID
+        if (!this.model.sysUserId){
+           this.model.sysUserId = this.userInfo().id;//获取userID
+        }
         console.log("this.model.sysUserId",this.model.sysUserId)
         //预览显示图片
         if(record.hasOwnProperty("id")){
@@ -299,6 +307,7 @@
             let old_pid = this.model[this.pidField]
             let formData = Object.assign(this.model, values);
             let new_pid = this.model[this.pidField]
+            formData.type = that.type
             console.log("表单提交数据",formData)
             httpAction(httpurl,formData,method).then((res)=>{
               if(res.success){

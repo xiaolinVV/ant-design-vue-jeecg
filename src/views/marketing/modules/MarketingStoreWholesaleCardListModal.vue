@@ -80,8 +80,8 @@
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label="礼品卡说明">
-          <a-input placeholder="请输入礼品卡说明" v-decorator="['carExplain', {}]" />
+          label="批发卡说明">
+          <a-input placeholder="请输入批发卡说明" v-decorator="['carExplain', {}]" />
         </a-form-item>
         <a-form-item
           :labelCol="labelCol"
@@ -113,7 +113,7 @@
   import moment from "moment"
 
   export default {
-    name: "MarketingStoreGiftCardListModal",
+    name: "MarketingStoreWholesaleCardListModal",
     data () {
       return {
         title:"操作",
@@ -136,7 +136,7 @@
           add: "/marketing/marketingStoreGiftCardList/add",
           edit: "/marketing/marketingStoreGiftCardList/edit",
         },
-        cardType:"0",
+        cardType:"1",
       }
     },
     created () {
@@ -181,8 +181,8 @@
             formData.startTime = formData.startTime?formData.startTime.format('YYYY-MM-DD HH:mm:ss'):null;
             formData.endTime = formData.endTime?formData.endTime.format('YYYY-MM-DD HH:mm:ss'):null;
 
-            formData.cardType = that.cardType
             console.log(formData)
+            formData.cardType = that.cardType
             httpAction(httpurl,formData,method).then((res)=>{
               if(res.success){
                 that.$message.success(res.message);

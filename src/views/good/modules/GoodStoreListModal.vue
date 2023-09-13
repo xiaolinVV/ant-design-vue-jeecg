@@ -134,7 +134,7 @@
               <a-card style="background-color: #cccccc">
                 <div v-if="specifications.length > 0">
                   <span style="color: #cf1322;font-weight: bold">批量设置：在下方栏中选择内容进行批量填充</span>
-                  <a-card style="margin-top: 20px;background-color: #c0ccda;">
+                  <a-card style="margin-top: 20px;background-color: #c0ccda; width: 100%">
                     <div style="display: flex;justify-content: space-between;">
                       <div>
                         <a-select
@@ -155,7 +155,7 @@
                           v-model="twoSpecification"
                           placeholder="请选择"
                           v-if="specifications.length == 2"
-                          style="margin-left: 20px;width: 120px"
+                          style="margin-left: 10px;width: 120px"
                         >
                           <a-select-option value="-1">全部</a-select-option>
                           <a-select-option
@@ -168,32 +168,44 @@
                         <a-input
                           placeholder="销售价"
                           v-model="setting.salesPrice"
-                          style="margin-left: 20px;width: 100px"
+                          style="margin-left: 10px;width: 100px"
                         ></a-input>
                         <a-input
                           placeholder="成本价"
                           v-model="setting.costPrice"
-                          style="margin-left: 20px;width: 100px"
+                          style="margin-left: 10px;width: 100px"
                         ></a-input>
                         <a-input
                           placeholder="会员价"
                           v-model="setting.vipPrice"
-                          style="margin-left: 20px;width: 100px"
+                          style="margin-left: 10px;width: 100px"
+                        ></a-input>
+                        <a-input
+                          v-if='isSelectedProducts === "1"'
+                          placeholder="黔行者大使价"
+                          v-model="setting.ambassadorPrice"
+                          style="margin-left: 10px;width: 100px"
                         ></a-input>
                         <a-input
                           placeholder="库存"
                           v-model="setting.repertory"
-                          style="margin-left: 20px;width: 100px"
+                          style="margin-left: 10px;width: 100px"
                         ></a-input>
                         <a-input
                           placeholder="重量"
                           v-model="setting.weight"
-                          style="margin-left: 20px;width: 100px"
+                          style="margin-left: 10px;width: 100px"
+                        ></a-input>
+                        <a-input
+                          v-if='isWholesale === "1"'
+                          placeholder="起批数量"
+                          v-model="setting.minWholesaleNum"
+                          style="margin-left: 10px;width: 100px"
                         ></a-input>
                         <a-input
                           placeholder="skuNo"
                           v-model="setting.skuNo"
-                          style="margin-left: 20px;width: 100px"
+                          style="margin-left: 10px;width: 100px"
                         ></a-input>
                       </div>
                       <div>
@@ -220,6 +232,9 @@
                     <template slot="vipPrice" slot-scope="text, record, index">
                       <a-input v-model="specificationsDecribes[index].vipPrice" @input="vipPriceChange"></a-input>
                     </template>
+                    <template slot="ambassadorPrice" slot-scope="text, record, index">
+                      <a-input v-model="specificationsDecribes[index].ambassadorPrice" @input="ambassadorPriceChange"></a-input>
+                    </template>
                     <template slot="costPrice" slot-scope="text, record, index">
                       <a-input v-model="specificationsDecribes[index].costPrice" @input="costPriceChange"></a-input>
                     </template>
@@ -228,6 +243,9 @@
                     </template>
                     <template slot="weight" slot-scope="text, record, index">
                       <a-input v-model="specificationsDecribes[index].weight"></a-input>
+                    </template>
+                    <template slot="minWholesaleNum" slot-scope="text, record, index">
+                      <a-input v-model="specificationsDecribes[index].minWholesaleNum"></a-input>
                     </template>
                     <template slot="skuNo" slot-scope="text, record, index">
                       <a-input v-model="specificationsDecribes[index].skuNo"></a-input>
@@ -265,6 +283,9 @@
                   <template slot="vipPrice" slot-scope="text, record">
                     <a-input v-model="shopInfo[0].vipPrice" :disabled="specifications.length != 0"></a-input>
                   </template>
+                  <template slot="ambassadorPrice" slot-scope="text, record">
+                    <a-input v-model="shopInfo[0].ambassadorPrice" :disabled="specifications.length != 0"></a-input>
+                  </template>
                   <template slot="costPrice" slot-scope="text, record">
                     <a-input v-model="shopInfo[0].costPrice" :disabled="specifications.length != 0"></a-input>
                   </template>
@@ -273,6 +294,9 @@
                   </template>
                   <template slot="weight" slot-scope="text, record">
                     <a-input v-model="shopInfo[0].weight" :disabled="specifications.length != 0"></a-input>
+                  </template>
+                  <template slot="minWholesaleNum" slot-scope="text, record, index">
+                    <a-input v-model="shopInfo[0].minWholesaleNum" :disabled="specifications.length != 0"></a-input>
                   </template>
                   <template slot="skuNo" slot-scope="text, record">
                     <a-input v-model="shopInfo[0].skuNo" :disabled="specifications.length != 0"></a-input>
@@ -286,11 +310,28 @@
             <a-input-number :min="0" :precision="2" v-model="model.marketPrice" style="width: 95%"></a-input-number>元
           </a-form-model-item>
         </a-card>
+        <a-card  title="产品批发" style="margin-top: 30px" v-if='isWholesale==="1"'>
+          <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="代理商分佣比例">
+            <a-input-number v-model="model.productAgencyCommissionRate" placeholder="请输入代理商分佣比例" style="width: 100%" />
+          </a-form-item>
+          <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="店铺分佣比例">
+            <a-input-number v-model="model.productStoreCommissionRate" placeholder="请输入店铺分佣比例" style="width: 100%" />
+          </a-form-item>
+        </a-card>
+        <a-card  title="甄品优选" style="margin-top: 30px" v-if='isSelectedProducts==="1"'>
+          <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="分享分佣比例">
+            <a-input-number v-model="model.shareCommissionRate" placeholder="请输入分享分佣比例" style="width: 100%" />
+          </a-form-item>
+          <a-form-item :labelCol="labelCol" :wrapperCol="wrapperCol" label="店铺分佣比例">
+            <a-input-number v-model="model.selectedStoreCommissionRate" placeholder="请输入店铺分佣比例" style="width: 100%" />
+          </a-form-item>
+        </a-card>
         <a-card title="服务承诺" style="margin-top: 30px">
           <a-form-model-item :labelCol="labelCol" :wrapperCol="wrapperCol" prop="distributionArray" label="配送方式">
             <a-checkbox-group v-model="distributionArray" @change="commitmentCustomersArrayChange">
               <a-checkbox value="0">快递</a-checkbox>
               <a-checkbox value="1">自提</a-checkbox>
+              <a-checkbox value="2">同城配送</a-checkbox>
             </a-checkbox-group>
           </a-form-model-item>
           <a-form-model-item :labelCol="labelCol" :wrapperCol="wrapperCol" prop="storeTemplateId" label="运费模板">
@@ -373,6 +414,8 @@ export default {
   components: { ATextarea, KqUpload },
   data() {
     return {
+      isWholesale: '0', // 是否批发商品页面
+      isSelectedProducts: '0', // 是否甄选优品页面
       goodTypeTree2:[],
       title: '商品添加',
       visible: false,
@@ -428,9 +471,11 @@ export default {
           salesPrice: 0,
           costPrice: 0,
           vipPrice: 0,
+          ambassadorPrice: 0,
           repertory: 0,
           weight: 0,
-          skuNo: ''
+          skuNo: '',
+          minWholesaleNum: 1
         }
       ],
       shopColumns: [
@@ -463,7 +508,7 @@ export default {
           title: 'skuNo编码',
           dataIndex: 'skuNo',
           scopedSlots: { customRender: 'skuNo' }
-        }
+        },
       ],
       specificationsColumns: [
         {
@@ -506,6 +551,172 @@ export default {
           scopedSlots: { customRender: 'imgUrl' }
         }
       ],
+      wholesaleSpecificationsColumns: [
+        {
+          title: '规格',
+          dataIndex: 'pName'
+        },
+        {
+          title: '销售价（元）',
+          dataIndex: 'salesPrice',
+          scopedSlots: { customRender: 'salesPrice' }
+        },
+        {
+          title: '成本价（元）',
+          dataIndex: 'costPrice',
+          scopedSlots: { customRender: 'costPrice' }
+        },
+        {
+          title: '批发价（元）',
+          dataIndex: 'vipPrice',
+          scopedSlots: { customRender: 'vipPrice' }
+        },
+        {
+          title: '库存',
+          dataIndex: 'repertory',
+          scopedSlots: { customRender: 'repertory' }
+        },
+        {
+          title: '重量',
+          dataIndex: 'weight',
+          scopedSlots: { customRender: 'weight' }
+        },
+        {
+          title: '起批数量',
+          dataIndex: 'minWholesaleNum',
+          scopedSlots: { customRender: 'minWholesaleNum' }
+        },
+        {
+          title: 'sku编码',
+          dataIndex: 'skuNo',
+          scopedSlots: { customRender: 'skuNo' }
+        },
+        {
+          title: '规格图',
+          dataIndex: 'imgUrl',
+          scopedSlots: { customRender: 'imgUrl' }
+        }
+      ],
+      wholesaleShopColumns : [
+        {
+          title: '销售价（元）',
+          dataIndex: 'salesPrice',
+          scopedSlots: { customRender: 'salesPrice' }
+        },
+        {
+          title: '成本价（元）',
+          dataIndex: 'costPrice',
+          scopedSlots: { customRender: 'costPrice' }
+        },
+        {
+          title: '批发价（元）',
+          dataIndex: 'vipPrice',
+          scopedSlots: { customRender: 'vipPrice' }
+        },
+        {
+          title: '总库存',
+          dataIndex: 'repertory',
+          scopedSlots: { customRender: 'repertory' }
+        },
+        {
+          title: '重量',
+          dataIndex: 'weight',
+          scopedSlots: { customRender: 'weight' }
+        },
+        {
+          title: '起批数量',
+          dataIndex: 'minWholesaleNum',
+          scopedSlots: { customRender: 'minWholesaleNum' }
+        },
+        {
+          title: 'skuNo编码',
+          dataIndex: 'skuNo',
+          scopedSlots: { customRender: 'skuNo' }
+        },
+      ],
+      selectedProductsShopColumns: [
+          {
+            title: '普通会员价（元）',
+            dataIndex: 'salesPrice',
+            scopedSlots: { customRender: 'salesPrice' }
+          },
+          {
+            title: '成本价（元）',
+            dataIndex: 'costPrice',
+            scopedSlots: { customRender: 'costPrice' }
+          },
+          {
+            title: '黔行者称号价（元）',
+            dataIndex: 'vipPrice',
+            scopedSlots: { customRender: 'vipPrice' }
+          },
+          {
+            title: '黔行者大使价（元）',
+            dataIndex: 'ambassadorPrice',
+            scopedSlots: { customRender: 'ambassadorPrice' }
+          },
+          {
+            title: '总库存',
+            dataIndex: 'repertory',
+            scopedSlots: { customRender: 'repertory' }
+          },
+          {
+            title: '重量',
+            dataIndex: 'weight',
+            scopedSlots: { customRender: 'weight' }
+          },
+          {
+            title: 'skuNo编码',
+            dataIndex: 'skuNo',
+            scopedSlots: { customRender: 'skuNo' }
+          }
+        ],
+      selectedProductsSpecificationsColumns: [
+        {
+          title: '规格',
+          dataIndex: 'pName'
+        },
+        {
+          title: '普通会员价（元）',
+          dataIndex: 'salesPrice',
+          scopedSlots: { customRender: 'salesPrice' }
+        },
+        {
+          title: '成本价（元）',
+          dataIndex: 'costPrice',
+          scopedSlots: { customRender: 'costPrice' }
+        },
+        {
+          title: '黔行者称号价（元）',
+          dataIndex: 'vipPrice',
+          scopedSlots: { customRender: 'vipPrice' }
+        },
+        {
+          title: '黔行者大使价（元）',
+          dataIndex: 'ambassadorPrice',
+          scopedSlots: { customRender: 'ambassadorPrice' }
+        },
+        {
+          title: '库存',
+          dataIndex: 'repertory',
+          scopedSlots: { customRender: 'repertory' }
+        },
+        {
+          title: '重量',
+          dataIndex: 'weight',
+          scopedSlots: { customRender: 'weight' }
+        },
+        {
+          title: 'sku编码',
+          dataIndex: 'skuNo',
+          scopedSlots: { customRender: 'skuNo' }
+        },
+        {
+          title: '规格图',
+          dataIndex: 'imgUrl',
+          scopedSlots: { customRender: 'imgUrl' }
+        }
+      ],
       oneSpecification: '-1',
       twoSpecification: '-1',
       setting: {
@@ -514,7 +725,9 @@ export default {
         weight: '',
         repertory: '',
         skuNo: '',
-        vipPrice: ''
+        vipPrice: '',
+        ambassadorPrice: '',
+        minWholesaleNum: ''
       },
       typeParam: {},
       goodTypeByTwoId: '',
@@ -528,7 +741,12 @@ export default {
       storeInfo: {}
     }
   },
-  created() {},
+  created() {
+
+  },
+  computed() {
+
+  },
   methods: {
     commitmentCustomersArrayChange(e) {
       console.log(e)
@@ -571,17 +789,25 @@ export default {
       }
     },
        getStoreGoodTypeByTree() {
-      getAction(this.url.getStoreGoodTypeByTree, {
-        storeManageId: this.storeInfo.key
-      }).then(res => {
-        
+         let param = {
+           storeManageId: this.storeInfo.key
+         }
+         if (this.isWholesale === '1') {
+           param.type = '1'
+         }
+         if (this.isSelectedProducts === '1') {
+           param.type = '2'
+         }
+
+      getAction(this.url.getStoreGoodTypeByTree, param).then(res => {
+
         if (res.success) {
-          
+
           this.goodTypeTree2 = []
           this.$nextTick(() => {
             this.goodTypeTree2 = res.result
           })
-          
+
           console.log(this.goodTypeTree)
         } else {
           this.$message.warning(res.message)
@@ -643,6 +869,7 @@ export default {
       this.vipPriceChange()
       this.repertoryChange()
       this.costPriceChange()
+      this.ambassadorPriceChange()
     },
     setShuju(item) {
       if (this.setting.salesPrice) {
@@ -650,6 +877,9 @@ export default {
       }
       if (this.setting.vipPrice) {
         item.vipPrice = this.setting.vipPrice
+      }
+      if (this.setting.ambassadorPrice) {
+        item.ambassadorPrice = this.setting.ambassadorPrice
       }
       if (this.setting.costPrice) {
         item.costPrice = this.setting.costPrice
@@ -662,6 +892,9 @@ export default {
       }
       if (this.setting.skuNo) {
         item.skuNo = this.setting.skuNo
+      }
+      if (this.setting.minWholesaleNum) {
+        item.minWholesaleNum = this.setting.minWholesaleNum
       }
     },
     //商品数据统计
@@ -690,6 +923,19 @@ export default {
         }
       }
       this.shopInfo[0].vipPrice = minVipPrice.toString() + '-' + maxVipPrice.toString()
+    },
+    ambassadorPriceChange() {
+      let minAmbassadorPrice = parseFloat(this.specificationsDecribes[0].ambassadorPrice)
+      let maxAmbassadorPrice = parseFloat(this.specificationsDecribes[0].ambassadorPrice)
+      for (let sp of this.specificationsDecribes) {
+        if (minAmbassadorPrice > parseFloat(sp.ambassadorPrice)) {
+          minAmbassadorPrice = parseFloat(sp.ambassadorPrice)
+        }
+        if (maxAmbassadorPrice < parseFloat(sp.ambassadorPrice)) {
+          maxAmbassadorPrice = parseFloat(sp.ambassadorPrice)
+        }
+      }
+      this.shopInfo[0].ambassadorPrice = minAmbassadorPrice.toString() + '-' + maxAmbassadorPrice.toString()
     },
     costPriceChange() {
       let minPrice = parseFloat(this.specificationsDecribes[0].costPrice)
@@ -724,6 +970,7 @@ export default {
               pName: sp.pName,
               salesPrice: 0,
               vipPrice: 0,
+              ambassadorPrice: 0,
               costPrice: 0,
               weight: 0,
               repertory: 0,
@@ -739,6 +986,7 @@ export default {
                 pName: sp.pName + ',' + sp2.pName,
                 salesPrice: 0,
                 vipPrice: 0,
+                ambassadorPrice: 0,
                 costPrice: 0,
                 weight: 0,
                 repertory: 0,
@@ -764,6 +1012,7 @@ export default {
         pName: '',
         salesPrice: 0,
         vipPrice: 0,
+        ambassadorPrice: 0,
         costPrice: 0,
         weight: 0,
         repertory: 0,
@@ -820,6 +1069,21 @@ export default {
       this.providerTemplateOption = []
       this.model.commitmentCustomersArray = []
 
+      if (this.isWholesale === '1') {
+        this.shopColumns.splice(0,this.shopColumns.length);
+        this.wholesaleShopColumns.forEach(e => this.shopColumns.push(e))
+        this.specificationsColumns.splice(0,this.specificationsColumns.length)
+        this.wholesaleSpecificationsColumns.forEach(e => this.specificationsColumns.push(e))
+      }
+
+      if (this.isSelectedProducts === '1') {
+        this.shopColumns.splice(0,this.shopColumns.length);
+        this.specificationsColumns.splice(0,this.specificationsColumns.length)
+
+        this.selectedProductsShopColumns.forEach(e => this.shopColumns.push(e))
+        this.selectedProductsSpecificationsColumns.forEach(e => this.specificationsColumns.push(e))
+      }
+
       if (this.model.id) {
         console.log(this.model)
 
@@ -861,6 +1125,7 @@ export default {
           {
             salesPrice: 0,
             vipPrice: 0,
+            ambassadorPrice: 0,
             costPrice: 0,
             repertory: 0,
             weight: 0,
@@ -931,6 +1196,9 @@ export default {
           this.model.mainImages = JSON.stringify(this.mainImages)
           this.model.detailsImages = JSON.stringify(this.detailsImages)
           this.model.specifications = JSON.stringify(this.specifications)
+
+          this.model.isWholesale = this.isWholesale
+          this.model.isSelectedProducts = this.isSelectedProducts
 
           this.model.specificationsDecribes = JSON.stringify(this.specificationsDecribes)
           this.model.goodTypeId = this.goodTypeByTwoId

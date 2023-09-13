@@ -17,8 +17,10 @@
       <a-table
         ref="table"
         size="middle"
+        :rowKey="record => record.id"
         :columns="columns"
         :dataSource="dataSource"
+        :pagination="pagination"
         :loading="loading"
         bordered
         :rowSelection="rowSelection"
@@ -88,7 +90,7 @@
     <div>
       <a-modal title="" v-model="visible1" @ok="hideModal1()" okText="保存" cancelText="取消">
         <input style="display: none" :value="StoreManageId" placeholder="id" />
-        <p>注：因考虑实际送货路况，配送费计算按步行距离，非地图直线距离。</p>
+<!--        <p>注：因考虑实际送货路况，配送费计算按步行距离，非地图直线距离。</p>-->
         <!--<a-textarea-->
         <!--placeholder="设置计费规则"-->
         <!--v-model="accountingRules"-->
@@ -136,7 +138,7 @@ const rowSelection = {
 }
 export default {
   name: 'StoreManagedistribution',
-  // mixins: [JeecgListMixin],
+  mixins: [JeecgListMixin],
   components: {
     ACollapsePanel,
     StoreManageAuditModal,
@@ -272,20 +274,6 @@ export default {
     this.loadData()
   },
   methods: {
-    loadData() {
-      this.loading = true
-      getAction(this.url.list).then(res => {
-        if (res.success) {
-          let sz = [res.result]
-          this.dataSource = sz
-          this.pagination.total = res.result.total
-        }
-        if (res.code === 510) {
-          this.$message.warning(res.message)
-        }
-        this.loading = false
-      })
-    },
     //启动停用弹窗
     showModal(id) {
       this.StoreManageId = id

@@ -4,8 +4,8 @@
       基础设置
     </div>
     <a-form :form="form" class="wrap">
-      <a-form-item :label-col="labelCol" :wrapper-col="wrapperCol" label="礼品卡别名">
-        <a-input placeholder="请输入礼品卡别名,字数不能超过4个字" v-decorator="rules.anotherName"> </a-input>
+      <a-form-item :label-col="labelCol" :wrapper-col="wrapperCol" label="批发卡别名">
+        <a-input placeholder="请输入批发卡别名,字数不能超过4个字" v-decorator="rules.anotherName"> </a-input>
       </a-form-item>
 
       <a-form-item :label-col="labelCol" :wrapper-col="wrapperCol" label="客户端显示">
@@ -105,10 +105,10 @@ import Vue from 'vue'
 import { getAction, postAction } from '@/api/manage'
 
 export default {
-  name: 'MarketingStoreGiftCardBaseSettingList',
+  name: 'MarketingStoreWholesaleCardBaseSettingList',
   data() {
     return {
-      cardType: '0',
+      cardType: '1',
       headers: '',
       form: this.$form.createForm(this),
       labelCol: Object.freeze({ span: 3 }),
@@ -118,7 +118,7 @@ export default {
           'anotherName',
           {
             rules: [
-              { required: true, message: '请输入礼品卡别名' },
+              { required: true, message: '请输入批发卡别名' },
               {
                 max: 4,
                 message: '字数不能超过4个字'

@@ -15,13 +15,13 @@
             </a-form-item>
           </a-col>
           <a-col :md="8" :sm="8">
-            <a-form-item label="礼品卡编号">
-              <a-input placeholder="请输入礼品卡编号" v-model="queryParam.cardSerialNumber"></a-input>
+            <a-form-item label="批发卡编号">
+              <a-input placeholder="请输入批发卡编号" v-model="queryParam.cardSerialNumber"></a-input>
             </a-form-item>
           </a-col>
           <a-col :md="8" :sm="8">
-            <a-form-item label="礼品卡号">
-              <a-input placeholder="请输入礼品卡号" v-model="queryParam.serialNumber"></a-input>
+            <a-form-item label="批发卡号">
+              <a-input placeholder="请输入批发卡号" v-model="queryParam.serialNumber"></a-input>
             </a-form-item>
           </a-col>
           <a-col :md="8" :sm="8" v-if="!isMerchant">
@@ -89,10 +89,10 @@
     <div class="table-operator">
       <!-- <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button> -->
       <a-button type="primary" icon="download" :loading="exportLoading"
-        @click="handleExportXls('店铺营销-店铺礼品卡-会员礼品卡')">导出</a-button>
+        @click="handleExportXls('店铺营销-店铺批发卡-会员批发卡')">导出</a-button>
       <a-button type="primary" @click="searchQuery" icon="search">查询</a-button>
       <a-button type="primary" @click="searchReset" icon="reload" style="margin-left: 8px">重置</a-button>
-      <a-button type="primary" @click="sendCouponModel" icon="plus" >送礼品卡</a-button>
+      <a-button type="primary" @click="sendCouponModel" icon="plus" >送批发卡</a-button>
       <!-- <a-upload
         name="file"
         :showUploadList="false"
@@ -169,13 +169,13 @@
     <marketingStoreGiftCardMemberList-modal ref="modalForm" @ok="modalFormOk"></marketingStoreGiftCardMemberList-modal>
     <MarketingStoreGiftCardCanSelectGoods ref="modalForm3"></MarketingStoreGiftCardCanSelectGoods>
 
-    <!-- 送礼品卡弹窗 -->
+    <!-- 送批发卡弹窗 -->
     <marketing-store-gift-card-member-list-list-send-couponModel ref="MarketingStoreGiftCardMemberListListSendCouponModel" @success="loadData">
     </marketing-store-gift-card-member-list-list-send-couponModel>
 
     <!-- 编辑 -->
     <a-modal
-      title="编辑会员礼品卡"
+      title="编辑会员批发卡"
       :width="800"
       v-model="visible"
       okText="确认修改"
@@ -214,10 +214,10 @@ import MarketingStoreGiftCardMemberListModal from './modules/MarketingStoreGiftC
 import MarketingStoreGiftCardCanSelectGoods from './modules/MarketingStoreGiftCardCanSelectGoods'
 import { JeecgListMixin } from '@/mixins/JeecgListMixin'
 import { filterObj } from '@/utils/util'
-import MarketingStoreGiftCardMemberListListSendCouponModel from './modules/MarketingStoreGiftCardMemberListListSendCouponModel'
+import MarketingStoreGiftCardMemberListListSendCouponModel from './modules/MarketingStoreWholesaleCardMemberListListSendCouponModel'
 
 export default {
-  name: 'MarketingStoreGiftCardMemberListList',
+  name: 'MarketingStoreWholesaleCardMemberListList',
   mixins: [JeecgListMixin],
   components: {
     MarketingStoreGiftCardMemberListModal,
@@ -227,7 +227,7 @@ export default {
   data () {
     return {
       visible: false,
-      description: '店铺会员礼品卡管理页面',
+      description: '店铺会员批发卡管理页面',
       // 表头
       columns: [
         {
@@ -268,12 +268,12 @@ export default {
           dataIndex: 'getTime',
         },
         {
-          title: '礼品卡编号',
+          title: '批发卡编号',
           align: 'center',
           dataIndex: 'cardSerialNumber',
         },
         {
-          title: '礼品卡号',
+          title: '批发卡号',
           align: 'center',
           dataIndex: 'serialNumber',
         },
@@ -292,12 +292,12 @@ export default {
           align: 'center',
           dataIndex: 'denomination',
         },
-        {
-          title: '可选商品',
-          align: 'center',
-          dataIndex: 'goodCount',
-          scopedSlots: { customRender: 'goodCount' },
-        },
+        // {
+        //   title: '可选商品',
+        //   align: 'center',
+        //   dataIndex: 'goodCount',
+        //   scopedSlots: { customRender: 'goodCount' },
+        // },
         {
           title: '有效期开始',
           align: 'center',
@@ -334,7 +334,7 @@ export default {
       isMerchant: false,
       form: this.$form.createForm(this, { denomination: 0 }),
       confirmLoading: false,
-      cardType: '0'
+      cardType: '1'
     }
   },
   created () {
@@ -376,9 +376,9 @@ export default {
     showModal (record) {
       this.$refs.modalForm3.showModal(record)
     },
-    //送礼品卡弹窗
+    //送批发卡弹窗
     sendCouponModel(value = {}){
-        value.modalTitle = '送礼品卡'
+        value.modalTitle = '送批发卡'
         this.$refs.MarketingStoreGiftCardMemberListListSendCouponModel.open(value);
     },
     /**查询栏时间区间查询*/

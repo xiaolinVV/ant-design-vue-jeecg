@@ -119,7 +119,7 @@
                 v-if="
                 maxHeight == null ||
                 (rowIndex >= parseInt(`${(scrollTop-rowHeight) / rowHeight}`) &&
-                  (parseInt(`${scrollTop / rowHeight}`) + 9) > rowIndex)
+                  (parseInt(`${scrollTop / rowHeight}`) + scrollPageSize) > rowIndex)
               "
                 :id="`${caseId}tbody-tr-${rowIndex}`"
                 :data-idx="rowIndex"
@@ -1010,6 +1010,11 @@
         calcWidth += ')'
         // console.log('calcWidth: ', calcWidth)
         return calcWidth
+      },
+      // 计算每次滚动的条数，添加0.5是因为当滚动的内容至少要超出行高的一半，不然会容易复现滚动时最后一行有时会不显示的问题
+      scrollPageSize () {
+        let temp = Math.ceil(this.maxHeight / this.rowHeight + 0.5);
+        return temp >= 5 ? temp : 9;
       }
     },
     // 侦听器

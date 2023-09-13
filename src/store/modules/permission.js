@@ -54,13 +54,18 @@ function filterAsyncRouter(routerMap, roles) {
 const permission = {
   state: {
     routers: constantRouterMap,
-    addRouters: []
+    addRouters: [],
+    hasParamRouters: []
   },
   mutations: {
     SET_ROUTERS: (state, data) => {
       state.addRouters = data
       state.routers = constantRouterMap.concat(data)
       //console.log('-----mutations---SET_ROUTERS----', data)
+    },
+    SET_HASPARAMROUTERS: (state, data) => {
+      state.hasParamRouters.push(...data)
+      //console.log('-----mutations---SET_HASPARAMROUTER----', data)
     }
   },
   actions: {
@@ -81,6 +86,13 @@ const permission = {
         //const [ roles ] = routes.constRoutes
         let routelist = routes.constRoutes;
         commit('SET_ROUTERS', routelist)
+        resolve()
+      })
+    },
+    // 对于权限路由有携带参数的路由进行存储
+    saveHasParamRouters ({ commit }, data) {
+      return new Promise(resolve => {
+        commit('SET_HASPARAMROUTERS', data.paramRouters)
         resolve()
       })
     }

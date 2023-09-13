@@ -104,6 +104,7 @@
 <script>
 
   import { getAction, deleteAction } from '@/api/manage'
+  import { filterObj, getUrlParams } from '@/utils/util'
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
   import GoodStoreTypeModal from './modules/GoodStoreTypeModal'
   import { initDictOptions, filterMultiDictText } from '@/components/dict/JDictSelectUtil'
@@ -197,8 +198,13 @@
         expandedRowKeys: [],
         hasChildrenField: 'hasChild',
         pidField: 'parentId',
-        dictOptions: {}
+        dictOptions: {},
+        type: '0'
       }
+    },
+    created() {
+      let pathQueryParam = getUrlParams()
+      this.type = pathQueryParam.type
     },
     computed: {
       importExcelUrl() {
@@ -216,10 +222,18 @@
       }
     },
     methods: {
+      handleAdd: function() {
+        this.$refs.modalForm.add()
+        this.$refs.modalForm.type = this.type
+        this.$refs.modalForm.title = this.type
+        this.$refs.modalForm.title = '新增'
+        this.$refs.modalForm.disableSubmit = false
+      },
 
       handleEdit: function(record, title = '') {
         this.$refs.modalForm.edit(record)
         this.$refs.modalForm.title = title
+        this.$refs.modalForm.type = this.type
         this.$refs.modalForm.disableSubmit = false
       },
 
@@ -302,6 +316,7 @@
       initDictConfig() {
       },
       modalFormOk(formData, arr) {
+        this.loadData()
         if (!formData.id) {
           this.addOk(formData, arr)
         } else {

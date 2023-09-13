@@ -3,6 +3,7 @@ import * as api from '@/api/api'
 import { isURL } from '@/utils/validate'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
 import onlineCommons from '@jeecg/antd-online-mini'
+import store from '@/store'
 
 export function timeFix() {
   const time = new Date()
@@ -103,6 +104,7 @@ export function generateIndexRouter(data) {
 
 function  generateChildRouters (data) {
   const routers = [];
+  const paramRouters = [];
   for (let item of data) {
     let component = "";
     if(item.component.indexOf("layouts")>=0){
@@ -138,6 +140,16 @@ function  generateChildRouters (data) {
       componentPath = onlineCommons.OnlCgreportAutoList
     }else{
       componentPath = resolve => require(['@/' + component+'.vue'], resolve)
+    }
+
+    let questionMarkIndex = item.name.indexOf('?');
+    if (questionMarkIndex > -1 && item.path.indexOf('/') > -1) {
+      store.dispatch('saveHasParamRouters',  {paramRouters :[
+        {
+          path: item.path,
+          name: item.name
+        }
+      ]});
     }
 
     let menu =  {

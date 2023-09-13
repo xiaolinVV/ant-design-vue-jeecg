@@ -3,7 +3,7 @@
     :confirmLoading="confirmLoading"
     :title="title"
     :visible="visible"
-    :width="1200"
+    :width="1500"
     @cancel="handleCancel"
     @ok="handleOk"
     cancelText="关闭"
@@ -11,24 +11,31 @@
   >
 
         <a-form :form="form">
-          <a-form-item label="获赠账号" :label-col="labelCol" :wrapper-col="wrapperCol">
-            <a-select
-              show-search
-              v-decorator="[ 'memberListId', { rules: [{ required: true, message: '请输入获赠账号!' }] } ]"
-              placeholder="请输入"
-              style="width: 100%"
-              :filter-option="false"
-              :not-found-content="fetching ? undefined : null"
-              @search="fetchPhone"
-              @change="phoneChange"
-            >
-              <a-spin v-if="fetching" slot="notFoundContent" size="small" />
-              <a-select-option v-for="d in phoneList" :key="d.id" v-show="d.NAME && d.id">
-                {{d.NAME}}
-              </a-select-option>
-            </a-select>
-      </a-form-item>
-          <a-form-item :label-col="labelCol" :wrapper-col="wrapperCol" v-if="titleLabel == '礼品卡'">
+          <a-form-item label="是否开启" :label-col="labelCol" :wrapper-col="wrapperCol">
+            <j-switch  v-decorator="['productWholesaleStatus',{ rules: [{ required: true, message: '请输入选择是否开启!' }] },]" :options='ynOptions'  ></j-switch>
+          </a-form-item>
+          <a-form-item label="栏目名称" :label-col="labelCol" :wrapper-col="wrapperCol">
+            <a-input v-decorator="['productWholesaleTitle',{ rules: [{ required: true, message: '请输入栏目名称!' }] },]" placeholder="请输入栏目名称"  ></a-input>
+          </a-form-item>
+          <a-form-item label="仅经销商" :label-col="labelCol" :wrapper-col="wrapperCol">
+            <j-switch v-decorator="['productWholesaleOnlyFranchiser',{ rules: [{ required: true, message: '请选择是否开启!' }] },]" :options='ynOptions'  ></j-switch>
+          </a-form-item>
+          <a-form-item label="仅代理商" :label-col="labelCol" :wrapper-col="wrapperCol">
+            <j-switch v-decorator="['productWholesaleOnlyAgency',{ rules: [{ required: true, message: '请选择是否开启!' }] },]" :options='ynOptions' ></j-switch>
+          </a-form-item>
+          <a-form-item label="申请海报" :label-col="labelCol" :wrapper-col="wrapperCol">
+            <j-image-upload  v-decorator="['productWholesaleApplyPicture',{ rules: [{ required: true, message: '请上传申请海报!' }] },]" ></j-image-upload>
+          </a-form-item>
+          <a-form-item label="分享海报" :label-col="labelCol" :wrapper-col="wrapperCol">
+            <j-image-upload  v-decorator="['productWholesaleSharePicture',{ rules: [{ required: true, message: '请上传分享海报!' }] },]" ></j-image-upload>
+          </a-form-item>
+          <a-form-item label="代理商申请内容" :label-col="labelCol" :wrapper-col="wrapperCol">
+              <JEditor v-decorator="['productWholesaleApplyContent',{ rules: [{ required: true, message: '请输入代理商申请内容!' }] },]"> </JEditor>
+          </a-form-item>
+          <a-form-item label="经销商申请内容" :label-col="labelCol" :wrapper-col="wrapperCol">
+            <JEditor v-decorator="['productFranchiserApplyContent',{ rules: [{ required: true, message: '请输入经销商申请内容!' }] },]"> </JEditor>
+          </a-form-item>
+          <a-form-item :label-col="labelCol" :wrapper-col="wrapperCol" v-if="titleLabel == '店铺'">
             <span slot="label">
               <span class="dataCheckedStar">
                 *
@@ -36,28 +43,29 @@
               {{titleLabel}}
             </span>
             <a-button @click="PopUp(1)">
-              选择礼品卡
+              选择店铺
             </a-button>
             <a-table :columns="couponListColumns" :dataSource="couponListData" :pagination="{pageSize:5}"
                      :scroll="{x:couponListColumns.length * columnsWidth}"
                      bordered
                      rowKey="id"
                      style="margin-top: 20px;">
-              <template slot="applyGood" slot-scope="text, record, index">
-                <a @click="showGoodInformation(record.id)">{{record.applyGood}}</a>
-              </template>
-              <template slot="distributedAmount" slot-scope="text, record, index">
-                <a-input-number
-                  :min="1"
-                  :precision="0"
-                  @change="e => certificateHandleChange(e, record.id, 'distributedAmount','couponListData')"
-                  v-model="record.distributedAmount"></a-input-number>
-              </template>
-              <template slot="status" slot-scope="text">
-                <div v-if="text == 0">已失效</div>
-                <div v-if="text == 1">可使用</div>
-                <div v-if="text == 2">已赠送</div>
-              </template>
+<!--              <template slot="applyGood" slot-scope="text, record, index">-->
+<!--                <a @click="showGoodInformation(record.id)">{{record.applyGood}}</a>-->
+<!--              </template>-->
+<!--              <template slot="distributedAmount" slot-scope="text, record, index">-->
+<!--                <a-input-number-->
+<!--                  :min="1"-->
+<!--                  :precision="0"-->
+<!--                  @change="e => certificateHandleChange(e, record.id, 'distributedAmount','couponListData')"-->
+<!--                  v-model="record.distributedAmount"></a-input-number>-->
+<!--              </template>-->
+<!--              <template slot="status" slot-scope="text">-->
+<!--                <div v-if="text == 0">已失效</div>-->
+<!--                <div v-if="text == 1">可使用</div>-->
+<!--                <div v-if="text == 2">已赠送</div>-->
+<!--              </template>-->
+
               <template slot="operation" slot-scope="text, record">
                 <a-popconfirm
                   @confirm="() => onDelete(record.id,1)"
@@ -70,19 +78,13 @@
             </a-table>
           </a-form-item>
 
-      <a-form-item label="赠送说明" :label-col="labelCol" :wrapper-col="wrapperCol">
-        <a-textarea :rows="4" placeholder="赠送说明" v-decorator="[
-          'giveExplain',
-          { rules: [{ required: true, message: '请输入赠送说明!' }] },
-        ]"/>
-      </a-form-item>
-      <a-form-item :label-col="labelCol" :wrapper-col="wrapperCol" :colon="false">
-        <div slot="label">
+          <a-form-item :label-col="labelCol" :wrapper-col="wrapperCol" :colon="false">
+            <div slot="label">
 
-        </div>
-        <a-checkbox v-model="isSure">我确认以上信息无误。</a-checkbox>
+            </div>
+            <a-checkbox v-model="isSure">我确认以上信息无误。</a-checkbox>
 
-      </a-form-item>
+          </a-form-item>
 
     </a-form>
     <a-modal
@@ -95,18 +97,16 @@
       <div id="cnt">
         <div class="title2">
           <div>
-            {{popName}}编号：
-            <a-input v-model="searchName" style="width: 200px;"/>
+            {{popName}}账号：
+            <a-input placeholder="请输入" v-model="queryParam.userName"></a-input>
           </div>
-          <div v-if="popPart == '0' || popPart == '1'">
-            卡名称:
-            <a-input v-model="queryParam.carName"  style="width: 200px;">
-
-            </a-input>
+          <div>
+            门店名称:
+            <a-input placeholder="请输入" v-model="queryParam.storeName"></a-input>
           </div>
           <div v-if="popPart == 1">
-            发行店铺:
-            <a-input v-model="queryParam.storeName"  style="width: 200px;"/>
+            分店名称:
+            <a-input placeholder="请输入" v-model="queryParam.subStoreName"></a-input>
           </div>
 
           <a-button @click="PopUp(popPart,'true')" type="primary">
@@ -122,12 +122,6 @@
                  style="margin-top: 20px;"
                  @change="handleSelectTableChange"
         >
-          <template slot="goodQuantity" slot-scope="text, record, index">
-            <a @click="showExchangeGoodInformation(record.id)">{{record.goodQuantity}}</a>
-          </template>
-          <template slot="applyGood" slot-scope="text, record, index">
-            <a @click="showGoodInformation(record.id)">{{record.applyGood}}</a>
-          </template>
           <template slot="logoAddr" slot-scope="text">
             <img :src="text" alt="" style="width: 40px;height: 40px;">
           </template>
@@ -154,7 +148,7 @@
 
 <script>
   const columnsWidth = 160
-  import { getAction, postAction, putAction, deleteAction } from '@/api/manage'
+  import { getAction, postAction, putAction} from '@/api/manage'
   import debounce from 'lodash/debounce';
 
   const couponListColumns = [
@@ -165,58 +159,216 @@
       align: 'center'
     },*/
     {
-      title: '礼品卡编号',
-      dataIndex: 'serialNumber',
-      width: columnsWidth,
-      align: 'center'
+      title: '店铺编号',
+      align: 'center',
+      dataIndex: 'id',
     },
     {
-      title: '卡名称',
-      dataIndex: 'carName',
-      width: columnsWidth,
-      align: 'center'
+      title: '店铺账号',
+      align: 'center',
+      dataIndex: 'userName',
     },
     {
-      title: '面额',
-      dataIndex: 'denomination',
-      width: columnsWidth,
-      align: 'center'
+      title: '联系人',
+      align: 'center',
+      dataIndex: 'bossName',
     },
     {
-      title: '可选商品',
-      dataIndex: 'goodCount',
-      width: columnsWidth,
-      align: 'center'
+      title: '联系人手机号',
+      align: 'center',
+      dataIndex: 'bossPhone',
     },
     {
-      title: '赠送数量',
-      dataIndex: 'distributedAmount',
-      scopedSlots: { customRender: 'distributedAmount' },
-      width: columnsWidth,
-      align: 'center'
-    },
-    {
-      title: '有效期开始',
-      dataIndex: 'startTime',
-      width: columnsWidth,
-      align: 'center'
-    }, {
-      title: '有效期结束',
-      dataIndex: 'endTime',
-      width: columnsWidth,
-      align: 'center'
-    }, {
-      title: '发行店铺',
+      title: '门店名称',
       align: 'center',
       dataIndex: 'storeName',
-      width: columnsWidth,
-    },{
-      title: '状态',
-      dataIndex: 'status',
-      width: columnsWidth,
-      scopedSlots: { customRender: 'status' },
-      align: 'center'
-    }, {
+    },
+    {
+      title: '分店名称',
+      align: 'center',
+      dataIndex: 'subStoreName',
+    },
+    // {
+    //   title: 'logo',
+    //   align: 'center',
+    //   dataIndex: 'logoAddr',
+    //   scopedSlots: { customRender: 'logoAddr' },
+    // },
+    // {
+    //   title: '门面照',
+    //   align: 'center',
+    //   dataIndex: 'storePicture',
+    //   scopedSlots: { customRender: 'avatarslot1' },
+    // },
+    // {
+    //   title: '店内照',
+    //   align: 'center',
+    //   dataIndex: 'accordingStore',
+    //   scopedSlots: { customRender: 'avatarslot2' },
+    // },
+    // {
+    //   title: '城市',
+    //   align: 'center',
+    //   dataIndex: 'areaAddress',
+    // },
+    // {
+    //   title: '门店地址',
+    //   align: 'center',
+    //   dataIndex: 'storeAddress',
+    // },
+    // {
+    //   title: '主体类型',
+    //   align: 'center',
+    //   dataIndex: 'straight_dictText',
+    // },
+    // {
+    //   title: '主营分类',
+    //   align: 'center',
+    //   dataIndex: 'mainType_dictText',
+    // },
+    //
+    // {
+    //   title: '客服电话',
+    //   align: 'center',
+    //   dataIndex: 'takeOutPhone',
+    // },
+    //
+    // {
+    //   title: '统一社会信用代码',
+    //   align: 'center',
+    //   dataIndex: 'socialCreditCode',
+    // },
+    // {
+    //   title: '统一社会信用代码证',
+    //   align: 'center',
+    //   dataIndex: 'licenseForEnterprise',
+    //   scopedSlots: { customRender: 'avatarslot3' },
+    // },
+    // {
+    //   title: '经办人类型',
+    //   align: 'center',
+    //   dataIndex: 'agentType_dictText',
+    // },
+    // {
+    //   title: '姓名',
+    //   align: 'center',
+    //   dataIndex: 'agentName',
+    // },
+    // {
+    //   title: '身份证号码',
+    //   align: 'center',
+    //   dataIndex: 'idCode',
+    // },
+    // {
+    //   title: '身份证正面照片',
+    //   align: 'center',
+    //   dataIndex: 'idPictureZ',
+    //   scopedSlots: { customRender: 'avatarslot4' },
+    // },
+    // {
+    //   title: '身份证反面照片',
+    //   align: 'center',
+    //   dataIndex: 'idPictureF',
+    //   scopedSlots: { customRender: 'avatarslot5' },
+    // },
+    //
+    // {
+    //   title: '手持身份证照片',
+    //   align: 'center',
+    //   dataIndex: 'idHand',
+    //   scopedSlots: { customRender: 'avatarslot6' },
+    // },
+    // {
+    //   title: '授权书图片',
+    //   align: 'center',
+    //   dataIndex: 'agentAuthorization',
+    //   scopedSlots: { customRender: 'avatarslot7' },
+    // },
+    // {
+    //   title: '推广人类型',
+    //   align: 'center',
+    //   dataIndex: 'promoterType',
+    //   scopedSlots: { customRender: 'promoterType' },
+    // },
+    // {
+    //   title: '推广人',
+    //   align: 'center',
+    //   dataIndex: 'promoterName',
+    // },
+    // {
+    //   title: '归属加盟商',
+    //   align: 'center',
+    //   dataIndex: 'allianceName',
+    // },
+    // {
+    //   title: '店铺二维码',
+    //   align: 'center',
+    //   dataIndex: 'ssAddress',
+    //   scopedSlots: { customRender: 'ssAddress' },
+    // },
+    // {
+    //   title: '商品审核',
+    //   align: 'center',
+    //   dataIndex: 'goodAudit',
+    //   width: 100,
+    //   scopedSlots: { customRender: 'goodAudit' },
+    // },
+    // {
+    //   title: '认证状态',
+    //   align: 'center',
+    //   dataIndex: 'attestationStatus_dictText',
+    // },
+    // {
+    //   title: '备注',
+    //   align: 'center',
+    //   dataIndex: 'remark',
+    // },
+    // {
+    //   title: '楼层',
+    //   align: 'center',
+    //   dataIndex: 'floorName',
+    // },
+    // {
+    //   title: '特色标签',
+    //   align: 'center',
+    //   dataIndex: 'labelCount',
+    //   scopedSlots: { customRender: 'labelCount' },
+    // },
+    // {
+    //   title: '排序',
+    //   align: 'center',
+    //   dataIndex: 'sort',
+    // },
+    // {
+    //   title: '是否推荐',
+    //   align: 'center',
+    //   dataIndex: 'isRecommend',
+    //   scopedSlots: { customRender: 'isRecommend' },
+    // },
+    // {
+    //   title: '状态',
+    //   align: 'center',
+    //   dataIndex: 'status',
+    //   scopedSlots: { customRender: 'status' },
+    // },
+    // {
+    //   title: '停用原因',
+    //   align: 'center',
+    //   dataIndex: 'closeExplain',
+    // },
+    // {
+    //   title: '店铺类型',
+    //   align: 'center',
+    //   dataIndex: 'storeType',
+    //   scopedSlots: { customRender: 'storeType' },
+    // },
+    // {
+    //   title: '是否连锁',
+    //   align: 'center',
+    //   dataIndex: 'isChain',
+    //   scopedSlots: { customRender: 'isChain' },
+    // },
+    {
       title: '操作',
       dataIndex: 'operation',
       className: 'operation',
@@ -224,14 +376,21 @@
       align: 'center'
     }
   ]
-  import AppMarketingCertificateGoodModal from './AppMarketingCertificateGoodModal'
-  import AppMarketingGoodModal from './AppMarketingGoodModal'
+  import AppMarketingCertificateGoodModal from '@/views/marketing/modules/AppMarketingCertificateGoodModal'
+  import AppMarketingGoodModal from '@/views/marketing/modules/AppMarketingGoodModal'
   export default {
-    name: 'MarketingStoreGiftCardMemberListListSendCouponModel',
+    name: 'StoreBatchPifaModel',
     data() {
+
       this.lastFetchId = 0;
       this.fetchPhone = debounce(this.fetchPhone, 800);
       return {
+        ynOptions: ['1','0'],
+        productWholesaleStatus: '0',
+        productWholesaleTitle:'',
+        productWholesaleOnlyFranchiser: '0',
+        productWholesaleOnlyAgency: '0',
+        productWholesaleApplyPicture: '',
         form: this.$form.createForm(this),
         fetching: false,
         phoneList:[],//手机号模糊查询
@@ -245,7 +404,7 @@
         title: '',
         visible: false,
         isSure:false,
-        titleLabel:'礼品卡',
+        titleLabel:'店铺',
         // certificateType: '',
         searchName: '',//查询内容
         columnsWidth,
@@ -279,13 +438,13 @@
         url:{
 
           //送礼品卡
-          giveMarketingDiscount:"marketing/marketingStoreGiftCardMemberList/give",
+          giveMarketingDiscount:"/storeManage/storeManage/batchEdit",
           //校验手机号码接口 (通过手机号码获取会员信息)
           likeMemberByPhone: "/memberList/memberList/likeMemberByPhone",//校验手机号码接口 (通过手机号码获取会员信息)
           //选择兑换券弹窗列表(传入字段 certificateName(券名称),id(券id),certificateType(兑换方式；0：全部兑换；1：任选一个))
           exchangeCertificatePopUpList: '/marketingCertificate/marketingCertificate/findGiveMarketingCertificateVO',
           //选择礼品卡弹窗列表(传入字段 discoountName(券名称),id(券id),getRestrict(使用人限制:0 普通会员 1:vip),issuer(发行人))
-          CouponPopupList: 'marketing/marketingStoreGiftCardList/list',
+          CouponPopupList: '/storeManage/storeManage/list',
         },
         //配置
         configure: {
@@ -433,8 +592,8 @@
           this.searchName = ''
           // this.certificateType = ''
           this.queryParam = {
-            status: 1,
-            cardType: this.cardType
+            // status: 1,
+            // cardType: this.cardType
           }
           this.search()
         } else {
@@ -459,7 +618,7 @@
             columns: 'couponListColumns',
             url: 'CouponPopupList',
             selectedRowKeys: 'discountRowKeys',
-            popName: '礼品卡',
+            popName: '店铺',
             searchName: 'serialNumber',
             allData: 'discoountAllData'
           }, {
@@ -496,10 +655,10 @@
                 if (item.logoAddr) item.logoAddr = that.configure.imgErver + '/' + item.logoAddr
                 return item
               })
-              if(index == 0 || index == 1){
-                delete popUpColumns[popUpColumns.length - 1]
-                delete popUpColumns[4]
-              }
+              // if(index == 0 || index == 1){
+              //   delete popUpColumns[popUpColumns.length - 1]
+              //   delete popUpColumns[4]
+              // }
               this.popUpColumns = popUpColumns
               this.$nextTick(() => {
                 this.popUpData = datas.records
@@ -584,13 +743,13 @@
         this.form.validateFields((err, values) => {
           if (!err) {
             let requestUrl
-            if(this.titleLabel == '礼品卡'){
+            if(this.titleLabel == '店铺'){
               if(!this.couponListData || (this.couponListData && this.couponListData.length <= 0)){
-                this.$message.warn('请至少选择一张礼品卡！')
+                this.$message.warn('请至少选择一个店铺！')
                 return;
               }
               requestUrl = this.url.giveMarketingDiscount
-              values.marketingStoreGiftCardList = this.toSubmitList()
+              values.id = this.toSubmitList()
             }
             if(!this.isSure){
               this.$message.warn('请确认信息无误！')
@@ -598,14 +757,14 @@
             }
             console.log(values);
             this.confirmLoading = true;
-            postAction(requestUrl,values).then(res=>{
+            putAction(requestUrl,values).then(res=>{
               this.confirmLoading = false;
               if(res.success){
-                this.$message.success(res.message || '赠送成功！')
+                this.$message.success(res.message || '配置成功！')
                 this.$emit('success')
                 this.handleCancel();
               }else{
-                this.$message.warn(res.message || '赠送失败!')
+                this.$message.warn(res.message || '配置失败!')
               }
             })
           }
@@ -615,7 +774,7 @@
         let list = [],
            analysisList,
           analysisIdName;
-        if(this.titleLabel == '礼品卡'){
+        if(this.titleLabel == '店铺'){
           analysisList = this.couponListData
           analysisIdName = 'marketingStoreGiftCardListId'
         }else{
@@ -623,19 +782,20 @@
           analysisIdName = 'marketingCertificateId'
         }
         for(let item of analysisList){
-          list.push({
-            [analysisIdName]:item.id,
-            distributedAmount:item.distributedAmount,
-          })
+          // list.push({
+          //   [analysisIdName]:item.id,
+          //   distributedAmount:item.distributedAmount,
+          // })
+          list.push(item.id)
         }
-        return list
+        return list.join(',')
       },
       open(value) {
         console.log('=open==============',value);
         this.visible = true
         this.title = value.modalTitle
-        if(value.modalTitle == '赠送送礼品卡'){
-          this.titleLabel = '礼品卡'
+        if(value.modalTitle == '批量设置产品批发栏目'){
+          this.titleLabel = '店铺'
         }
         this.form.resetFields();
         this.isSure = false

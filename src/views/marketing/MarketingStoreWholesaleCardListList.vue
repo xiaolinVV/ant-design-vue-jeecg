@@ -5,8 +5,8 @@
       <a-form layout="inline">
         <a-row :gutter="24">
           <a-col :md="8" :sm="8">
-            <a-form-item label="礼品卡编号">
-              <a-input placeholder="请输入礼品卡编号" v-model="queryParam.serialNumber"></a-input>
+            <a-form-item label="批发卡编号">
+              <a-input placeholder="请输入批发卡编号" v-model="queryParam.serialNumber"></a-input>
             </a-form-item>
           </a-col>
           <a-col :md="8" :sm="8">
@@ -137,7 +137,7 @@
 </template>
 
 <script>
-import MarketingStoreGiftCardListModal from './modules/MarketingStoreGiftCardListModal'
+import MarketingStoreGiftCardListModal from './modules/MarketingStoreWholesaleCardListModal'
 import MarketingStoreGiftCardCanSelectGoods from './modules/MarketingStoreGiftCardCanSelectGoods'
 import { JeecgListMixin } from '@/mixins/JeecgListMixin'
 import { filterObj } from '@/utils/util'
@@ -145,7 +145,7 @@ import textAreaModal from '@/components/popUp/textAreaModal'
 import { putAction, deleteAction } from '@/api/manage'
 import JInput from '@/components/jeecg/JInput.vue'
 export default {
-  name: 'MarketingStoreGiftCardListList',
+  name: 'MarketingStoreWholesaleCardListList',
   mixins: [JeecgListMixin],
   components: {
     MarketingStoreGiftCardListModal,
@@ -155,8 +155,8 @@ export default {
   },
   data() {
     return {
-      description: '店铺礼品卡列表管理页面',
-      cardType:"0",
+      description: '店铺批发卡列表管理页面',
+      cardType:"1",
       // 表头
       columns: [
         {
@@ -170,7 +170,7 @@ export default {
           }
         },
         {
-          title: '礼品卡编号',
+          title: '批发卡编号',
           align: 'center',
           dataIndex: 'serialNumber'
         },
@@ -185,17 +185,17 @@ export default {
           align: 'center',
           dataIndex: 'carName'
         },
-        {
-          title: '面额',
-          align: 'center',
-          dataIndex: 'denomination'
-        },
-        {
-          title: '可选商品',
-          align: 'center',
-          dataIndex: 'goodCount',
-          scopedSlots: { customRender: 'goodCount' }
-        },
+        // {
+        //   title: '面额',
+        //   align: 'center',
+        //   dataIndex: 'denomination'
+        // },
+        // {
+        //   title: '可选商品',
+        //   align: 'center',
+        //   dataIndex: 'goodCount',
+        //   scopedSlots: { customRender: 'goodCount' }
+        // },
         {
           // ；0：有效期；1：当日起；2：次日起
           title: '有效期',
@@ -259,23 +259,23 @@ export default {
       this.$refs.modalForm3.showModal(record)
     },
     toOperation(record = {}) {
-      this.$router.push({ path: '/marketing/modules/MarketingStoreGiftCardListListAdd', query: { record } })
+      this.$router.push({ path: '/marketing/modules/MarketingStoreWholesaleCardListListAdd', query: { record } })
     },
     async showTextareaModal(record, type) {
       const allInfos = [
         {
           title: '停用',
-          mainText: '停用后，该礼品卡将不再发行。',
+          mainText: '停用后，该批发卡将不再发行。',
           explainSureText: '您确定要停用吗'
         },
         {
           title: '启用',
-          mainText: '启用后，该礼品卡将可以发行。',
+          mainText: '启用后，该批发卡将可以发行。',
           explainSureText: '您确定要启用吗'
         },
         {
           title: '删除',
-          mainText: '删除礼品卡，将无法恢复。',
+          mainText: '删除批发卡，将无法恢复。',
           explainSureText: '您确定要删除吗'
         }
       ]

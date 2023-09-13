@@ -121,6 +121,8 @@
         <a-button type="primary" icon="import">导入</a-button>
       </a-upload> -->
       <a-button type="primary" icon="download"  :loading="exportLoading"  @click="handleExportXls('店铺-店铺管理-店铺列表')">导出</a-button>
+      <a-button type="primary" @click="batchPifa" icon="plus" >批量设置产品批发栏目</a-button>
+      <a-button type="primary" @click="batchZx" icon="plus" >批量设置臻品优选栏目</a-button>
       <a-dropdown v-if="selectedRowKeys.length > 0">
         <a-menu slot="overlay">
           <a-menu-item key="1" @click="batchDel">
@@ -340,6 +342,12 @@
               <a-menu-item>
                 <a @click="storeFunctionSetModalClick(record)">功能设置</a>
               </a-menu-item>
+              <a-menu-item>
+                <a @click="handlePifa(record)">产品批发栏目设置</a>
+              </a-menu-item>
+              <a-menu-item>
+                <a @click="handleZxyp(record)">臻选优品栏目设置</a>
+              </a-menu-item>
             </a-menu>
           </a-dropdown>
         </div>
@@ -364,6 +372,18 @@
 
     <!--功能设置-->
     <store-function-set-modal ref="storeFunctionSetModal"></store-function-set-modal>
+
+<!--    产品批发栏目设置-->
+    <store-wholesale-modal ref="modalForm2" @ok="modalFormOk1"></store-wholesale-modal>
+
+<!--    臻选优品栏目设置-->
+    <store-manage-best-selection-modal ref="modalForm3" @ok="modalFormOk1"></store-manage-best-selection-modal>
+
+<!--    批量设置批发栏目-->
+    <store-batch-pifa-model ref="StoreBatchPifaModel" @success="modalFormOk1"></store-batch-pifa-model>
+
+<!--    批量设置臻选栏目-->
+    <store-batch-zx-model ref="StoreBatchZxModel" @success="modalFormOk1"></store-batch-zx-model>
   </a-card>
 </template>
 
@@ -377,6 +397,7 @@ import { filterDictText, initDictOptions } from '@/components/dict/JDictSelectUt
 import Vue from 'vue'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
 import StoreManageAuditModal from './modules/StoreManageAuditModal'
+import StoreWholesaleModal from './modules/StoreWholesaleModal'
 import StoreManageModal from './modules/StoreManageModal'
 import { colAuthFilter } from '@/utils/authFilter'
 import selectAddress from '@/components/selectAddress/selectAddress'
@@ -385,6 +406,9 @@ import StoreCashierSettingModal from './modules/StoreCashierSettingModal'
 import StoreOrderSettingModal from './modules/StoreOrderSettingModal'
 import StoreFunctionSetModal from './modules/StoreFunctionSetModal'
 import StoreCashierRoutingList from './StoreCashierRoutingList'
+import StoreManageBestSelectionModal from './modules/StoreManageBestSelectionModal'
+import StoreBatchPifaModel from './modules/StoreBatchPifaModel'
+import StoreBatchZxModel from './modules/StoreBatchZxModel'
 
 export default {
   name: 'StoreManageList',
@@ -398,6 +422,10 @@ export default {
     StoreFunctionSetModal,
     StoreCashierRoutingList,
     StoreOrderSettingModal,
+    StoreWholesaleModal,
+    StoreManageBestSelectionModal,
+    StoreBatchPifaModel,
+    StoreBatchZxModel
   },
   inject: ['rush'],
   data() {
@@ -682,6 +710,16 @@ export default {
   },
 
   methods: {
+    handlePifa: function(record) {
+      this.$refs.modalForm2.edit(record)
+      this.$refs.modalForm2.title = '批发栏目设置'
+      this.$refs.modalForm2.disableSubmit = false
+    },
+    handleZxyp: function(record) {
+      this.$refs.modalForm3.edit(record)
+      this.$refs.modalForm3.title = '臻选优品栏目设置'
+      this.$refs.modalForm3.disableSubmit = false
+    },
     changeCommand(record) {
       let modelInfo = {
         title: '点击确定将该店铺设为推荐',
@@ -919,6 +957,12 @@ export default {
         }
       })
     },
+    modalFormOk1() {
+      // 新增/修改 成功时，重载列表
+      this.loadData()
+      //清空列表选中
+      this.onClearSelected()
+    },
     showModal(item) {
       this.$refs.modalForm1.showModal(item)
       this.$refs.modalForm1.title = '价格'
@@ -940,6 +984,15 @@ export default {
       record.fashionableType = fashionableType
       this.$refs.storeCashierRoutingList.show(record)
     },
+    batchPifa(value = {}){
+      value.modalTitle = '批量设置产品批发栏目'
+      this.$refs.StoreBatchPifaModel.open(value);
+    },
+    batchZx(value = {}){
+      value.modalTitle = '批量设置臻品优选栏目'
+      this.$refs.StoreBatchZxModel.open(value);
+    },
+
   },
 }
 </script>

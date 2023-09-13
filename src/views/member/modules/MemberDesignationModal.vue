@@ -270,6 +270,9 @@
                 到期前<a-input-number v-model="model.pastDueWarn" :precision="0" :min="0"></a-input-number>天发起续费提醒
               </a-checkbox>
             </div>
+            <div>
+              <a-checkbox v-model="model.isGetTeamAgency"> 自动获取团队批发代理商身份 </a-checkbox>
+            </div>
           </div>
           <div class="sjtj" v-if="lowLevelDividendsOptions.length > 0">
             <div class="specialTwo">
@@ -540,7 +543,8 @@ export default {
         isDefault: 0,
         isBuyGiftbag: 0,
         participation: 0,
-        sort: 0
+        sort: 0,
+        isGetTeamAgency: false
         // isMonthlyPerformance:false,
         // totalPeoples:'',
         // totalPrices:'',
@@ -1061,6 +1065,7 @@ export default {
         console.log(record)
         await this.getMemberDesignationListBySort(record.sort, record.memberDesignationGroupId)
         record.isAverage = record.isAverage == 1 ? true : false
+        record.isGetTeamAgency = record.isGetTeamAgency == 1 ? true : false
         record.isPastDueControl = record.isPastDueControl == 1 ? true : false
         record.isPastDueWarn = record.isPastDueWarn == 1 ? true : false
 
@@ -1320,6 +1325,7 @@ export default {
           formData.isPastDueWarn = formData.isPastDueWarn ? 1 : 0
           formData.lowLevelDividends = formData.lowLevelDividends ? 1 : 0
           formData.isBuyGiftbag = formData.isBuyGiftbag ? 1 : 0
+          formData.isGetTeamAgency = formData.isGetTeamAgency ? 1 : 0
           // formData.isMonthlyPerformance = formData.isMonthlyPerformance ? 1 : 0
           if (formData.memberDesignations && formData.memberDesignations.length > 0) {
             formData.memberDesignations = formData.memberDesignations.join(',')
