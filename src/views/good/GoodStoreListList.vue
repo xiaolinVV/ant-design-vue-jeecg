@@ -536,6 +536,183 @@ export default {
           scopedSlots: { customRender: 'action' },
         },
       ],
+      wholesaleColumns: [
+        {
+          title: '#',
+          dataIndex: '',
+          key: 'rowIndex',
+          width: 60,
+          align: 'center',
+          customRender: function (t, r, index) {
+            return parseInt(index) + 1
+          },
+        },
+        {
+          title: '店铺名称',
+          align: 'center',
+          dataIndex: 'storeName',
+        },
+        {
+          title: '商品类型',
+          align: 'center',
+          dataIndex: 'goodTypeName',
+        },
+        {
+          title: '商品主图',
+          align: 'center',
+          dataIndex: 'mainPicture',
+          scopedSlots: { customRender: 'mainPicture' },
+        },
+        {
+          title: '商品编号',
+          align: 'center',
+          dataIndex: 'goodNo',
+          customRender(text) {
+            if (!text) {
+              return '-'
+            }
+            return text
+          },
+        },
+        {
+          title: '商品名称',
+          align: 'center',
+          dataIndex: 'goodName',
+        },
+        {
+          title: '市场价',
+          align: 'center',
+          dataIndex: 'marketPrice',
+        },
+        {
+          title: '成本价',
+          align: 'center',
+          dataIndex: 'minCostPrice',
+          customRender(text, record) {
+            if (record.minCostPrice == record.maxCostPrice) {
+              return text
+            } else {
+              return text + '-' + record.maxCostPrice
+            }
+          },
+        },
+        {
+          title: '销售价',
+          align: 'center',
+          dataIndex: 'minPrice',
+          customRender(text, record) {
+            if (record.minPrice == record.maxPrice) {
+              return text
+            } else {
+              return text + '-' + record.maxPrice
+            }
+          },
+        },
+        {
+          title: '批发价',
+          align: 'center',
+          dataIndex: 'minVipPrice',
+          customRender(text, record) {
+            if (record.minVipPrice == record.maxVipPrice) {
+              return text
+            } else {
+              return text + '-' + record.maxVipPrice
+            }
+          },
+        },
+        {
+          title: '状态',
+          align: 'center',
+          dataIndex: 'status',
+          customRender(text) {
+            if (text == 0) {
+              return '停用'
+            }
+            if (text == 1) {
+              return '启用'
+            }
+          },
+        },
+        {
+          title: '上下架状态',
+          align: 'center',
+          dataIndex: 'frameStatus',
+          customRender(text) {
+            if (text == 0) {
+              return '下架'
+            }
+            if (text == 1) {
+              return '上架'
+            }
+          },
+        },
+        {
+          title: '审核状态',
+          align: 'center',
+          dataIndex: 'auditStatus',
+          customRender(text) {
+            if (text == 0) {
+              return '草稿'
+            }
+            if (text == 1) {
+              return '待审核'
+            }
+            if (text == 2) {
+              return '审核通过'
+            }
+            if (text == 3) {
+              return '审核不通过'
+            }
+          },
+        },
+        {
+          title: '状态说明',
+          align: 'center',
+          dataIndex: 'statusExplain',
+          customRender(text) {
+            if (!text) {
+              return '-'
+            }
+            return text
+          },
+        },
+        {
+          title: '有无规格',
+          align: 'center',
+          dataIndex: 'isSpecification',
+          customRender(text) {
+            if (text == 0) {
+              return '无规格'
+            }
+            if (text == 1) {
+              return '有规格'
+            }
+          },
+        },
+        {
+          title: '销量',
+          align: 'center',
+          dataIndex: 'salesVolume',
+        },
+        {
+          title: '创建者',
+          align: 'center',
+          dataIndex: 'createBy',
+        },
+        {
+          title: '创建时间',
+          align: 'center',
+          dataIndex: 'createTime',
+        },
+        {
+          title: '操作',
+          dataIndex: 'action',
+          align: 'center',
+          width: '150px',
+          fixed: 'right',
+          scopedSlots: { customRender: 'action' },
+        },
+      ],
       url: {
         list: '/goodStoreList/goodStoreList/listNew',
         delete: '/goodStoreList/goodStoreList/delete',
@@ -575,6 +752,10 @@ export default {
       if (this.isSelectedProducts === '1'){
         this.columns.splice(0,this.columns.length);
         this.selectedProductsColumns.forEach(e => this.columns.push(e))
+      }
+      if (this.isWholesale === '1') {
+        this.columns.splice(0,this.columns.length);
+        this.wholesaleColumns.forEach(e => this.columns.push(e))
       }
     }
   },

@@ -567,7 +567,7 @@ export default {
           scopedSlots: { customRender: 'costPrice' }
         },
         {
-          title: '会员价（元）',
+          title: '批发价（元）',
           dataIndex: 'vipPrice',
           scopedSlots: { customRender: 'vipPrice' }
         },
@@ -609,7 +609,7 @@ export default {
           scopedSlots: { customRender: 'costPrice' }
         },
         {
-          title: '会员价（元）',
+          title: '批发价（元）',
           dataIndex: 'vipPrice',
           scopedSlots: { customRender: 'vipPrice' }
         },
