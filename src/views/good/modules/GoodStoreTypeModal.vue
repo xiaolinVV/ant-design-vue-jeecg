@@ -79,7 +79,7 @@
          </a-form-item>
 
         <a-form-item v-if='this.userRole.indexOf("Merchant") === -1' label="所属店铺" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <j-search-select-tag  :async='true' v-decorator="['sysUserId', { rules: [{ required: true, message: '请选择店铺' }] }]"  laceholder="请选择店铺" dict="store_manage,IF(LENGTH(TRIM(sub_store_name)) > 0 ,CONCAT(store_name,'(',sub_store_name,')'),store_name),sys_user_id"/>
+          <j-search-select-tag  :async='false' v-decorator="['sysUserId', { rules: [{ required: true, message: '请选择店铺' }] }]" :dict-options='storeList'  laceholder="请选择店铺"/>
         </a-form-item>
 
         <!-- <a-form-item label="停用说明" :labelCol="labelCol" :wrapperCol="wrapperCol">
@@ -163,15 +163,18 @@
           fileUpload: window._CONFIG['domianURL']+"/sys/common/upload",
           imgerver: window._CONFIG['domianURL']+"/sys/common/view",
           queryById:"/GoodStoreType/goodStoreType/queryById",
+          getAllStoreList: 'storeManage/storeManage/getAllStoreDictList'
         },
         expandedRowKeys:[],
-        pidField:"parentId"
+        pidField:"parentId",
+        storeList: []
 
       }
     },
     created () {
       const token = Vue.ls.get(ACCESS_TOKEN);
       this.headers = {"X-Access-Token":token}
+      this.getAllStoreDictList()
     },
     computed:{
       uploadAction:function () {
@@ -223,6 +226,18 @@
       ...mapGetters(["nickname", "typePicture", "userInfo"]),
       /*图片上传结束*/
 
+      getAllStoreDictList() {
+        getAction(this.url.getAllStoreList, {}).then(res => {
+          if (res.success) {
+            for (let s of res.result) {
+              this.storeList.push(s)
+            }
+            console.log(this.storeList)
+          } else {
+            this.$message.warning(res.message)
+          }
+        })
+      },
 
       add () {
         this.edit({});
