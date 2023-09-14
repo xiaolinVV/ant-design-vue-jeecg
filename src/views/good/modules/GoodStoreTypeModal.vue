@@ -285,7 +285,7 @@
           this.model.level=record.level;
         }
 
-        if (!this.model.sysUserId){
+       if (this.userRole.indexOf("Merchant") === -1){
            this.model.sysUserId = this.userInfo().id;//获取userID
         }
         console.log("this.model.sysUserId",this.model.sysUserId)
