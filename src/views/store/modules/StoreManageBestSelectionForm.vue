@@ -14,6 +14,11 @@
             </a-form-model-item>
           </a-col>
           <a-col :span="24">
+            <a-form-model-item label="海报图" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="productsSelectedPostsPicture">
+              <j-image-upload  v-model="model.productsSelectedPostsPicture" ></j-image-upload>
+            </a-form-model-item>
+          </a-col>
+          <a-col :span="24">
             <a-form-model-item label="分享海报" :labelCol="labelCol" :wrapperCol="wrapperCol" prop="productsSelectedSharePicture">
               <j-image-upload  v-model="model.productsSelectedSharePicture" ></j-image-upload>
             </a-form-model-item>
@@ -63,7 +68,10 @@
               { required: true, message: '请输入栏目名称!'},
            ],
            productsSelectedSharePicture: [
-              { required: true, message: '请输入分享海报!'},
+              { required: true, message: '请上传分享海报!'},
+           ],
+          productsSelectedPostsPicture: [
+              { required: true, message: '请上传海报图!'},
            ],
         },
         url: {

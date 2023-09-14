@@ -17,6 +17,9 @@
           <a-form-item label="栏目名称" :label-col="labelCol" :wrapper-col="wrapperCol">
             <a-input v-decorator="['productsSelectedTitle',{ rules: [{ required: true, message: '请输入栏目名称' }] },]" placeholder="请输入栏目名称"  ></a-input>
           </a-form-item>
+          <a-form-item label="海报图" :label-col="labelCol" :wrapper-col="wrapperCol">
+            <j-image-upload v-decorator="['productsSelectedPostsPicture',{ rules: [{ required: true, message: '请上传海报图' }] },]"  ></j-image-upload>
+          </a-form-item>
           <a-form-item label="分享海报" :label-col="labelCol" :wrapper-col="wrapperCol">
             <j-image-upload v-decorator="['productsSelectedSharePicture',{ rules: [{ required: true, message: '请上传分享海报' }] },]"  ></j-image-upload>
           </a-form-item>
