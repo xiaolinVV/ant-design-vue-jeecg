@@ -79,7 +79,7 @@
          </a-form-item>
 
         <a-form-item v-if='this.userRole.indexOf("Merchant") === -1' label="所属店铺" :labelCol="labelCol" :wrapperCol="wrapperCol">
-          <j-dict-select-tag  v-decorator="['sysUserId', { rules: [{ required: true, message: '请选择店铺' }] }]"  laceholder="请选择店铺" dictCode="store_manage,store_name,sys_user_id"/>
+          <j-search-select-tag  :async='true' v-decorator="['sysUserId', { rules: [{ required: true, message: '请选择店铺' }] }]"  laceholder="请选择店铺" dict="store_manage,store_name,sys_user_id"/>
         </a-form-item>
 
         <!-- <a-form-item label="停用说明" :labelCol="labelCol" :wrapperCol="wrapperCol">
