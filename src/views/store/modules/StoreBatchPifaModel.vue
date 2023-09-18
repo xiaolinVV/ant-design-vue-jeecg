@@ -30,10 +30,10 @@
             <j-image-upload  v-decorator="['productWholesaleSharePicture',{ rules: [{ required: true, message: '请上传分享海报!' }] },]" ></j-image-upload>
           </a-form-item>
           <a-form-item label="代理商申请内容" :label-col="labelCol" :wrapper-col="wrapperCol">
-              <JEditor v-decorator="['productWholesaleApplyContent',{ rules: [{ required: true, message: '请输入代理商申请内容!' }] },]"> </JEditor>
+              <JEditor v-decorator="['productWholesaleApplyContent',]"> </JEditor>
           </a-form-item>
           <a-form-item label="经销商申请内容" :label-col="labelCol" :wrapper-col="wrapperCol">
-            <JEditor v-decorator="['productFranchiserApplyContent',{ rules: [{ required: true, message: '请输入经销商申请内容!' }] },]"> </JEditor>
+            <JEditor v-decorator="['productFranchiserApplyContent']"> </JEditor>
           </a-form-item>
           <a-form-item :label-col="labelCol" :wrapper-col="wrapperCol" v-if="titleLabel == '店铺'">
             <span slot="label">
