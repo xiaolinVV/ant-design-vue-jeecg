@@ -51,7 +51,7 @@ import '@/components/JVxeCells/install'
 //表单验证
 import { rules } from '@/utils/rules'
 /** KFormDesign */
-import KFormDesign from 'k-form-design'
+import * as KFormDesign  from 'k-form-design'
 Vue.use(KFormDesign)
 /** KFormDesign */
 import ElementUI from 'element-ui';
