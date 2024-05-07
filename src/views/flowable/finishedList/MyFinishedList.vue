@@ -17,11 +17,6 @@
             </a-form-item>
           </a-col>
           <a-col :xl="6" :lg="7" :md="8" :sm="24">
-            <a-form-item label="申请科室">
-              <a-input placeholder="请输入申请科室" v-model="queryParam.applyKeshi"></a-input>
-            </a-form-item>
-          </a-col>
-          <a-col :xl="6" :lg="7" :md="8" :sm="24">
             <a-form-item label="申请人">
               <a-input placeholder="请输入申请人" v-model="queryParam.applyPeople"></a-input>
             </a-form-item>

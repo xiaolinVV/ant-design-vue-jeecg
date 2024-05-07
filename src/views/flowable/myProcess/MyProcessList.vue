@@ -126,11 +126,11 @@
               return parseInt(index)+1;
             }
           },
-          {
-            title:'业务标题',
-            align:"center",
-            dataIndex: 'title'
-          },
+          // {
+          //   title:'业务标题',
+          //   align:"center",
+          //   dataIndex: 'title'
+          // },
           {
             title:'流程名称',
             align:"center",
@@ -139,7 +139,7 @@
           {
             title:'流程编号',
             align:"center",
-            dataIndex: 'procDefId'
+            dataIndex: 'procDefKey'
           },
           {
             title:'流程实例',

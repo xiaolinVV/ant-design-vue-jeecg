@@ -15,7 +15,7 @@
               :color="setColor(item.finishTime)"
             >
               <p style="font-weight: 700;">{{item.taskName}}
-                <i v-if="!item.finishTime" style="color: orange">(待办中。。。)</i>
+                <i v-if="!item.finishTime" style="color: orange">(待办中)</i>
               </p>
 
               <a-card :body-style="{ padding: '10px' }">
