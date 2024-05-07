@@ -139,7 +139,7 @@
           {
             title:'流程编号',
             align:"center",
-            dataIndex: 'procDefKey'
+            dataIndex: 'procDefId'
           },
           {
             title:'流程实例',
