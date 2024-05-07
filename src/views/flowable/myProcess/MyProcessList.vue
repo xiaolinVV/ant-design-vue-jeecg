@@ -166,11 +166,11 @@
             align:"center",
             dataIndex: 'duration'
           },
-          {
-            title:'状态',
-            align:"center",
-            dataIndex: 'actStatus'
-          },
+          // {
+          //   title:'状态',
+          //   align:"center",
+          //   dataIndex: 'actStatus'
+          // },
           // {
           //   title: '操作',
           //   dataIndex: 'action',
