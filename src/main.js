@@ -15,7 +15,7 @@ import Antd, { version } from 'ant-design-vue'
 console.log('ant-design-vue version:', version)
 
 import Viser from 'viser-vue'
-import 'k-form-design/lib/k-form-design.css'
+// import 'k-form-design/lib/k-form-design.css'
 import 'ant-design-vue/dist/antd.less';  // or 'ant-design-vue/dist/antd.less'
 
 import '@/permission' // permission control
