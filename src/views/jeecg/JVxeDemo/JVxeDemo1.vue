@@ -11,6 +11,10 @@
     :dataSource="dataSource"
     :columns="columns"
     style="margin-top: 8px;"
+    :row-class-name="rowClassName"
+    :cell-class-name="cellClassName"
+    :row-style="rowStyle"
+    :cell-style="cellStyle"
     @valueChange="handleValueChange"
   >
 
@@ -294,13 +298,53 @@
           }, pageSize - diff)
         }
 
-      }
+      },
+
+      // 用于改变行样式
+      rowClassName ({ row, rowIndex }) {
+        // console.log('row====', row, rowIndex)
+      },
+
+      // 用于改变列样式
+      cellClassName ({ row, rowIndex, column, columnIndex }) {
+        // console.log('row====', row, rowIndex, column, columnIndex)
+      //   if (column.property === 'select') {
+      //     if (row.select.toLowerCase() === 'int') {
+      //       return 'col-red'
+      //     } else {
+      //       return 'col-blue'
+      //     }
+      //   }
+      },
+
+      // 修改行样式表
+      rowStyle ({ row, rowIndex }) {
+        //
+      },
+
+      // 修改列样式表
+      cellStyle ({ row, rowIndex, column, columnIndex }) {
+        if (column.property === 'select') {
+          if (row.select.toLowerCase() === 'int') {
+            return {
+              color: '#f00'
+            }
+          } else {
+            return {
+              color: '#0e0c99'
+            }
+          }
+        }
+      },
     }
   }
 </script>
 
 <style lang="less" scoped>
-  /deep/ .vxe-table .vxe-body--column:nth-child(8){
-    color: #f00;
-  }
+  // /deep/ .vxe-table .vxe-body--column.col-red {
+  //   color: red;
+  // }
+  // /deep/ .vxe-table .vxe-body--column.col-blue {
+  //   color: #0e0c99;
+  // }
 </style>
