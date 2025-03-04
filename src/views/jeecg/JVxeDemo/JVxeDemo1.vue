@@ -299,6 +299,8 @@
   }
 </script>
 
-<style scoped>
-
+<style lang="less" scoped>
+  /deep/ .vxe-table .vxe-body--column:nth-child(8){
+    color: #f00;
+  }
 </style>
