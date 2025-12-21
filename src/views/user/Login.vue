@@ -11,7 +11,7 @@
         </a-tab-pane>
       </a-tabs>
 
-      <a-form-model-item>
+      <!-- <a-form-model-item>
         <a-checkbox @change="handleRememberMeChange" default-checked>自动登录</a-checkbox>
         <router-link :to="{ name: 'alteration'}" class="forge-password" style="float: right;">
           忘记密码
@@ -19,7 +19,7 @@
         <router-link :to="{ name: 'register'}" class="forge-password" style="float: right;margin-right: 10px" >
           注册账户
         </router-link>
-      </a-form-model-item>
+      </a-form-model-item> -->
 
       <a-form-item style="margin-top:24px">
         <a-button size="large"  type="primary"  htmlType="submit"  class="login-button"  :loading="loginBtn"  @click.stop.prevent="handleSubmit" :disabled="loginBtn">确定
