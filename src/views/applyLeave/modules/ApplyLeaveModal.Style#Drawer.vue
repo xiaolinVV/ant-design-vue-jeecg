@@ -7,7 +7,7 @@
     @close="close"
     destroyOnClose
     :visible="visible">
-    <test-online-component-form ref="realForm" @ok="submitCallback" :disabled="disableSubmit" normal></test-online-component-form>
+    <apply-leave-form ref="realForm" @ok="submitCallback" :disabled="disableSubmit" normal></apply-leave-form>
     <div class="drawer-footer">
       <a-button @click="handleCancel" style="margin-bottom: 0;">关闭</a-button>
       <a-button v-if="!disableSubmit"  @click="handleOk" type="primary" style="margin-bottom: 0;">提交</a-button>
@@ -17,17 +17,17 @@
 
 <script>
 
-  import TestOnlineComponentForm from './TestOnlineComponentForm'
+  import ApplyLeaveForm from './ApplyLeaveForm'
 
   export default {
-    name: 'TestOnlineComponentModal',
+    name: 'ApplyLeaveModal',
     components: {
-      TestOnlineComponentForm
+      ApplyLeaveForm
     },
     data () {
       return {
         title:"操作",
-        width:1280,
+        width:800,
         visible: false,
         disableSubmit: false
       }

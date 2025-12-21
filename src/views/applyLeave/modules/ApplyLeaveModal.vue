@@ -8,22 +8,22 @@
     :okButtonProps="{ class:{'jee-hidden': disableSubmit} }"
     @cancel="handleCancel"
     cancelText="关闭">
-    <test-online-component-form ref="realForm" @ok="submitCallback" :disabled="disableSubmit"></test-online-component-form>
+    <apply-leave-form ref="realForm" @ok="submitCallback" :disabled="disableSubmit"></apply-leave-form>
   </j-modal>
 </template>
 
 <script>
 
-  import TestOnlineComponentForm from './TestOnlineComponentForm'
+  import ApplyLeaveForm from './ApplyLeaveForm'
   export default {
-    name: 'TestOnlineComponentModal',
+    name: 'ApplyLeaveModal',
     components: {
-      TestOnlineComponentForm
+      ApplyLeaveForm
     },
     data () {
       return {
         title:'',
-        width:1280,
+        width:800,
         visible: false,
         disableSubmit: false
       }

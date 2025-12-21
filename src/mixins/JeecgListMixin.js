@@ -125,7 +125,7 @@ export const JeecgListMixin = {
         sqp['superQueryMatchType'] = this.superQueryMatchType
       }
       let pathQueryParam = getUrlParams()
-      var param = Object.assign(sqp, this.queryParam, this.isorter ,this.filters, pathQueryParam);
+      var param = Object.assign(sqp, this.queryParam, this.isorter ,this.filters,pathQueryParam);
       param.field = this.getQueryField();
       param.pageNo = this.ipagination.current;
       param.pageSize = this.ipagination.pageSize;
