@@ -15,7 +15,6 @@ import Antd, { version } from 'ant-design-vue'
 console.log('ant-design-vue version:', version)
 
 import Viser from 'viser-vue'
-// import 'k-form-design/lib/k-form-design.css'
 import 'ant-design-vue/dist/antd.less';  // or 'ant-design-vue/dist/antd.less'
 
 import '@/permission' // permission control
@@ -50,10 +49,6 @@ import '@/components/jeecg/JVxeTable/install'
 import '@/components/JVxeCells/install'
 //表单验证
 import { rules } from '@/utils/rules'
-/** KFormDesign */
-import * as KFormDesign  from 'k-form-design'
-Vue.use(KFormDesign)
-/** KFormDesign */
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(ElementUI);
